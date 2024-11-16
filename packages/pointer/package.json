@@ -1,0 +1,48 @@
+{
+  "name": "@avati/pointer",
+  "version": "0.1.0",
+  "description": "Pointer management package part of Avati project",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "author": {
+    "name": "Khaled Sameer",
+    "email": "khaled.smq@hotmail.com",
+    "url": "https://khaled.ee/"
+  },
+  "homepage": "https://avati.io/",
+  "bugs": {
+    "url": "https://github.com/KhaledSMQ/avati/issues",
+    "email": "khaled.smq@hotmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KhaledSMQ/avati",
+    "directory": "packages/pointer"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@avati/debounce": "^1.0.0",
+    "@avati/listener": "^1.0.0",
+    "@avati/memoize": "^1.0.0",
+    "@avati/throttle": "^1.0.0"
+  },
+  "browserslist": [
+    "last 1 version and not Explorer 10",
+    "Explorer 11",
+    "iOS >= 9",
+    "Android >= 4.4"
+  ],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "webpack --mode production --config-name umd --config-name esm --config-name cjs",
+    "dev": "webpack --mode development --watch --config-name umd --config-name esm --config-name cjs",
+    "test": "jest",
+    "lint": "eslint src --ext .ts,.tsx"
+  }
+}

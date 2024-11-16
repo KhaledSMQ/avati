@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventListenerManager Advanced Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #16a34a;
+            --warning-color: #ca8a04;
+            --error-color: #dc2626;
+            --bg-color: #f8fafc;
+            --code-bg: #1e293b;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-card {
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .demo-controls {
+            margin: 1.5rem 0;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        input, button, textarea {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-right: 0.5rem;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+        }
+
+        .status-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .status-error {
+            background: var(--error-color);
+            color: white;
+        }
+
+        pre[class*="language-"] {
+            margin: 1.5rem 0;
+            border-radius: 6px;
+        }
+
+        .results {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-color);
+            border-radius: 6px;
+            min-height: 100px;
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 300px;
+            background: var(--bg-color);
+            border-radius: 6px;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .drag-drop-container {
+            border: 2px dashed #ccc;
+            border-radius: 6px;
+            padding: 2rem;
+            text-align: center;
+            background: var(--bg-color);
+            transition: all 0.2s;
+        }
+
+        .drag-drop-container.drag-over {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin: 1rem 0;
+        }
+
+        .autosave-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            background: var(--bg-color);
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .drawing-toolbar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .color-picker {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: 2px solid #ccc;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-item {
+            background: var(--bg-color);
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .keyboard-map {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.5rem;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .key {
+            background: var(--bg-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>EventListenerManager Advanced Demo</h1>
+        <p>Advanced examples showcasing the power and flexibility of the EventListenerManager library</p>
+    </div>
+
+    <!-- Previous sections remain the same -->
+
+    <div class="section">
+        <h2>4. Drawing Canvas with Event Coordination</h2>
+        <div class="drawing-toolbar">
+            <input type="color" id="colorPicker" class="color-picker" value="#000000">
+            <div class="slider-container">
+                <label for="brushSize">Brush Size:</label>
+                <input type="range" id="brushSize" min="1" max="20" value="5">
+            </div>
+            <button id="clearCanvas">Clear Canvas</button>
+        </div>
+        <div class="canvas-container">
+            <canvas id="drawingCanvas"></canvas>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <h4>Points Drawn</h4>
+                <div id="pointsDrawn" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <h4>Current Tool</h4>
+                <div id="currentTool" class="metric-value">Brush</div>
+            </div>
+        </div>
+
+        <pre><code class="language-javascript">
+// Drawing canvas implementation with coordinated events
+const canvas = document.getElementById('drawingCanvas');
+let isDrawing = false;
+let pointsDrawn = 0;
+
+const drawingManager = eventManager.add(canvas, 'mousemove', (e) => {
+    if (!isDrawing) return;
+
+    const ctx = canvas.getContext('2d');
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    pointsDrawn++;
+
+    document.getElementById('pointsDrawn').textContent = pointsDrawn;
+}, {
+    throttle: 16, // ~60fps
+    metadata: true
+});
+
+// Coordinate multiple events
+eventManager.add(canvas, 'mousedown', () => isDrawing = true);
+eventManager.add(canvas, 'mouseup', () => isDrawing = false);
+eventManager.add(canvas, 'mouseleave', () => isDrawing = false);</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>5. Auto-saving Text Editor</h2>
+        <div class="demo-controls">
+            <div class="input-group">
+                    <textarea id="editor" rows="6" style="width: 100%"
+                              placeholder="Start typing to see auto-save in action..."></textarea>
+                <div class="autosave-indicator">
+                    <div class="pulse"></div>
+                    <span id="saveStatus">Changes saved</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <h4>Characters</h4>
+                <div id="charCount" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <h4>Save Count</h4>
+                <div id="saveCount" class="metric-value">0</div>
+            </div>
+        </div>
+
+        <pre><code class="language-javascript">
+const editor = document.getElementById('editor');
+let saveCount = 0;
+
+// Add debounced auto-save
+eventManager.add(editor, 'input', async (event) => {
+    const content = event.target.value;
+    const saveStatus = document.getElementById('saveStatus');
+
+    saveStatus.textContent = 'Saving...';
+
+    try {
+        await mockSaveContent(content);
+        saveCount++;
+        document.getElementById('saveCount').textContent = saveCount;
+        saveStatus.textContent = 'Changes saved';
+    } catch (error) {
+        saveStatus.textContent = 'Save failed';
+    }
+}, {
+    debounce: 1000,
+    async: true,
+    onError: (error) => {
+        console.error('Auto-save failed:', error);
+    }
+});</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>6. Drag and Drop File Upload</h2>
+        <div class="drag-drop-container" id="dropZone">
+            <p>Drag and drop files here or click to select</p>
+            <input type="file" id="fileInput" style="display: none" multiple>
+            <div class="preview-container" id="previewContainer"></div>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <h4>Files Queued</h4>
+                <div id="fileCount" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <h4>Upload Status</h4>
+                <div id="uploadStatus" class="metric-value">
+                    <span class="status status-pending">Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <pre><code class="language-javascript">
+const dropZone = document.getElementById('dropZone');
+
+// Coordinated drag and drop events
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    eventManager.add(dropZone, eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (eventName === 'dragenter' || eventName === 'dragover') {
+            dropZone.classList.add('drag-over');
+        } else {
+            dropZone.classList.remove('drag-over');
+        }
+
+        if (eventName === 'drop') {
+            handleFiles(e.dataTransfer.files);
+        }
+    }, {
+        metadata: true
+    });
+});</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>7. Keyboard Shortcut Manager</h2>
+        <div class="keyboard-map" id="keyboardMap">
+            <span class="key">Ctrl + S</span>
+            <span>Save document</span>
+            <span class="key">Ctrl + Z</span>
+            <span>Undo last action</span>
+            <span class="key">Ctrl + Y</span>
+            <span>Redo last action</span>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <h4>Last Shortcut</h4>
+                <div id="lastShortcut" class="metric-value">None</div>
+            </div>
+            <div class="metric-card">
+                <h4>Actions Count</h4>
+                <div id="actionCount" class="metric-value">0</div>
+            </div>
+        </div>
+
+        <pre><code class="language-javascript">
+// Global keyboard shortcut handler
+eventManager.add(document, 'keydown', (e) => {
+    if (e.ctrlKey || e.metaKey) {
+        const key = e.key.toLowerCase();
+        let action = '';
+
+        switch (key) {
+            case 's':
+                e.preventDefault();
+                action = 'Save';
+                saveDocument();
+                break;
+            case 'z':
+                e.preventDefault();
+                action = 'Undo';
+                undoLastAction();
+                break;
+            case 'y':
+                e.preventDefault();
+                action = 'Redo';
+                redoLastAction();
+                break;
+        }
+
+        if (action) {
+            document.getElementById('lastShortcut').textContent = action;
+            incrementActionCount();
+        }
+    }
+}, {
+    metadata: true
+});</code></pre>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+
+
+<script src="../dist/index.umd.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+
+    // Mock implementations
+    const mockSaveContent = async (content) => {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        return true;
+    };
+
+    const handleFiles = (files) => {
+        const container = document.getElementById('previewContainer');
+        container.innerHTML = '';
+        document.getElementById('fileCount').textContent = files.length;
+
+        Array.from(files).forEach(file => {
+            const preview = document.createElement('div');
+            preview.className = 'preview-item';
+            preview.textContent = `${file.name} (${formatFileSize(file.size)})`;
+            container.appendChild(preview);
+        });
+    };
+
+    const formatFileSize = (bytes) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    // Initialize Canvas
+    const initCanvas = () => {
+        const canvas = document.getElementById('drawingCanvas');
+        const container = canvas.parentElement;
+        canvas.width = container.offsetWidth;
+        canvas.height = container.offsetHeight;
+
+        const ctx = canvas.getContext('2d');
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+
+        let isDrawing = false;
+        let pointsDrawn = 0;
+
+        const drawingManager = eventManager.add(canvas, 'mousemove', (e) => {
+            if (!isDrawing) return;
+
+            const ctx = canvas.getContext('2d');
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            pointsDrawn++;
+
+            document.getElementById('pointsDrawn').textContent = pointsDrawn;
+        }, {
+            throttle: 16, // ~60fps
+            metadata: true,
+        });
+
+        // Coordinate multiple events
+        eventManager.add(canvas, 'mousedown', () => isDrawing = true);
+        eventManager.add(window, 'mouseup', () => isDrawing = false);
+        eventManager.add(canvas, 'mouseleave', () => isDrawing = false);
+    };
+
+    // Initialize demo when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        initCanvas();
+        initializeAdditionalExamples();
+    });
+
+    function initializeAdditionalExamples() {
+        // Add new sections dynamically
+        const container = document.querySelector('.container');
+
+        // 8. Infinite Scroll Example
+        const infiniteScrollSection = createSection(`
+<h2>8. Infinite Scroll with Intersection Observer</h2>
+<div class="demo-controls">
+    <div id="infiniteContent" style="height: 400px; overflow-y: auto;">
+        <div id="contentItems"></div>
+        <div id="loadingTrigger">Loading more items...</div>
+    </div>
+</div>
+
+<div class="metrics">
+    <div class="metric-card">
+        <h4>Items Loaded</h4>
+        <div id="itemsLoaded" class="metric-value">0</div>
+    </div>
+    <div class="metric-card">
+        <h4>Load Count</h4>
+        <div id="loadCount" class="metric-value">0</div>
+    </div>
+</div>
+
+<pre><code class="language-javascript">
+// Infinite scroll implementation
+const loadTrigger = document.getElementById('loadingTrigger');
+
+eventManager.add(loadTrigger, 'intersectionObserver', async (entries) => {
+    const entry = entries[0];
+    if (entry.isIntersecting) {
+        await loadMoreItems();
+        updateMetrics();
+    }
+}, {
+    throttle: 1000, // Prevent rapid firing
+    options: {
+        root: document.getElementById('infiniteContent'),
+        rootMargin: '100px',
+        threshold: 0.1
+    }
+});</code></pre>
+`);
+
+        // 9. Multi-touch Gesture Example
+        const gestureSection = createSection(`
+<h2>9. Multi-touch Gesture Handler</h2>
+<div class="demo-controls">
+    <div id="gestureArea" class="canvas-container">
+        <div id="gestureElement" style="
+                            width: 100px;
+                            height: 100px;
+                            background: var(--primary-color);
+                            border-radius: 8px;
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            touch-action: none;
+                        "></div>
+    </div>
+</div>
+
+<div class="metrics">
+    <div class="metric-card">
+        <h4>Scale</h4>
+        <div id="scaleValue" class="metric-value">1.0</div>
+    </div>
+    <div class="metric-card">
+        <h4>Rotation</h4>
+        <div id="rotationValue" class="metric-value">0°</div>
+    </div>
+</div>
+
+<pre><code class="language-javascript">
+// Multi-touch gesture handling
+const element = document.getElementById('gestureElement');
+let initialScale = 1;
+let initialRotation = 0;
+
+eventManager.add(element, 'gesturestart', (e) => {
+    e.preventDefault();
+    initialScale = currentScale;
+    initialRotation = currentRotation;
+}, { passive: false });
+
+eventManager.add(element, 'gesturechange', (e) => {
+    e.preventDefault();
+    const scale = initialScale * e.scale;
+    const rotation = initialRotation + e.rotation;
+
+    updateElementTransform(scale, rotation);
+    updateMetrics(scale, rotation);
+}, {
+    throttle: 16,
+    passive: false
+});</code></pre>
+`);
+
+        // 10. Form Auto-Complete with Debounce
+        const autocompleteSection = createSection(`
+<h2>10. Smart Form Auto-Complete</h2>
+<div class="demo-controls">
+    <div class="input-group">
+        <input type="text" id="cityInput" placeholder="Start typing a city name...">
+        <div id="suggestions" class="results"></div>
+    </div>
+</div>
+
+<div class="metrics">
+    <div class="metric-card">
+        <h4>API Requests</h4>
+        <div id="requestCount" class="metric-value">0</div>
+    </div>
+    <div class="metric-card">
+        <h4>Cache Hits</h4>
+        <div id="cacheHits" class="metric-value">0</div>
+    </div>
+</div>
+
+<pre><code class="language-javascript">
+// Smart auto-complete with caching
+const cityInput = document.getElementById('cityInput');
+const suggestionsCache = new Map();
+
+eventManager.add(cityInput, 'input', async (e) => {
+    const query = e.target.value.trim();
+    if (query.length < 2) return;
+
+    if (suggestionsCache.has(query)) {
+        showSuggestions(suggestionsCache.get(query));
+        incrementCacheHits();
+        return;
+    }
+
+    try {
+        const suggestions = await fetchCitySuggestions(query);
+        suggestionsCache.set(query, suggestions);
+        showSuggestions(suggestions);
+        incrementRequestCount();
+    } catch (error) {
+        console.error('Failed to fetch suggestions:', error);
+    }
+}, {
+    debounce: 300,
+    async: true
+});</code></pre>
+`);
+
+        // Add new sections to container
+        container.appendChild(infiniteScrollSection);
+        container.appendChild(gestureSection);
+        container.appendChild(autocompleteSection);
+
+        // Initialize Prism.js for new code blocks
+        Prism.highlightAll();
+
+        // Setup functionality for new examples
+        setupInfiniteScroll();
+        setupGestureHandler();
+        setupAutoComplete();
+    }
+
+    // Helper function to create a new section
+    function createSection(content) {
+        const section = document.createElement('div');
+        section.className = 'section';
+        section.innerHTML = content;
+        return section;
+    }
+
+    // Example implementations for new sections
+    function setupInfiniteScroll() {
+        let itemCount = 0;
+        const contentItems = document.getElementById('contentItems');
+
+// Initial load
+        loadMoreItems(10);
+
+        async function loadMoreItems(count = 5) {
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < count; i++) {
+                const item = document.createElement('div');
+                item.className = 'demo-item';
+                item.style.padding = '1rem';
+                item.style.margin = '0.5rem';
+                item.style.background = 'var(--bg-color)';
+                item.style.borderRadius = '4px';
+                item.textContent = `Item ${++itemCount}`;
+                fragment.appendChild(item);
+            }
+            contentItems.appendChild(fragment);
+            document.getElementById('itemsLoaded').textContent = itemCount;
+        }
+    }
+
+    function setupGestureHandler() {
+        let currentScale = 1;
+        let currentRotation = 0;
+        const element = document.getElementById('gestureElement');
+
+        function updateElementTransform(scale, rotation) {
+            currentScale = Math.min(Math.max(scale, 0.5), 3);
+            currentRotation = rotation;
+
+            element.style.transform = `
+translate(-50%, -50%)
+scale(${currentScale})
+rotate(${currentRotation}deg)
+`;
+
+            document.getElementById('scaleValue').textContent = currentScale.toFixed(2);
+            document.getElementById('rotationValue').textContent = `${Math.round(currentRotation)}°`;
+        }
+    }
+
+    function setupAutoComplete() {
+        const mockCities = [
+            'New York', 'London', 'Paris', 'Tokyo', 'Berlin',
+            'Rome', 'Madrid', 'Amsterdam', 'Moscow', 'Dubai',
+        ];
+
+        async function fetchCitySuggestions(query) {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 200));
+            return mockCities.filter(city =>
+                city.toLowerCase().includes(query.toLowerCase()),
+            );
+        }
+
+        function showSuggestions(suggestions) {
+            const container = document.getElementById('suggestions');
+            container.innerHTML = suggestions
+                .map(city => `<div class="suggestion">${city}</div>`)
+                .join('');
+        }
+
+        const cityInput = document.getElementById('cityInput');
+        const suggestionsCache = new Map();
+
+        eventManager.add(cityInput, 'input', async (e) => {
+            const query = e.target.value.trim();
+            if (query.length < 2) return;
+
+            if (suggestionsCache.has(query)) {
+                showSuggestions(suggestionsCache.get(query));
+                incrementCacheHits();
+                return;
+            }
+
+            try {
+                const suggestions = await fetchCitySuggestions(query);
+                suggestionsCache.set(query, suggestions);
+                showSuggestions(suggestions);
+                incrementRequestCount();
+            } catch (error) {
+                console.error('Failed to fetch suggestions:', error);
+            }
+        }, {
+            debounce: 300,
+            async: true
+        });
+    }
+
+
+</script>
+</body>
+</html>

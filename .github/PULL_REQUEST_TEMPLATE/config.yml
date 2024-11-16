@@ -1,0 +1,10 @@
+template_selection:
+  - name: Bug Fix
+    path: .github/PULL_REQUEST_TEMPLATE/bug_fix.md
+    about: Submit a bug fix
+  - name: Feature
+    path: .github/PULL_REQUEST_TEMPLATE/feature.md
+    about: Submit a new feature
+  - name: Documentation
+    path: .github/PULL_REQUEST_TEMPLATE/documentation.md
+    about: Update documentation

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EventListenerManager - Once Example</title>
+</head>
+<body>
+<button id="onceButton">Click Me Once</button>
+
+
+<script src="../dist/index.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+    document.addEventListener('DOMContentLoaded', () => {
+        const button = document.getElementById('onceButton');
+
+        function handleClick() {
+            alert('This will only appear once!');
+        }
+
+        // Add a one-time event listener
+        eventManager.once(button, 'click', handleClick);
+    });
+</script>
+</body>
+</html>

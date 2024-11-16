@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throttle Function Showcase</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --primary-dark: #2563eb;
+            --success: #22c55e;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+            --card-background: #ffffff;
+
+
+            --primary-color: #2563eb;
+            --secondary-color: #22c55e;
+            --background-color: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.5;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f8fafc;
+            color: #1f2937;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .demos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .demo-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .demo-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+        }
+
+        .demo-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .demo-content {
+            padding: 1.5rem;
+        }
+
+        .demo-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .demo-playground {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .visualization {
+            height: 60px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.25rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-marker {
+            position: absolute;
+            width: 2px;
+            background: var(--primary-light);
+            animation: fade-out 1s forwards;
+        }
+
+        .throttle-marker {
+            position: absolute;
+            width: 2px;
+            background: var(--success);
+            animation: fade-out 1s forwards;
+        }
+
+        @keyframes fade-out {
+            0% {
+                opacity: 1;
+                height: 100%;
+            }
+            100% {
+                opacity: 0.3;
+                height: 100%;
+            }
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+        }
+
+        .status {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .legend {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .legend-color.raw {
+            background: var(--primary-light);
+        }
+
+        .legend-color.throttled {
+            background: var(--success);
+        }
+
+        #mouseTracker {
+            height: 200px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            cursor: crosshair;
+        }
+
+        /* Stats section */
+        .demo-stats {
+            background: var(--background-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stats-header {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stats-item {
+            padding: 0.75rem;
+            background: var(--card-background);
+            border-radius: 0.375rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .stats-item span {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Throttle Function Showcase</h1>
+    <p>Interactive demonstrations of throttling with different configurations</p>
+</div>
+
+<div class="demos-grid">
+    <!-- Mouse Movement Demo -->
+    <div class="demo-card">
+        <div class="demo-header">
+            <h2>Mouse Movement Throttling</h2>
+        </div>
+        <div class="demo-content">
+            <p class="demo-description">
+                Move your mouse in the area below. Green markers show throttled events,
+                blue markers show raw events.
+            </p>
+            <div class="demo-playground">
+                <div id="mouseTracker">Move mouse here</div>
+                <div id="mouseVisualization" class="visualization"></div>
+                <div class="demo-stats">
+                    <div class="stats-header">Statistics</div>
+                    <div class="stats-grid">
+                        <div class="stats-item">
+                            Events/sec: <span id="mouseEventsPerSec">0</span>
+                        </div>
+                        <div class="stats-item">
+                            Throttle Rate: <span id="mouseThrottleRate">0%</span>
+                        </div>
+                        <div class="stats-item">
+                            Total Events: <span id="mouseTotalEvents">0</span>
+                        </div>
+                        <div class="stats-item">
+                            Throttled Events: <span id="mouseThrottledEvents">0</span>
+                        </div>
+                        <div class="stats-item">
+                            Raw FPS: <span id="rawFPS">0</span>
+                        </div>
+                        <div class="stats-item">
+                            Throttled FPS: <span id="throttledFPS">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color raw"></div>
+                        <span>Raw Events</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color throttled"></div>
+                        <span>Throttled Events</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rapid Clicking Demo -->
+    <div class="demo-card">
+        <div class="demo-header">
+            <h2>Click Throttling</h2>
+        </div>
+        <div class="demo-content">
+            <p class="demo-description">
+                Click the button rapidly to see throttling in action.
+                Notice how certain clicks are delayed or ignored.
+            </p>
+            <div class="demo-playground">
+                <div class="controls">
+                    <button id="clickButton">Click repeatedly</button>
+                    <span id="clickStatus" class="status">Clicks: 0 / 0</span>
+                </div>
+                <div id="clickVisualization" class="visualization"></div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color raw"></div>
+                        <span>Raw Events</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color throttled"></div>
+                        <span>Throttled Events</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trailing vs Leading Demo -->
+    <div class="demo-card">
+        <div class="demo-header">
+            <h2>Leading vs Trailing</h2>
+        </div>
+        <div class="demo-content">
+            <p class="demo-description">
+                Compare different throttle configurations.
+                Toggle between leading, trailing, or both edges.
+            </p>
+            <div class="demo-playground">
+                <div class="controls">
+                    <button id="configButton">Trigger Event</button>
+                    <select id="configSelect">
+                        <option value="both">Leading & Trailing</option>
+                        <option value="leading">Leading Only</option>
+                        <option value="trailing">Trailing Only</option>
+                    </select>
+                </div>
+                <div id="configVisualization" class="visualization"></div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color raw"></div>
+                        <span>Raw Events</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color throttled"></div>
+                        <span>Throttled Events</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../dist/index.umd.js"></script>
+<script>
+
+    const { throttle } = window['@avati/throttle'];
+
+    const stats = {
+        mouse: {
+            total: 0,
+            throttled: 0,
+            rate: 0,
+            lastUpdate: Date.now(),
+            // Add FPS tracking
+            frames: {
+                raw: [],
+                throttled: [],
+                lastFrameTime: performance.now(),
+                fps: {
+                    raw: 0,
+                    throttled: 0,
+                },
+            },
+        },
+    };
+
+
+    // Helper to add visualization markers
+    function addMarker(container, x, isThrottled = false) {
+        const marker = document.createElement('div');
+        marker.className = isThrottled ? 'throttle-marker' : 'event-marker';
+        marker.style.left = `${x}px`;
+        marker.style.height = '100%';
+        container.appendChild(marker);
+
+        // Clean up old markers
+        setTimeout(() => marker.remove(), 1000);
+    }
+
+    // Mouse Movement Demo
+    const mouseTracker = document.getElementById('mouseTracker');
+    const mouseViz = document.getElementById('mouseVisualization');
+
+    const throttledMouseMove = throttle((x) => {
+        // Calculate throttled FPS
+        stats.mouse.frames.throttled.push(performance.now());
+        // stats.mouse.frames.fps.throttled = calculateFPS(stats.mouse.frames.throttled);
+
+        addMarker(mouseViz, x, true);
+
+
+        stats.mouse.throttled++;
+        updateStats();
+
+    }, 500);
+
+    mouseTracker.addEventListener('mousemove', (e) => {
+        const rect = mouseTracker.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        addMarker(mouseViz, x);
+        stats.mouse.total++;
+        stats.mouse.rate = stats.mouse.total / ((Date.now() - stats.mouse.lastUpdate) / 1000);
+        // Calculate raw FPS
+        stats.mouse.frames.raw.push(performance.now());
+
+        throttledMouseMove(x);
+        updateStats();
+
+    });
+
+    // Click Demo
+    const clickButton = document.getElementById('clickButton');
+    const clickViz = document.getElementById('clickVisualization');
+    const clickStatus = document.getElementById('clickStatus');
+    let totalClicks = 0;
+    let throttledClicks = 0;
+
+    const throttledClick = throttle(() => {
+        throttledClicks++;
+        clickStatus.textContent = `Clicks: ${throttledClicks} / ${totalClicks}`;
+        addMarker(clickViz, Math.random() * clickViz.offsetWidth, true);
+    }, 1000);
+
+    clickButton.addEventListener('click', () => {
+        totalClicks++;
+        clickStatus.textContent = `Clicks: ${throttledClicks} / ${totalClicks}`;
+        addMarker(clickViz, Math.random() * clickViz.offsetWidth);
+        throttledClick();
+    });
+
+    // Configuration Demo
+    const configButton = document.getElementById('configButton');
+    const configSelect = document.getElementById('configSelect');
+    const configViz = document.getElementById('configVisualization');
+
+    let configThrottled = createConfigThrottle();
+
+    function createConfigThrottle() {
+        const [leading, trailing] = {
+            'both': [true, true],
+            'leading': [true, false],
+            'trailing': [false, true],
+        }[configSelect.value];
+
+        return throttle(
+            () => addMarker(configViz, Math.random() * configViz.offsetWidth, true),
+            1000,
+            { leading, trailing },
+        );
+    }
+
+    configSelect.addEventListener('change', () => {
+        configThrottled.cancel();
+        configThrottled = createConfigThrottle();
+    });
+
+    configButton.addEventListener('click', () => {
+        addMarker(configViz, Math.random() * configViz.offsetWidth);
+        configThrottled();
+    });
+
+
+    // Update stats displays
+    function updateStats() {
+        // Mouse stats
+        document.getElementById('mouseEventsPerSec').textContent = stats.mouse.rate.toFixed(1);
+        document.getElementById('mouseThrottleRate').textContent = ((stats.mouse.throttled / Math.max(stats.mouse.total, 1)) * 100).toFixed(1) + '%';
+        document.getElementById('mouseTotalEvents').textContent = stats.mouse.total;
+        document.getElementById('mouseThrottledEvents').textContent = stats.mouse.throttled;
+        document.getElementById('rawFPS').textContent = stats.mouse.frames.fps.raw;
+        document.getElementById('throttledFPS').textContent = stats.mouse.frames.fps.throttled;
+
+    }
+
+    // FPS calculation function
+    function calculateFPS(timestamps, timeWindow = 1000) {
+        const now = performance.now();
+        // Remove timestamps outside the time window
+        while (timestamps.length > 0 && timestamps[0] < now - timeWindow) {
+            timestamps.shift();
+        }
+
+        // Add current timestamp
+        timestamps.push(now);
+
+        // Calculate FPS based on remaining timestamps
+        return Math.round((timestamps.length / timeWindow) * 1000);
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+
+
+        setInterval(() => {
+            const now = performance.now();
+            const timeWindow = 1000; // 1 second window
+            stats.mouse.frames.raw = stats.mouse.frames.raw.filter(t => t > now - timeWindow);
+            stats.mouse.frames.throttled = stats.mouse.frames.throttled.filter(t => t > now - timeWindow);
+
+
+            // Reset rates periodically
+            if (Date.now() - stats.mouse.lastUpdate > 1000) {
+                stats.mouse.rate = 0;
+                stats.mouse.lastUpdate = Date.now();
+                stats.mouse.fps = 0;
+            }
+            updateStats();
+        }, 100);
+    });
+
+
+
+ </script>
+</body>
+</html>

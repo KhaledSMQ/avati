@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EventListenerManager - Throttle Options Example</title>
+    <style>
+        body {
+            height: 2000px;
+        }
+        #scrollInfo {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="scrollInfo">Scroll Y: 0</div>
+
+
+<script src="../dist/index.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+    document.addEventListener('DOMContentLoaded', () => {
+        const scrollInfo = document.getElementById('scrollInfo');
+
+        function handleScroll() {
+            scrollInfo.textContent = `Scroll Y: ${window.scrollY}`;
+        }
+
+        // Throttle with no leading call
+        eventManager.add(window, 'scroll', handleScroll, {
+            throttle: 200,
+            noLeading: true,
+        });
+
+        // Uncomment the following code to throttle with no trailing call
+        // eventManager.add(window, 'scroll', handleScroll, {
+        //   throttle: 200,
+        //   noTrailing: true,
+        // });
+    });
+</script>
+</body>
+</html>

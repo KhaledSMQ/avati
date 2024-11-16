@@ -1,0 +1,2 @@
+node scripts/verify-commit.mjs $1
+npx --no -- commitlint --edit $1

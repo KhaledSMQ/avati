@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EventListenerManager - Debounce Example</title>
+    <style>
+        #output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="searchInput" placeholder="Type to search..." />
+<div id="output"></div>
+
+
+<script src="../dist/index.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('searchInput');
+        const output = document.getElementById('output');
+
+        function handleInput(event) {
+            const query = event.target.value;
+            output.textContent = `Searching for: ${query}`;
+        }
+
+        // Debounce the input event handler
+        eventManager.add(input, 'input', handleInput, { debounce: 500 });
+    });
+</script>
+</body>
+</html>

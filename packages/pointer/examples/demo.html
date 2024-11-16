@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pointer Event Manager Demo</title>
+    <style>
+        .demo-box {
+            width: 200px;
+            height: 200px;
+            border: 2px solid #333;
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-section {
+            text-align: center;
+            margin: 10px;
+        }
+
+        #dragBox {
+            background-color: #f0f0f0;
+            cursor: move;
+        }
+
+        #multiTouchBox {
+            background-color: #e0e0ff;
+            touch-action: none;
+        }
+
+        #velocityBox {
+            background-color: #e0ffe0;
+        }
+
+        #gestureBox {
+            background-color: #ffe0e0;
+        }
+
+        .info-panel {
+            font-family: monospace;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            min-height: 60px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center;">Pointer Event Manager Demo</h1>
+
+<div class="container">
+    <!-- Drag Demo -->
+    <div class="demo-section">
+        <h3>Draggable Element</h3>
+        <div id="dragBox" class="demo-box">Drag me</div>
+        <div id="dragInfo" class="info-panel"></div>
+    </div>
+
+    <!-- Multi-touch Demo -->
+    <div class="demo-section">
+        <h3>Multi-touch Tracking</h3>
+        <div id="multiTouchBox" class="demo-box">Touch (multiple)</div>
+        <div id="multiTouchInfo" class="info-panel"></div>
+    </div>
+
+    <!-- Velocity Demo -->
+    <div class="demo-section">
+        <h3>Velocity Tracking</h3>
+        <div id="velocityBox" class="demo-box">Move pointer</div>
+        <div id="velocityInfo" class="info-panel"></div>
+    </div>
+
+    <!-- Gesture Demo -->
+    <div class="demo-section">
+        <h3>Gesture Detection</h3>
+        <div id="gestureBox" class="demo-box">Click or touch</div>
+        <div id="gestureInfo" class="info-panel"></div>
+    </div>
+</div>
+<script src="../dist/index.umd.js"></script>
+
+<script>
+    const { AdvancedPointerEventManager, getElementPositionInfo } = window['@avati/pointer'];
+
+    // Initialize managers for each demo box
+    function initDragDemo() {
+        const element = document.getElementById('dragBox');
+        const info = document.getElementById('dragInfo');
+        const elementRect = element.getBoundingClientRect();
+        let offsetX = 0, offsetY = 0;
+        let currentPosition = { x: 0, y: 0 };
+
+        const manager = new AdvancedPointerEventManager(element, {
+            moveEventTarget: 'document',
+        });
+
+        manager.on('pointerdown', (event, state) => {
+            offsetX = event.clientX - currentPosition.x;
+            offsetY = event.clientY - currentPosition.y;
+
+            element.style.opacity = '0.8';
+            element.style.transition = 'none'; // Disable transition while dragging
+        });
+
+        manager.on('pointermove', (event, state) => {
+            if (state.get(event.pointerId)?.isDown) {
+                const deltaX = event.clientX - offsetX;
+                const deltaY = event.clientY - offsetY;
+
+                console.log({
+                    deltaX,
+                    deltaY,
+                    offsetX,
+                    offsetY,
+                });
+                currentPosition = { x: deltaX, y: deltaY };
+
+                element.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0px)`;
+                info.textContent = `Position: (${deltaX.toFixed(0)}, ${deltaY.toFixed(0)})`;
+
+            }
+        });
+
+        manager.on('pointerup', () => {
+            element.style.opacity = '1';
+            element.style.transition = 'transform 0.3s ease'; // Smooth snap back or update
+        });
+    }
+
+    function initMultiTouchDemo() {
+        const element = document.getElementById('multiTouchBox');
+        const info = document.getElementById('multiTouchInfo');
+
+        const manager = new AdvancedPointerEventManager(element);
+
+        function updateInfo(state) {
+            const count = state.size;
+            const points = Array.from(state.values())
+                .map(p => `(${p.position.x.toFixed(0)}, ${p.position.y.toFixed(0)})`)
+                .join(', ');
+            info.textContent = `Active points: ${count}\n${points}`;
+        }
+
+        ['pointerdown', 'pointermove', 'pointerup'].forEach(event => {
+            manager.on(event, (e, state) => {
+                updateInfo(state);
+                element.style.backgroundColor = state.size > 0 ?
+                    `rgb(${160 + state.size * 30}, ${160}, ${255})` :
+                    '#e0e0ff';
+            });
+        });
+    }
+
+    function initVelocityDemo() {
+        const element = document.getElementById('velocityBox');
+        const info = document.getElementById('velocityInfo');
+
+        const manager = new AdvancedPointerEventManager(element, {
+            moveEventTarget: 'element',
+        });
+
+        manager.on('pointermove', (event, state) => {
+            const pointerState = state.get(event.pointerId);
+            if (pointerState) {
+                const velocity = Math.sqrt(
+                    pointerState.velocity.vx ** 2 +
+                    pointerState.velocity.vy ** 2,
+                ).toFixed(1);
+
+                info.textContent = `Speed: ${velocity}px/s`;
+
+                // Visual feedback
+                const intensity = Math.min(velocity / 1000, 1);
+                element.style.backgroundColor =
+                    `rgb(${224 - intensity * 50}, ${255 - intensity * 50}, ${224 - intensity * 50})`;
+            }
+        });
+
+        manager.on('pointerleave', () => {
+            element.style.backgroundColor = '#e0ffe0';
+            info.textContent = '';
+        });
+    }
+
+    function initGestureDemo() {
+        const element = document.getElementById('gestureBox');
+        const info = document.getElementById('gestureInfo');
+        let lastClickTime = 0;
+        let holdTimer = null;
+
+        const manager = new AdvancedPointerEventManager(element);
+
+        manager.on('pointerdown', () => {
+            element.style.transform = 'scale(0.95)';
+            holdTimer = setTimeout(() => {
+                info.textContent = 'Long press detected!';
+                element.style.backgroundColor = '#ff9090';
+            }, 500);
+        });
+
+        manager.on('pointerup', () => {
+            element.style.transform = 'scale(1)';
+            clearTimeout(holdTimer);
+        });
+
+        manager.on('click', (event) => {
+            const now = Date.now();
+            if (now - lastClickTime < 300) {
+                info.textContent = 'Double click detected!';
+                element.style.backgroundColor = '#ff9090';
+                lastClickTime = 0;
+            } else {
+                info.textContent = 'Single click detected!';
+                element.style.backgroundColor = '#ffe0e0';
+                lastClickTime = now;
+            }
+
+            setTimeout(() => {
+                element.style.backgroundColor = '#ffe0e0';
+                info.textContent = '';
+            }, 1000);
+        });
+    }
+
+    // Initialize all demos
+    document.addEventListener('DOMContentLoaded', () => {
+        initDragDemo();
+        initMultiTouchDemo();
+        initVelocityDemo();
+        initGestureDemo();
+    });
+</script>
+</body>
+</html>

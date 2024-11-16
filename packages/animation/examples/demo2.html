@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="h-screen flex items-center justify-center">
+   <div id="animation-container"></div>
+</div>
+<script src="./index.js"></script>
+<script>
+
+    const { Tween } = Avati;
+    console.log(Tween);
+
+    class LoadingAnimation {
+        bounceAnimation = null
+        squareAnimation = null
+
+        constructor(options = {}) {
+            this.size = options.size || 300
+            this.containerSize = options.containerSize || 900
+
+            // Create container
+            this.container = document.createElement("div")
+            Object.assign(this.container.style, {
+                width: `${this.containerSize}px`,
+                height: `${this.containerSize}px`,
+                position: "relative",
+                margin: "0 auto"
+            })
+
+            // Create ball
+            this.ball = document.createElement("div")
+            Object.assign(this.ball.style, {
+                width: `${this.size}px`,
+                height: `${this.size}px`,
+                backgroundColor: options.color || "#3498db",
+                borderRadius: "50%",
+                position: "absolute",
+                transition: "border-radius 0.3s ease"
+            })
+
+            this.container.appendChild(this.ball)
+        }
+
+        mount(parent) {
+            parent.appendChild(this.container)
+        }
+
+        start() {
+            this.animateBounce()
+
+            // After 5 seconds, transform to square
+            setTimeout(() => {
+                if (this.bounceAnimation) {
+                    this.bounceAnimation.stop()
+                }
+                this.transformToSquare()
+            }, 5000)
+        }
+
+        animateBounce() {
+            const startPosition = { x: 0, y: 0 }
+            const bouncePoints = [
+                { x: this.containerSize - this.size, y: 0 },
+                { x: this.containerSize - this.size, y: this.containerSize - this.size },
+                { x: 0, y: this.containerSize - this.size },
+                startPosition
+            ]
+
+            let currentPointIndex = 0
+
+            const createBounceAnimation = (from, to) => {
+                return new Tween({
+                    from,
+                    to,
+                    duration: 1000,
+                    easing: Tween.EasingFunctions.easeInOutCubic,
+                    onUpdate: value => {
+                        this.ball.style.transform = `translate(${value.x}px, ${value.y}px)`
+                    },
+                    onComplete: () => {
+                        currentPointIndex = (currentPointIndex + 1) % bouncePoints.length
+                        this.bounceAnimation = createBounceAnimation(
+                            bouncePoints[currentPointIndex],
+                            bouncePoints[(currentPointIndex + 1) % bouncePoints.length]
+                        )
+                        this.bounceAnimation.start()
+                    }
+                })
+            }
+
+            this.bounceAnimation = createBounceAnimation(startPosition, bouncePoints[1])
+            this.bounceAnimation.start()
+        }
+
+        transformToSquare() {
+            // Move to center
+            const centerX = (this.containerSize - this.size) / 2
+            const centerY = (this.containerSize - this.size) / 2
+
+            const centerAnimation = new Tween({
+                from: {
+                    x: parseFloat(this.ball.style.transform.split("(")[1]) || 0,
+                    y: parseFloat(this.ball.style.transform.split(",")[1]) || 0
+                },
+                to: { x: centerX, y: centerY },
+                duration: 500,
+                easing: Tween.EasingFunctions.easeOutCubic,
+                onUpdate: value => {
+                    this.ball.style.transform = `translate(${value.x}px, ${value.y}px)`
+                },
+                onComplete: () => {
+                    // Transform to square
+                    this.ball.style.borderRadius = "4px"
+
+                    // Scale up animation
+                    const scaleAnimation = new Tween({
+                        from: 1,
+                        to: 2,
+                        duration: 500,
+                        easing: Tween.EasingFunctions.easeOutElastic,
+                        onUpdate: value => {
+                            this.ball.style.transform = `translate(${centerX}px, ${centerY}px) scale(${value})`
+                        }
+                    })
+                    scaleAnimation.start()
+                }
+            })
+
+            centerAnimation.start()
+        }
+
+        stop() {
+            if (this.bounceAnimation) {
+                this.bounceAnimation.stop()
+            }
+            if (this.squareAnimation) {
+                this.squareAnimation.stop()
+            }
+        }
+    }
+    class AnimationExample {
+        static createComplexAnimation(element) {
+            // Position animation
+            const positionTween = new Tween({
+                from: { x: 0, y: 0 },
+                to: { x: 200, y: 100 },
+                duration: 1000,
+                easing: Tween.EasingFunctions.easeInOutCubic,
+                onUpdate: value => {
+                    element.style.transform = `translate(${value.x}px, ${value.y}px)`;
+                },
+            });
+
+            // Color animation
+            const colorTween = new Tween({
+                from: '#ff0000',
+                to: '#00ff00',
+                duration: 1500,
+                easing: Tween.EasingFunctions.easeInOutQuad,
+                onUpdate: value => {
+                    element.style.backgroundColor = value;
+                },
+            });
+
+            // Scale animation
+            const scaleTween = new Tween({
+                from: 1,
+                to: 2,
+                duration: 2000,
+                easing: Tween.EasingFunctions.bounce,
+                onUpdate: value => {
+                    element.style.scale = value.toString();
+                },
+            });
+
+            return {
+                start: () => {
+                    positionTween.start();
+                    colorTween.start();
+                    scaleTween.start();
+                },
+                stop: () => {
+                    positionTween.stop();
+                    colorTween.stop();
+                    scaleTween.stop();
+                },
+            };
+        }
+    }
+
+
+    const container = document.getElementById('animation-container');
+    const loadingAnimation = new LoadingAnimation({
+        size: 60,                // ball size in pixels
+        color: '#3498db',        // ball color
+        containerSize: 200       // container size in pixels
+    });
+
+    loadingAnimation.mount(container);
+    loadingAnimation.start();
+
+</script>
+
+</body>
+</html>

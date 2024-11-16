@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EventListenerManager - Error Handling Example</title>
+</head>
+<body>
+<button id="errorButton">Click Me</button>
+<div id="errorMessage" style="color: red;"></div>
+
+
+<script src="../dist/index.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+    document.addEventListener('DOMContentLoaded', () => {
+        const button = document.getElementById('errorButton');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function handleClick() {
+            // Simulate an error
+            throw new Error('Something went wrong!');
+        }
+
+        function handleError(error) {
+            errorMessage.textContent = `Error: ${error.message}`;
+        }
+
+        // Add event listener with error handling
+        eventManager.add(button, 'click', handleClick, { onError: handleError });
+    });
+</script>
+</body>
+</html>

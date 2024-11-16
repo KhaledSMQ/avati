@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Debounce Utility Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #6b7280;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --background: #f8fafc;
+            --text: #1f2937;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        input, button {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--border);
+        }
+
+        .metric-card h4 {
+            color: var(--secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .code-block {
+            margin: 1rem 0;
+            background: #1f2937;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+
+        .results {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 0.375rem;
+            border: 1px solid var(--border);
+        }
+
+        .result-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .chart {
+            width: 100%;
+            height: 200px;
+            margin-top: 1rem;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-error {
+            background: #fff5f5;
+            color: #e53e3e;
+        }
+
+        .warning {
+            background: #fff5f5;
+            color: #e53e3e;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+        }
+
+        .warning a {
+            color: #cc2c2c;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        .warning span {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1>EventListenerManager Examples</h1>
+        <p>Interactive examples demonstrating the power of the EventListenerManager library</p>
+    </header>
+
+    <!-- Smart Search with Debounce -->
+    <section class="demo-section">
+        <h2>Smart Search with Debounce</h2>
+        <p>Demonstrates debounced API calls with loading states and error handling.</p>
+
+        <div class="demo-controls">
+            <div class="input-group">
+                <label for="search-input">Search Users</label>
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Type to search..."
+                >
+            </div>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <h4>API Calls</h4>
+                <div class="metric-value" id="api-calls">0</div>
+            </div>
+            <div class="metric-card">
+                <h4>Result count</h4>
+                <div class="metric-value" id="result-count">
+                    <span class="">0</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <h4>Status</h4>
+                <div class="metric-value" id="search-status">
+                    <span class="status status-success">Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="results" id="search-results">
+        </div>
+
+        <div class="code-block">
+            <button class="copy-button" data-code="search">Copy Code</button>
+            <pre>
+                    <code class="language-typescript" id="searchCode">
+import eventManager from '@avati/listener';
+
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+let apiCalls = 0;
+
+eventManager.add(searchInput, 'input', async (event) => {
+    const query = event.target.value.trim();
+    if (query.length < 2) {
+        searchResults.innerHTML = '';
+        return;
+    }
+    try {
+        const results = await searchApi(query);
+        displayResults(results);
+    } catch (error) {
+       displayErrors(error);
+    }
+}, {
+    debounce: 300,
+    async: true,
+    onError: (error) => {
+        console.error('Search error:', error);
+    }
+})
+
+                    </code>
+                </pre>
+        </div>
+    </section>
+
+</div>
+
+<script src="../dist/index.umd.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+    // Highlight.js initialization
+    hljs.highlightAll();
+
+    // Mock API delay
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+    let apiCalls = 0;
+
+    // Mock API functions
+    const mockData = [
+        'JavaScript', 'TypeScript', 'React', 'Vue', 'Angular',
+        'Node.js', 'Python', 'Java', 'C++', 'Ruby',
+        'Go', 'Rust', 'Swift', 'Kotlin', 'PHP',
+    ];
+
+    async function searchApi(query) {
+        const shouldFail = Math.random() > 0.8;
+        apiCalls++;
+        document.getElementById('api-calls').textContent = apiCalls;
+        await new Promise(resolve => setTimeout(resolve, 300)); // Simulate network delay
+
+        if (shouldFail) {
+            throw new Error('Failed to fetch data');
+        }
+        return mockData.filter(item =>
+            item.toLowerCase().includes(query.toLowerCase()),
+        );
+    }
+
+    async function saveContent(content) {
+        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate save delay
+        localStorage.setItem('editor-content', content);
+        return true;
+    }
+
+
+    // Initialize search functionality
+    function initSearch() {
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        const resultCount = document.getElementById('result-count');
+        const resultStatus = document.getElementById('search-status');
+
+        function displayResults(results) {
+            searchResults.innerHTML = results.length
+                ? results.map(result => `
+<div class="suggestion">
+    ${result.replace(
+                    new RegExp(searchInput.value, 'gi'),
+                    match => `<strong>${match}</strong>`,
+                )}
+</div>
+`).join('')
+                : '<div>No results found</div>';
+        }
+
+        eventManager.add(searchInput, 'input', async (event) => {
+            const query = event.target.value.trim();
+
+            if (query.length < 2) {
+                searchResults.innerHTML = '';
+                resultCount.textContent = '0';
+                return;
+            }
+
+            try {
+                resultStatus.innerHTML = '<span class="status status-pending">Searching...</span>';
+                const results = await searchApi(query);
+                resultCount.textContent = results.length;
+                displayResults(results);
+                resultStatus.innerHTML = '<span class="status status-success">Ready</span>';
+            } catch (error) {
+                resultStatus.innerHTML = '<span class="status status-error">Error</span>';
+                searchResults.innerHTML = `
+<div style="color: var(--error-color)">
+    Search failed: ${error.message}
+</div>
+`;
+            }
+        }, {
+            debounce: 300,
+            async: true,
+        });
+    }
+
+
+    function initCodeCopy() {
+        document.querySelectorAll('.copy-button').forEach(button => {
+            eventManager.add(button, 'click', async () => {
+                const codeId = button.dataset.code + 'Code';
+                const codeElement = document.getElementById(codeId);
+                const code = codeElement.textContent;
+
+                try {
+                    await navigator.clipboard.writeText(code);
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy code:', err);
+                }
+            });
+        });
+    }
+
+
+    // Initialize everything when DOM is loaded
+    eventManager.add(document, 'DOMContentLoaded', () => {
+        initSearch();
+        // initCanvas();
+        // initEditor();
+        initCodeCopy();
+
+
+    });
+</script>
+</body>
+</html>

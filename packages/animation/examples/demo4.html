@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Animation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f6fa;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        #upload-container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div id="upload-container"></div>
+<script src="./index.js"></script>
+<script>
+
+    const { Tween } = Avati;
+
+    class UploadAnimation {
+        currentAnimation = null
+
+        constructor(options = {}) {
+            this.size = options.size || 120
+            this.strokeWidth = this.size / 15
+            this.colors = {
+                primary: options.primaryColor || "#3498db",
+                success: options.successColor || "#2ecc71",
+                error: options.errorColor || "#e74c3c"
+            }
+
+            this.createElements()
+        }
+
+        createElements() {
+            // Container
+            this.container = document.createElement("div")
+            Object.assign(this.container.style, {
+                width: `${this.size}px`,
+                height: `${this.size}px`,
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+            })
+
+            // SVG - Using setAttribute instead of Object.assign
+            this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+            const radius = (this.size - this.strokeWidth) / 2
+            const center = this.size / 2
+            const circumference = 2 * Math.PI * radius
+
+            this.svg.setAttribute("width", `${this.size}`)
+            this.svg.setAttribute("height", `${this.size}`)
+            this.svg.setAttribute("viewBox", `0 0 ${this.size} ${this.size}`)
+
+            // Background circle
+            const bgCircle = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            )
+            bgCircle.setAttribute("cx", center.toString())
+            bgCircle.setAttribute("cy", center.toString())
+            bgCircle.setAttribute("r", radius.toString())
+            bgCircle.setAttribute("fill", "none")
+            bgCircle.setAttribute("stroke", "#eee")
+            bgCircle.setAttribute("stroke-width", this.strokeWidth.toString())
+
+            // Progress circle
+            this.circle = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            )
+            this.circle.setAttribute("cx", center.toString())
+            this.circle.setAttribute("cy", center.toString())
+            this.circle.setAttribute("r", radius.toString())
+            this.circle.setAttribute("fill", "none")
+            this.circle.setAttribute("stroke", this.colors.primary)
+            this.circle.setAttribute("stroke-width", this.strokeWidth.toString())
+            this.circle.setAttribute("stroke-dasharray", circumference.toString())
+            this.circle.setAttribute("stroke-dashoffset", circumference.toString())
+            this.circle.setAttribute("transform", `rotate(-90 ${center} ${center})`)
+
+            // Checkmark
+            this.checkmark = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "path"
+            )
+            const checkSize = this.size * 0.3
+            const checkX = center - checkSize * 0.5
+            const checkY = center - checkSize * 0.2
+
+            this.checkmark.setAttribute(
+                "d",
+                `M${checkX},${checkY} l${checkSize * 0.4},${checkSize *
+                0.4} l${checkSize * 0.6},-${checkSize * 0.8}`
+            )
+            this.checkmark.setAttribute("fill", "none")
+            this.checkmark.setAttribute("stroke", this.colors.success)
+            this.checkmark.setAttribute("stroke-width", this.strokeWidth.toString())
+            this.checkmark.setAttribute("stroke-linecap", "round")
+            this.checkmark.setAttribute("stroke-linejoin", "round")
+            this.checkmark.setAttribute("opacity", "0")
+            this.checkmark.setAttribute("stroke-dasharray", "100")
+            this.checkmark.setAttribute("stroke-dashoffset", "100")
+
+            // Cross
+            this.cross = document.createElementNS("http://www.w3.org/2000/svg", "g")
+            const crossSize = this.size * 0.3
+            const crossX = center - crossSize * 0.5
+            const crossY = center - crossSize * 0.5
+
+            const line1 = document.createElementNS("http://www.w3.org/2000/svg", "line")
+            const line2 = document.createElementNS("http://www.w3.org/2000/svg", "line")
+
+            line1.setAttribute("x1", crossX.toString())
+            line1.setAttribute("y1", crossY.toString())
+            line1.setAttribute("x2", (crossX + crossSize).toString())
+            line1.setAttribute("y2", (crossY + crossSize).toString())
+            line1.setAttribute("stroke", this.colors.error)
+            line1.setAttribute("stroke-width", this.strokeWidth.toString())
+            line1.setAttribute("stroke-linecap", "round")
+            line1.setAttribute("opacity", "0")
+
+            line2.setAttribute("x1", (crossX + crossSize).toString())
+            line2.setAttribute("y1", crossY.toString())
+            line2.setAttribute("x2", crossX.toString())
+            line2.setAttribute("y2", (crossY + crossSize).toString())
+            line2.setAttribute("stroke", this.colors.error)
+            line2.setAttribute("stroke-width", this.strokeWidth.toString())
+            line2.setAttribute("stroke-linecap", "round")
+            line2.setAttribute("opacity", "0")
+
+            this.cross.appendChild(line1)
+            this.cross.appendChild(line2)
+
+            this.svg.appendChild(bgCircle)
+            this.svg.appendChild(this.circle)
+            this.svg.appendChild(this.checkmark)
+            this.svg.appendChild(this.cross)
+            this.container.appendChild(this.svg)
+        }
+        mount(parent) {
+            parent.appendChild(this.container)
+        }
+
+        updateProgress(progress) {
+            const radius = (this.size - this.strokeWidth) / 2
+            const circumference = 2 * Math.PI * radius
+            const offset = circumference - (progress / 100) * circumference
+            this.circle.style.strokeDashoffset = offset.toString()
+        }
+
+        async success() {
+            // Stop any current animation
+            if (this.currentAnimation) {
+                this.currentAnimation.stop()
+            }
+
+            // Complete the circle
+            await this.animateToCompletion()
+
+            // Change color and show checkmark
+            this.circle.style.stroke = this.colors.success
+
+            // Animate checkmark
+            return new Promise(resolve => {
+                const checkmarkTween = new Tween({
+                    from: 100,
+                    to: 0,
+                    duration: 600,
+                    easing: Tween.EasingFunctions.easeOutCubic,
+                    onUpdate: value => {
+                        this.checkmark.style.opacity = "1"
+                        this.checkmark.style.strokeDashoffset = value.toString()
+                    },
+                    onComplete: () => resolve()
+                })
+                checkmarkTween.start()
+            })
+        }
+
+        async error() {
+            if (this.currentAnimation) {
+                this.currentAnimation.stop()
+            }
+
+            // Change color
+            this.circle.style.stroke = this.colors.error
+
+            // Animate cross
+            return new Promise(resolve => {
+                this.cross.childNodes.forEach((line, index) => {
+                    const lineTween = new Tween({
+                        from: 0,
+                        to: 1,
+                        duration: 400,
+                        easing: Tween.EasingFunctions.easeOutCubic,
+                        onUpdate: value => {
+                            line.style.opacity = value.toString()
+                        },
+                        onComplete: () => {
+                            if (index === 1) resolve()
+                        }
+                    })
+                    setTimeout(() => lineTween.start(), index * 100)
+                })
+            })
+        }
+
+        async animateToCompletion() {
+            const radius = (this.size - this.strokeWidth) / 2
+            const circumference = 2 * Math.PI * radius
+            const currentOffset = parseFloat(
+                this.circle.style.strokeDashoffset || circumference.toString()
+            )
+
+            return new Promise(resolve => {
+                const completionTween = new Tween({
+                    from: currentOffset,
+                    to: 0,
+                    duration: 400,
+                    easing: Tween.EasingFunctions.easeOutCubic,
+                    onUpdate: value => {
+                        this.circle.style.strokeDashoffset = value.toString()
+                    },
+                    onComplete: () => resolve()
+                })
+                completionTween.start()
+            })
+        }
+
+        reset() {
+            if (this.currentAnimation) {
+                this.currentAnimation.stop()
+            }
+
+            const radius = (this.size - this.strokeWidth) / 2
+            const circumference = 2 * Math.PI * radius
+
+            this.circle.style.stroke = this.colors.primary
+            this.circle.style.strokeDashoffset = circumference.toString()
+            this.checkmark.style.opacity = "0"
+            this.checkmark.style.strokeDashoffset = "100"
+            this.cross.childNodes.forEach(line => {
+                line.style.opacity = "0"
+            })
+        }
+    }
+
+    // Example usage with file upload
+    class FileUploadExample {
+        constructor(container) {
+            // Create upload animation
+            this.uploadAnimation = new UploadAnimation({
+                size: 120,
+                primaryColor: "#3498db",
+                successColor: "#2ecc71",
+                errorColor: "#e74c3c"
+            })
+
+            // Create file input
+            this.input = document.createElement("input")
+            this.input.type = "file"
+            this.input.style.display = "none"
+
+            // Create upload button
+            this.button = document.createElement("button")
+            Object.assign(this.button.style, {
+                padding: "12px 24px",
+                fontSize: "16px",
+                borderRadius: "8px",
+                border: "none",
+                backgroundColor: "#3498db",
+                color: "white",
+                cursor: "pointer",
+                marginTop: "20px"
+            })
+            this.button.textContent = "Select File"
+
+            // Create wrapper
+            const wrapper = document.createElement("div")
+            Object.assign(wrapper.style, {
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "20px"
+            })
+
+            wrapper.appendChild(this.uploadAnimation.container)
+            wrapper.appendChild(this.button)
+            wrapper.appendChild(this.input)
+            container.appendChild(wrapper)
+
+            this.setupListeners()
+        }
+
+        setupListeners() {
+            this.button.addEventListener("click", () => this.input.click())
+            this.input.addEventListener("change", () => this.handleFileSelect())
+        }
+
+        async handleFileSelect() {
+            const file = this.input.files?.[0]
+            if (!file) return
+
+            this.button.disabled = true
+            this.uploadAnimation.reset()
+
+            // Simulate file upload
+            try {
+                await this.simulateFileUpload(file, progress => {
+                    this.uploadAnimation.updateProgress(progress)
+                })
+
+                await this.uploadAnimation.success()
+            } catch (error) {
+                await this.uploadAnimation.error()
+            } finally {
+                this.button.disabled = false
+                this.input.value = ""
+            }
+        }
+
+        simulateFileUpload(file, onProgress) {
+            return new Promise((resolve, reject) => {
+                let progress = 0
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10
+                    if (progress >= 100) {
+                        clearInterval(interval)
+                        // Randomly succeed or fail
+                        if (Math.random() > 0.3) {
+                            resolve()
+                        } else {
+                            reject(new Error("Upload failed"))
+                        }
+                    } else {
+                        onProgress(progress)
+                    }
+                }, 200)
+            })
+        }
+    }
+
+    // Initialize
+    const container = document.getElementById("upload-container")
+    new FileUploadExample(container)
+
+
+
+</script>
+</body>
+</html>

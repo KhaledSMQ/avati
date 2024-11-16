@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EventListenerManager - Throttle Example</title>
+  <style>
+    body {
+      height: 2000px;
+    }
+    #scrollPosition {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="scrollPosition">Scroll Y: 0</div>
+
+  <script src="../dist/index.js"></script>
+  <script>
+    const { eventManager } = window['@avati/listener'];
+    document.addEventListener('DOMContentLoaded', () => {
+      const scrollDisplay = document.getElementById('scrollPosition');
+
+      function handleScroll() {
+        scrollDisplay.textContent = `Scroll Y: ${window.scrollY}`;
+      }
+
+      // Throttle the scroll event handler
+      eventManager.add(window, 'scroll', handleScroll, { throttle: 100 });
+    });
+  </script>
+</body>
+</html>

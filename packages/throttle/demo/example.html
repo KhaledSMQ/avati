@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throttle Examples</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .example {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .scroll-container {
+            height: 200px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .scroll-content {
+            height: 1000px;
+            background: linear-gradient(180deg, #f0f0f0 0%, #e0e0e0 100%);
+            position: relative;
+        }
+
+        .scroll-indicator {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-container {
+            margin: 10px 0;
+        }
+
+        .search-results {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #eee;
+            min-height: 50px;
+        }
+
+        .click-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 5px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<h1>Throttle Function Examples</h1>
+
+<!-- Example 1: Scroll Event Handling -->
+<div class="example">
+    <h2>1. Scroll Event Throttling</h2>
+    <p>Scroll the container below. Notice how the scroll position updates are throttled to prevent performance
+        issues:</p>
+    <div class="scroll-container" id="scrollExample">
+        <div class="scroll-content">
+            <div class="scroll-indicator" id="scrollPosition">
+                Scroll Position: 0px
+            </div>
+        </div>
+    </div>
+    <div class="status" id="scrollStatus">Last update: Never</div>
+</div>
+
+<!-- Example 2: Search Input Throttling -->
+<div class="example">
+    <h2>2. Search Input Throttling</h2>
+    <p>Type in the search box. API calls are throttled to prevent overwhelming the server:</p>
+    <div class="search-container">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Type to search..."
+            style="padding: 8px; width: 200px;"
+        >
+        <div class="search-results" id="searchResults">
+            Results will appear here...
+        </div>
+    </div>
+    <div class="status" id="searchStatus">Last search: Never</div>
+</div>
+
+<!-- Example 3: Button Click Throttling -->
+<div class="example">
+    <h2>3. Button Click Throttling</h2>
+    <p>Try clicking the button rapidly. Notice how the actions are throttled:</p>
+    <div class="click-container">
+        <button id="clickButton">Click Me!</button>
+        <div class="status" id="clickStatus">Clicks handled: 0</div>
+    </div>
+</div>
+<script src="../dist/index.umd.js"></script>
+<script>
+
+    const { throttle } = window['@avati/throttle'];
+
+    // Example 1: Scroll Event Handler
+    const scrollContainer = document.getElementById('scrollExample');
+    const scrollPosition = document.getElementById('scrollPosition');
+    const scrollStatus = document.getElementById('scrollStatus');
+
+    const updateScrollPosition = throttle(() => {
+        const position = scrollContainer.scrollTop;
+        scrollPosition.textContent = `Scroll Position: ${position}px`;
+        scrollStatus.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
+    }, 100); // Throttle to 100ms
+
+    scrollContainer.addEventListener('scroll', updateScrollPosition);
+
+    // Example 2: Search Input Handler
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const searchStatus = document.getElementById('searchStatus');
+
+    // Simulate API call
+    const performSearch = throttle((query) => {
+        searchResults.textContent = `Searching for: "${query}"...`;
+        searchStatus.textContent = `Last search: ${new Date().toLocaleTimeString()}`;
+
+        // Simulate API delay
+        setTimeout(() => {
+            searchResults.textContent = `Results for "${query}": ${Math.random().toString(36).slice(2, 8)}`;
+        }, 500);
+    }, 500); // Throttle to 500ms
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+        if (query) {
+            performSearch(query);
+        } else {
+            searchResults.textContent = 'Results will appear here...';
+        }
+    });
+
+    // Example 3: Button Click Handler
+    const clickButton = document.getElementById('clickButton');
+    const clickStatus = document.getElementById('clickStatus');
+    let clickCount = 0;
+
+    const handleClick = throttle(() => {
+        clickCount++;
+        clickStatus.textContent = `Clicks handled: ${clickCount}`;
+    }, 1000); // Throttle to 1 second
+
+    clickButton.addEventListener('click', handleClick);
+</script>
+</body>
+</html>

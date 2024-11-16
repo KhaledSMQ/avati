@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EventListenerManager - Basic Usage</title>
+</head>
+<body>
+<button id="myButton">Click Me</button>
+
+<script src="../dist/index.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+    // Wait for the DOM to load
+    document.addEventListener('DOMContentLoaded', () => {
+        const button = document.getElementById('myButton');
+
+        function handleClick(event) {
+            alert('Button clicked!');
+        }
+
+        // Add an event listener using EventListenerManager
+        const eventId = eventManager.add(button, 'click', handleClick);
+
+        // Optionally, remove the event listener after some time
+        setTimeout(() => {
+            eventManager.remove(eventId);
+            console.log('Event listener removed');
+        }, 10000); // Removes the listener after 10 seconds
+    });
+</script>
+</body>
+</html>

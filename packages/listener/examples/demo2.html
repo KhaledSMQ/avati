@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventListenerManager Working Examples</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #16a34a;
+            --warning-color: #ca8a04;
+            --error-color: #dc2626;
+            --bg-color: #f8fafc;
+            --code-bg: #1e293b;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-card {
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .demo-controls {
+            margin: 1.5rem 0;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        input, button {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+        }
+
+        .status-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .status-error {
+            background: var(--error-color);
+            color: white;
+        }
+
+        pre[class*="language-"] {
+            margin: 1.5rem 0;
+            border-radius: 6px;
+        }
+
+        .results {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-color);
+            border-radius: 6px;
+            min-height: 100px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .canvas-area {
+            width: 100%;
+            height: 300px;
+            background: var(--bg-color);
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #drawingCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .tools {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 10;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .color-picker {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: 2px solid #fff;
+            border-radius: 4px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .save-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .save-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success-color);
+        }
+
+        .save-dot.saving {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .suggestions {
+            margin-top: 0.5rem;
+        }
+
+        .suggestion {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .suggestion:hover {
+            background: var(--bg-color);
+        }
+
+        .code-container {
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>EventListenerManager Examples</h1>
+        <p>Interactive examples demonstrating the power of the EventListenerManager library</p>
+    </div>
+
+    <div class="section">
+        <h2>1. Smart Search with Debounce</h2>
+        <div class="demo-controls">
+            <div class="input-group">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Type to search..."
+                    autocomplete="off"
+                >
+            </div>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <h4>API Calls</h4>
+                <div id="searchApiCalls" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <h4>Results Found</h4>
+                <div id="resultsFound" class="metric-value">0</div>
+            </div>
+        </div>
+
+        <div id="searchResults" class="results"></div>
+
+        <div class="code-container">
+            <button class="copy-button" data-code="search">Copy Code</button>
+            <pre><code class="language-typescript" id="searchCode">
+import eventManager from '@avati/event-listener-manager';
+
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+let apiCalls = 0;
+
+eventManager.add(searchInput, 'input', async (event) => {
+    const query = event.target.value.trim();
+
+    if (query.length < 2) {
+        searchResults.innerHTML = '';
+        return;
+    }
+
+    try {
+        apiCalls++;
+        document.getElementById('searchApiCalls').textContent = apiCalls;
+
+        // Simulate API call
+        const results = await searchApi(query);
+
+        // Update metrics and display results
+        document.getElementById('resultsFound').textContent = results.length;
+        displayResults(results);
+    } catch (error) {
+        searchResults.innerHTML = `
+            <div style="color: var(--error-color)">
+                Search failed: ${error.message}
+            </div>
+        `;
+    }
+}, {
+    debounce: 300,
+    async: true,
+    onError: (error) => {
+        console.error('Search error:', error);
+    }
+});</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Interactive Drawing Canvas</h2>
+        <div class="canvas-area">
+            <div class="tools">
+                <input type="color" id="colorPicker" class="color-picker">
+                <button id="clearCanvas">Clear</button>
+            </div>
+            <canvas id="drawingCanvas"></canvas>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <h4>Strokes</h4>
+                <div id="strokeCount" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <h4>Points</h4>
+                <div id="pointCount" class="metric-value">0</div>
+            </div>
+        </div>
+
+        <div class="code-container">
+            <button class="copy-button" data-code="canvas">Copy Code</button>
+            <pre><code class="language-javascript" id="canvasCode">
+// Canvas drawing implementation
+const canvas = document.getElementById('drawingCanvas');
+const ctx = canvas.getContext('2d');
+let isDrawing = false;
+let strokes = 0;
+let points = 0;
+
+// Set canvas size
+function resizeCanvas() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 3;
+}
+
+eventManager.add(window, 'resize', resizeCanvas, {
+    throttle: 100
+});
+
+// Handle drawing events
+eventManager.add(canvas, 'mousedown', (e) => {
+    isDrawing = true;
+    strokes++;
+    document.getElementById('strokeCount').textContent = strokes;
+
+    const rect = canvas.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(
+        e.clientX - rect.left,
+        e.clientY - rect.top
+    );
+});
+
+eventManager.add(canvas, 'mousemove', (e) => {
+    if (!isDrawing) return;
+
+    const rect = canvas.getBoundingClientRect();
+    ctx.lineTo(
+        e.clientX - rect.left,
+        e.clientY - rect.top
+    );
+    ctx.stroke();
+
+    points++;
+    document.getElementById('pointCount').textContent = points;
+}, {
+    throttle: 16 // ~60fps
+});
+
+['mouseup', 'mouseleave'].forEach(eventType => {
+    eventManager.add(canvas, eventType, () => {
+        isDrawing = false;
+    });
+});</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. Auto-saving Text Editor</h2>
+        <div class="demo-controls">
+                <textarea
+                    id="editor"
+                    placeholder="Start typing to see auto-save in action..."
+                ></textarea>
+            <div class="save-indicator">
+                <div id="saveDot" class="save-dot"></div>
+                <span id="saveStatus">Changes saved</span>
+            </div>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <h4>Characters</h4>
+                <div id="charCount" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <h4>Words</h4>
+                <div id="wordCount" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <h4>Saves</h4>
+                <div id="saveCount" class="metric-value">0</div>
+            </div>
+        </div>
+
+        <div class="code-container">
+            <button class="copy-button" data-code="editor">Copy Code</button>
+            <pre><code class="language-javascript" id="editorCode">
+const editor = document.getElementById('editor');
+const saveDot = document.getElementById('saveDot');
+const saveStatus = document.getElementById('saveStatus');
+let saveCount = 0;
+
+// Update character and word counts
+eventManager.add(editor, 'input', (e) => {
+    const text = e.target.value;
+    document.getElementById('charCount').textContent = text.length;
+    document.getElementById('wordCount').textContent =
+        text.trim().split(/\s+/).filter(Boolean).length;
+});
+
+// Handle auto-save
+eventManager.add(editor, 'input', async () => {
+    saveDot.classList.add('saving');
+    saveStatus.textContent = 'Saving...';
+
+    try {
+        await saveContent(editor.value);
+        saveCount++;
+        document.getElementById('saveCount').textContent = saveCount;
+
+        saveDot.classList.remove('saving');
+        saveStatus.textContent = 'Changes saved';
+    } catch (error) {
+        saveDot.classList.remove('saving');
+        saveStatus.textContent = 'Save failed!';
+    }
+}, {
+    debounce: 1000,
+    async: true,
+    onError: (error) => {
+        console.error('Auto-save failed:', error);
+    }
+});</code></pre>
+        </div>
+    </div>
+</div>
+
+<script src="../dist/index.umd.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+
+    // Mock API functions
+    const mockData = [
+        'JavaScript', 'TypeScript', 'React', 'Vue', 'Angular',
+        'Node.js', 'Python', 'Java', 'C++', 'Ruby',
+        'Go', 'Rust', 'Swift', 'Kotlin', 'PHP',
+    ];
+
+    async function searchApi(query) {
+        await new Promise(resolve => setTimeout(resolve, 300)); // Simulate network delay
+        return mockData.filter(item =>
+            item.toLowerCase().includes(query.toLowerCase()),
+        );
+    }
+
+    async function saveContent(content) {
+        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate save delay
+        localStorage.setItem('editor-content', content);
+        return true;
+    }
+
+    // Initialize search functionality
+    function initSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        function displayResults(results) {
+            searchResults.innerHTML = results.length
+                ? results.map(result => `
+<div class="suggestion">
+    ${result.replace(
+                    new RegExp(searchInput.value, 'gi'),
+                    match => `<strong>${match}</strong>`,
+                )}
+</div>
+`).join('')
+                : '<div>No results found</div>';
+        }
+
+        eventManager.add(searchInput, 'input', async (event) => {
+            const query = event.target.value.trim();
+
+            if (query.length < 2) {
+                searchResults.innerHTML = '';
+                document.getElementById('resultsFound').textContent = '0';
+                return;
+            }
+
+            try {
+                const results = await searchApi(query);
+                document.getElementById('resultsFound').textContent = results.length;
+                displayResults(results);
+            } catch (error) {
+                searchResults.innerHTML = `
+<div style="color: var(--error-color)">
+    Search failed: ${error.message}
+</div>
+`;
+            }
+        }, {
+            debounce: 300,
+            async: true,
+        });
+    }
+
+    // Initialize canvas functionality
+    function initCanvas() {
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const clearButton = document.getElementById('clearCanvas');
+        let isDrawing = false;
+        let strokes = 0;
+        let points = 0;
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = colorPicker.value;
+        }
+
+        resizeCanvas();
+        eventManager.add(window, 'resize', resizeCanvas, { throttle: 100 });
+
+// Clear canvas
+        clearButton.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            strokes = 0;
+            points = 0;
+            document.getElementById('strokeCount').textContent = '0';
+            document.getElementById('pointCount').textContent = '0';
+        });
+
+// Color picker
+        colorPicker.addEventListener('input', (e) => {
+            ctx.strokeStyle = e.target.value;
+        });
+
+// Drawing events
+        eventManager.add(canvas, 'mousedown', (e) => {
+            isDrawing = true;
+            strokes++;
+            document.getElementById('strokeCount').textContent = strokes;
+
+            const rect = canvas.getBoundingClientRect();
+            ctx.beginPath();
+            ctx.moveTo(
+                e.clientX - rect.left,
+                e.clientY - rect.top,
+            );
+        });
+
+        eventManager.add(canvas, 'mousemove', (e) => {
+            if (!isDrawing) return;
+
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(
+                e.clientX - rect.left,
+                e.clientY - rect.top,
+            );
+            ctx.stroke();
+
+            points++;
+            document.getElementById('pointCount').textContent = points;
+        }, {
+            throttle: 16, // ~60fps
+        });
+
+        ['mouseup', 'mouseleave'].forEach(eventType => {
+            eventManager.add(canvas, eventType, () => {
+                isDrawing = false;
+            });
+        });
+    }
+
+    // Initialize editor functionality
+    function initEditor() {
+        const editor = document.getElementById('editor');
+        const saveDot = document.getElementById('saveDot');
+        const saveStatus = document.getElementById('saveStatus');
+        let saveCount = 0;
+
+// Load saved content
+        const savedContent = localStorage.getItem('editor-content');
+        if (savedContent) {
+            editor.value = savedContent;
+            updateCounts(savedContent);
+        }
+
+        function updateCounts(text) {
+            document.getElementById('charCount').textContent = text.length;
+            document.getElementById('wordCount').textContent =
+                text.trim().split(/\s+/).filter(Boolean).length;
+        }
+
+// Update counts on input
+        eventManager.add(editor, 'input', (e) => {
+            updateCounts(e.target.value);
+        });
+
+// Auto-save
+        eventManager.add(editor, 'input', async () => {
+            saveDot.classList.add('saving');
+            saveStatus.textContent = 'Saving...';
+
+            try {
+                await saveContent(editor.value);
+                saveCount++;
+                document.getElementById('saveCount').textContent = saveCount;
+
+                saveDot.classList.remove('saving');
+                saveStatus.textContent = 'Changes saved';
+            } catch (error) {
+                saveDot.classList.remove('saving');
+                saveStatus.textContent = 'Save failed!';
+            }
+        }, {
+            debounce: 1000,
+            async: true,
+        });
+    }
+
+    // Copy code functionality
+    function initCodeCopy() {
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', async () => {
+                const codeId = button.dataset.code + 'Code';
+                const codeElement = document.getElementById(codeId);
+                const code = codeElement.textContent;
+
+                try {
+                    await navigator.clipboard.writeText(code);
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy code:', err);
+                }
+            });
+        });
+    }
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        initSearch();
+        initCanvas();
+        initEditor();
+        initCodeCopy();
+    });
+</script>
+</body>
+</html>

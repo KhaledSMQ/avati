@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollable Examples</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .example {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .example h2 {
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .example-controls {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        button {
+            padding: 6px 12px;
+            border: none;
+            background: #0066ff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #0052cc;
+        }
+
+        /* Scrollable containers */
+        .scroll-container {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background: #fafafa;
+            touch-action: none; /* Prevent default touch actions */
+            user-select: none; /* Prevent text selection during dragging */
+        }
+
+        /* Vertical list example */
+        .vertical-list {
+            width: 100%;
+            height: 300px;
+        }
+
+        .vertical-content {
+            padding: 16px;
+        }
+
+        .list-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Grid example */
+        .grid-scroll {
+            width: 100%;
+            height: 300px;
+        }
+
+        .grid-content {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .grid-item {
+            height: 120px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Horizontal scroll example */
+        .horizontal-scroll {
+            width: 100%;
+            height: 160px;
+        }
+
+        .horizontal-content {
+            display: flex;
+            padding: 16px;
+            gap: 12px;
+        }
+
+        .card {
+            flex: 0 0 200px;
+            height: 120px;
+            background: white;
+            border-radius: 4px;
+            padding: 16px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Text content example */
+        .text-scroll {
+            width: 100%;
+            height: 300px;
+        }
+
+        .text-content {
+            padding: 16px;
+            max-width: 600px;
+        }
+
+        .text-content p {
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            /*display: none;*/
+            /*visibility: hidden;*/
+        }
+    </style>
+</head>
+<body>
+<div class="examples-grid ">
+    <!-- Vertical List Example -->
+    <div class="example hidden">
+        <h2>Vertical List</h2>
+        <div class="example-controls">
+            <button onclick="scrollToTop('vertical')">Scroll to Top</button>
+            <button onclick="scrollToBottom('vertical')">Scroll to Bottom</button>
+        </div>
+        <div class="scroll-container vertical-list" id="vertical-container">
+            <div class="scroll-content vertical-content" id="vertical-content">
+                <!-- Generated in JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid Example -->
+    <div class="example hidden">
+        <h2>Grid Layout</h2>
+        <div class="example-controls">
+            <button onclick="changeSpring('grid', 'gentle')">Gentle</button>
+            <button onclick="changeSpring('grid', 'wobbly')">Wobbly</button>
+        </div>
+        <div class="scroll-container grid-scroll" id="grid-container">
+            <div class="scroll-content grid-content" id="grid-content">
+                <!-- Generated in JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Horizontal Scroll Example -->
+    <div class="example">
+        <h2>Horizontal Scroll</h2>
+        <div class="example-controls">
+            <button onclick="scrollToStart('horizontal')">Start</button>
+            <button onclick="scrollToEnd('horizontal')">End</button>
+        </div>
+        <div class="scroll-container horizontal-scroll" id="horizontal-container">
+            <div class="scroll-content horizontal-content" id="horizontal-content">
+                <!-- Generated in JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Content Example -->
+    <div class="example hidden">
+        <h2>Text Content</h2>
+        <div class="example-controls">
+            <button onclick="changeSpring('text', 'stiff')">Stiff</button>
+            <button onclick="changeSpring('text', 'molasses')">Molasses</button>
+        </div>
+        <div class="scroll-container text-scroll" id="text-container">
+            <div class="scroll-content text-content" id="text-content">
+                <!-- Generated in JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../dist/index.js"></script>
+
+<script>
+    const { Scrollable } = window['@avati/scrollable'];
+    // Store scrollable instances
+    const scrollables = new Map();
+
+    // Helper function to create scrollable instance
+    function createScrollable(containerId, contentId, options = {}) {
+        const container = document.getElementById(containerId);
+        const scrollable = new Scrollable(container, {
+            direction: 'both',
+            useRAF: true,
+            smoothingFactor: 0.15,
+            precision: 0.1,
+            speed: 1,
+            acceleration: 1.2,
+            bounce: true,
+            maskFeatherSize: '2rem',
+            maskOpacity: 0.3,
+            onScroll: (position) => {
+                console.log('Scrolling:', position);
+            },
+            ...options,
+        });
+        scrollables.set(containerId, scrollable);
+        return scrollable;
+    }
+
+    // Generate content for vertical list
+    function generateVerticalList() {
+        const content = document.getElementById('vertical-content');
+        for (let i = 1; i <= 20; i++) {
+            const item = document.createElement('div');
+            item.className = 'list-item';
+            item.textContent = `List Item ${i}`;
+            content.appendChild(item);
+        }
+        createScrollable('vertical-container', 'vertical-content', {
+            direction: 'vertical',
+        });
+    }
+
+    // Generate content for grid
+    function generateGrid() {
+        const content = document.getElementById('grid-content');
+        for (let i = 1; i <= 24; i++) {
+            const item = document.createElement('div');
+            item.className = 'grid-item';
+            item.textContent = i;
+            content.appendChild(item);
+        }
+        createScrollable('grid-container', 'grid-content', {
+            direction: 'auto',
+        });
+    }
+
+    // Generate content for horizontal scroll
+    function generateHorizontalCards() {
+        const content = document.getElementById('horizontal-content');
+        for (let i = 1; i <= 10; i++) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.textContent = `Card ${i}`;
+            content.appendChild(card);
+        }
+        createScrollable('horizontal-container', 'horizontal-content', {
+            direction: 'horizontal',
+        });
+    }
+
+    // Generate text content
+    function generateTextContent() {
+        const content = document.getElementById('text-content');
+        const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+        for (let i = 0; i < 10; i++) {
+            const p = document.createElement('p');
+            p.textContent = lorem;
+            content.appendChild(p);
+        }
+        createScrollable('text-container', 'text-content', {
+            direction: 'vertical',
+        });
+    }
+
+    // Scroll control functions
+    function scrollToTop(type) {
+        const scrollable = scrollables.get(`${type}-container`);
+        scrollable.scrollTo(0, 0);
+    }
+
+    function scrollToBottom(type) {
+        const scrollable = scrollables.get(`${type}-container`);
+        const container = document.getElementById(`${type}-container`);
+        const content = document.getElementById(`${type}-content`);
+        const maxScroll = content.offsetHeight - container.offsetHeight;
+        scrollable.scrollTo(0, -maxScroll);
+    }
+
+    function scrollToStart(type) {
+        const scrollable = scrollables.get(`${type}-container`);
+        scrollable.scrollTo(0, 0);
+    }
+
+    function scrollToEnd(type) {
+        const scrollable = scrollables.get(`${type}-container`);
+        const container = document.getElementById(`${type}-container`);
+        const content = document.getElementById(`${type}-content`);
+        const maxScroll = content.offsetWidth - container.offsetWidth;
+        scrollable.scrollTo(-maxScroll, 0);
+    }
+
+    function changeSpring(type, preset) {
+        const scrollable = scrollables.get(`${type}-container`);
+        scrollable.updateSpringPreset(preset);
+    }
+
+    // Initialize examples
+    document.addEventListener('DOMContentLoaded', () => {
+        generateVerticalList();
+        generateGrid();
+        generateHorizontalCards();
+        generateTextContent();
+    });
+</script>
+</body>
+</html>

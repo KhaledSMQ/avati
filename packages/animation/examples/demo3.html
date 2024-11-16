@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="h-screen flex items-center justify-center">
+   <div id="animation-container"></div>
+</div>
+<script src="./index.js"></script>
+<script>
+
+    const { Tween } = Avati;
+    class FullscreenLoading {
+        currentAnimation = null
+        isAnimating = false
+
+        constructor() {
+            // Create container
+            this.container = document.createElement("div")
+            Object.assign(this.container.style, {
+                width: "100vw",
+                height: "100vh",
+                backgroundColor: "#1a1a1a",
+                position: "fixed",
+                top: "0",
+                left: "0",
+                overflow: "hidden"
+            })
+
+            // Create ball
+            this.ball = document.createElement("div")
+            Object.assign(this.ball.style, {
+                width: "20px",
+                height: "20px",
+                backgroundColor: "#3498db",
+                borderRadius: "50%",
+                position: "absolute",
+                boxShadow: "0 0 10px rgba(52, 152, 219, 0.5)",
+                transition: "border-radius 0.5s ease"
+            })
+
+            this.container.appendChild(this.ball)
+        }
+
+        mount() {
+            document.body.appendChild(this.container)
+        }
+
+        start() {
+            this.isAnimating = true
+            this.startBouncing()
+
+            // Transform after 5 seconds
+            setTimeout(() => {
+                if (this.isAnimating) {
+                    this.transformToSquare()
+                }
+            }, 5000)
+        }
+
+        startBouncing() {
+            const width = window.innerWidth
+            const height = window.innerHeight
+            const ballSize = 20
+
+            // Define bounce path with physics-like motion
+            const createBounceAnimation = startPos => {
+                // Calculate end position with some randomness
+                const endX = Math.random() * (width - ballSize)
+                const endY = height - ballSize
+
+                const midPoint = {
+                    x: (startPos.x + endX) / 2,
+                    y: startPos.y - 100 // Add some height to the bounce
+                }
+
+                let currentT = 0
+                const duration = 1000
+
+                return new Tween({
+                    from: startPos,
+                    to: { x: endX, y: endY },
+                    duration,
+                    easing: Tween.EasingFunctions.bounce,
+                    onUpdate: pos => {
+                        // Add a subtle squish effect
+                        const progress = currentT / duration
+                        const scale = 1 + Math.sin(progress * Math.PI) * 0.2
+                        const scaleY = 1 - Math.sin(progress * Math.PI) * 0.1
+
+                        this.ball.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(${scale}, ${scaleY})`
+                        currentT += 16 // Approximate for 60fps
+                    },
+                    onComplete: () => {
+                        if (this.isAnimating) {
+                            // Start next bounce
+                            const nextAnimation = createBounceAnimation({ x: endX, y: endY })
+                            this.currentAnimation = nextAnimation
+                            nextAnimation.start()
+                        }
+                    }
+                })
+            }
+
+            // Start first bounce
+            this.currentAnimation = createBounceAnimation({
+                x: width / 2 - ballSize / 2,
+                y: height - ballSize
+            })
+            this.currentAnimation.start()
+        }
+
+        transformToSquare() {
+            if (this.currentAnimation) {
+                this.currentAnimation.stop()
+            }
+
+            const width = window.innerWidth
+            const height = window.innerHeight
+            const centerX = width / 2 - 10
+            const centerY = height / 2 - 10
+
+            // Move to center
+            const centeringTween = new Tween({
+                from: {
+                    x: parseFloat(this.ball.style.transform.split("(")[1]) || 0,
+                    y: parseFloat(this.ball.style.transform.split(",")[1]) || 0
+                },
+                to: { x: centerX, y: centerY },
+                duration: 600,
+                easing: Tween.EasingFunctions.easeOutCubic,
+                onUpdate: pos => {
+                    this.ball.style.transform = `translate(${pos.x}px, ${pos.y}px)`
+                },
+                onComplete: () => {
+                    // Transform shape and scale up
+                    this.ball.style.borderRadius = "4px"
+                    this.ball.style.backgroundColor = "#2ecc71"
+                    this.ball.style.boxShadow = "0 0 20px rgba(46, 204, 113, 0.5)"
+
+                    const scaleTween = new Tween({
+                        from: 1,
+                        to: 3,
+                        duration: 800,
+                        easing: Tween.EasingFunctions.easeOutElastic,
+                        onUpdate: scale => {
+                            this.ball.style.transform = `translate(${centerX}px, ${centerY}px) scale(${scale})`
+                        }
+                    })
+                    scaleTween.start()
+                }
+            })
+
+            centeringTween.start()
+        }
+
+        stop() {
+            this.isAnimating = false
+            if (this.currentAnimation) {
+                this.currentAnimation.stop()
+            }
+        }
+
+        // Clean up method
+        destroy() {
+            this.stop()
+            if (this.container.parentNode) {
+                this.container.parentNode.removeChild(this.container)
+            }
+        }
+    }
+
+    // Handle window resize
+    window.addEventListener("resize", () => {
+        // Debounce resize handling
+        let resizeTimeout
+        return () => {
+            clearTimeout(resizeTimeout)
+            resizeTimeout = window.setTimeout(() => {
+                if (loader && loader.isActive) {
+                    loader.destroy()
+                    loader = new FullscreenLoading()
+                    loader.mount()
+                    loader.start()
+                }
+            }, 250)
+        }
+    })
+
+    // Initialize and start the animation
+    let loader = new FullscreenLoading()
+    loader.mount()
+    loader.start()
+
+    // Clean up when needed:
+    // loader.destroy();
+
+</script>
+
+</body>
+</html>

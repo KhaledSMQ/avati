@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Hello word</h1>
+<script src="./index.js"></script>
+<script>
+
+    const { Tween } = Avati;
+
+    class AnimationExample {
+        static createComplexAnimation(element) {
+            // Position animation
+            const positionTween = new Tween({
+                from: { x: 0, y: 0 },
+                to: { x: 200, y: 100 },
+                duration: 1000,
+                easing: Tween.EasingFunctions.easeInOutCubic,
+                onUpdate: value => {
+                    element.style.transform = `translate(${value.x}px, ${value.y}px)`;
+                },
+            });
+
+            // Color animation
+            const colorTween = new Tween({
+                from: '#ff0000',
+                to: '#00ff00',
+                duration: 1500,
+                easing: Tween.EasingFunctions.easeInOutQuad,
+                onUpdate: value => {
+                    element.style.backgroundColor = value;
+                },
+            });
+
+            // Scale animation
+            const scaleTween = new Tween({
+                from: 1,
+                to: 2,
+                duration: 2000,
+                easing: Tween.EasingFunctions.bounce,
+                onUpdate: value => {
+                    element.style.scale = value.toString();
+                },
+            });
+
+            return {
+                start: () => {
+                    positionTween.start();
+                    colorTween.start();
+                    scaleTween.start();
+                },
+                stop: () => {
+                    positionTween.stop();
+                    colorTween.stop();
+                    scaleTween.stop();
+                },
+            };
+        }
+    }
+
+
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+    element.style.width = '50px';
+    element.style.height = '50px';
+    element.style.position = 'absolute';
+
+    // Create and start the complex animation
+    const animation = AnimationExample.createComplexAnimation(element);
+    animation.start();
+</script>
+
+</body>
+</html>

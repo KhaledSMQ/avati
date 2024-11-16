@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EventListenerManager - Cleanup Example</title>
+</head>
+<body>
+<button id="cleanupButton">Click Me</button>
+<button id="removeListenerButton">Remove Listener</button>
+
+<script src="../dist/index.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+    document.addEventListener('DOMContentLoaded', () => {
+        const clickButton = document.getElementById('cleanupButton');
+        const removeButton = document.getElementById('removeListenerButton');
+
+        function handleClick() {
+            alert('Button clicked!');
+        }
+
+        // Add event listener with cleanup
+        const cleanup = eventManager.addWithCleanup(clickButton, 'click', handleClick);
+
+        eventManager.add(removeButton, 'click', () => {
+            cleanup();
+            alert('Event listener removed');
+        });
+    });
+</script>
+</body>
+</html>

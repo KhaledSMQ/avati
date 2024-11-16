@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EventListenerManager - Debounce and Async Example</title>
+</head>
+<body>
+<input type="text" id="searchInput" placeholder="Type to search..." />
+<div id="results"></div>
+
+<script src="../dist/index.umd.js"></script>
+<script>
+    const { eventManager } = window['@avati/listener'];
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('searchInput');
+        const results = document.getElementById('results');
+
+        async function handleInput(event) {
+            const query = event.target.value;
+            if (!query) {
+                results.textContent = '';
+                return;
+            }
+            results.textContent = 'Searching...';
+
+            // Simulate an asynchronous search operation
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+
+            results.textContent = `Results for "${query}"`;
+        }
+
+        // Debounce the async input handler
+        eventManager.add(input, 'input', handleInput, { debounce: 500, async: true });
+
+    });
+</script>
+</body>
+</html>
