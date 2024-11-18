@@ -21,6 +21,9 @@
       "types": "./dist/jsx-runtime.d.ts",
       "import": "./dist/jsx-runtime.esm.js",
       "require": "./dist/jsx-runtime.js"
+    },
+    "./types": {
+      "types": "./dist/jax.d.ts"
     }
   },
   "homepage": "https://avati.io/",
@@ -45,6 +48,7 @@
   ],
   "files": [
     "dist",
+    "types/jsx.d.ts",
     "src/jsx-runtime"
   ],
   "scripts": {

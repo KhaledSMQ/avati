@@ -1,5 +1,5 @@
 import { ComponentLifecycleState } from './core_types';
-import { Signal } from './Signal';
+import { Signal } from './signal';
 import { RefManager } from './ref';
 
 /**

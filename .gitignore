@@ -75,9 +75,6 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 /**/dist
-/packages/**/*.d.ts
-/packages/**/*.js.map
-/packages/**/*.d.ts.map
 
 # Dependency directories
 node_modules/

@@ -90,14 +90,6 @@ export function cloneElement(
     };
 }
 
-// Add JSX pragma
-declare global {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace JSX {
-        // @ts-ignore
-        interface IntrinsicElements extends JSX.IntrinsicElements {}
-    }
-}
 
 export default {
     jsx,

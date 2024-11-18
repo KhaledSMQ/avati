@@ -23,7 +23,7 @@ export interface ComponentInstance {
 export interface EffectState extends HookState {
     type: 'effect';
     effect: () => void | (() => void);
-    deps?: any[];
+    deps?: any;
     cleanup?: () => void;
     depsChanged?: boolean;
 }

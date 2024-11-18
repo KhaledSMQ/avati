@@ -1,6 +1,6 @@
 import { Component, FunctionComponent, Key, Props, VElement, VNode } from './core_types';
-import { HooksContext, HookState } from './HooksContext';
-import { withHooks } from './hooks/WithHooks';
+import { HooksContext, HookState } from './hooksContext';
+import { withHooks } from './hooks/withHooks';
 
 interface Instance {
     type: string | Function;

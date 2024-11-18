@@ -1,4 +1,4 @@
-import { Component } from './Component';
+import { Component } from './component';
 
 export class Renderer {
     private static currentComponent: Component<any, any> | null = null;

@@ -1,6 +1,6 @@
 import { VNode } from './core_types';
-import { BatchScheduler } from './BatchScheduler';
-import { Reconciler } from './Reconciler';
+import { BatchScheduler } from './batchScheduler';
+import { Reconciler } from './reconciler';
 
 interface Root {
     render: (vnode: VNode) => void;

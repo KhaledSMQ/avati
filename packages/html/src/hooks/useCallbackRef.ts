@@ -1,6 +1,5 @@
-// Create callback ref
 import { RefObject } from '../core_types';
-import { useRef } from './UseRef';
+import { useRef } from './useRef';
 
 export function useCallbackRef<T>(callback: (instance: T | null) => void): RefObject<T> {
     const callbackRef = useRef<T | null>(null);

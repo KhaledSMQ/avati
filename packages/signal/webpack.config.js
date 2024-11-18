@@ -1,14 +1,9 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const isProduction = process.argv[process.argv.indexOf('--mode') + 1] === 'production';
-const webpack = require('webpack');
 
 const common_config = {
-    entry: {
-        'avati': './src/index.ts',
-        'avati.min': './src/index.ts',
-        'jsx-runtime': './src/jsx-runtime/index.ts',
-    },
+    entry: './src/index.ts',
     module: {
         rules: [
             {
@@ -28,9 +23,7 @@ const common_config = {
         minimizer: [new TerserPlugin()]
     },
     plugins: [
-        new webpack.DefinePlugin({
-            __DEV__: JSON.stringify(!isProduction)
-        })
+
     ],
     mode: isProduction ? 'production' : 'development',
 };
@@ -43,9 +36,9 @@ module.exports = (env, argv) => {
             name: 'umd',
             output: {
                 path: path.resolve(__dirname, 'dist'),
-                filename: '[name].umd.js',
+                filename: 'index.umd.js',
                 library: {
-                    name: '@avati/html',
+                    name: '@avati/signal',
                     type: 'umd',
                 }
             },
@@ -56,7 +49,7 @@ module.exports = (env, argv) => {
             name: 'esm',
             output: {
                 path: path.resolve(__dirname, 'dist'),
-                filename: '[name].esm.js',
+                filename: 'index.esm.js',
                 library: {
                     type: 'module',
                 },
@@ -71,7 +64,7 @@ module.exports = (env, argv) => {
             name: 'cjs',
             output: {
                 path: path.resolve(__dirname, 'dist'),
-                filename: '[name].cjs.js',
+                filename: 'index.cjs.js',
                 library: {
                     type: 'commonjs2',
                 },

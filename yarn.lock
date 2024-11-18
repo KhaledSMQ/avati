@@ -118,6 +118,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@avati/signal@workspace:packages/signal":
+  version: 0.0.0-use.local
+  resolution: "@avati/signal@workspace:packages/signal"
+  languageName: unknown
+  linkType: soft
+
 "@avati/state@workspace:packages/state":
   version: 0.0.0-use.local
   resolution: "@avati/state@workspace:packages/state"

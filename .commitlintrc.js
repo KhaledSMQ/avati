@@ -18,6 +18,7 @@ module.exports = {
                 'scrollable',
                 'state',
                 'throttle',
+                'signal',
                 'release',
                 'docs',
             ],

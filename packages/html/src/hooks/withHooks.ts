@@ -1,5 +1,5 @@
 import { VNode } from '../core_types';
-import { ComponentInstance, HooksContext } from '../HooksContext';
+import { ComponentInstance, HooksContext } from '../hooksContext';
 
 export function withHooks<P extends object = {}>(Component: (props: P) => VNode) {
     return function render(this: ComponentInstance, props: P): JSX.Element {

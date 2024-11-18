@@ -20,7 +20,8 @@
   },
   "include": [
     "src",
-    "jsx.d.ts"
+    "types/jsx.d.ts",
+    "types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",

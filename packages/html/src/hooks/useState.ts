@@ -1,4 +1,4 @@
-import { HooksContext, HookState } from '../HooksContext';
+import { HooksContext, HookState } from '../hooksContext';
 
 export function useState<T>(
     initialState: T | (() => T)

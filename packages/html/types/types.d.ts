@@ -5,9 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  **/
 
-export * from './useCallbackRef';
-export * from './useEffect';
-export * from './useRef';
-export * from './useState';
-export * from './withHooks';
-export * from './types';
+declare const __DEV__: boolean;
+
+declare namespace JSX {
+    interface Element {
+        type: any
+        props: any;
+        key?: any;
+        ref?: any
+        displayName?: string | null;
+    }
+}
