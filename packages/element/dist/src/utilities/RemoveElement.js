@@ -1,0 +1,1 @@
+export function removeElement(e){"undefined"!=typeof document&&e.parentElement&&e.parentElement.removeChild(e)}

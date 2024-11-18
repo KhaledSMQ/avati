@@ -1,0 +1,1 @@
+export function addEventListenerToElement(e,n,t){"undefined"!=typeof document&&e.addEventListener(n,t)}export function removeEventListenerFromElement(e,n,t){"undefined"!=typeof document&&e.removeEventListener(n,t)}

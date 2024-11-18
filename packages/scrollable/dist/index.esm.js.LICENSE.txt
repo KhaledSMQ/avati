@@ -1,0 +1,13 @@
+/*!
+ * Rk4thSpring - 0.1.1
+ * Copyright (c) 2024. Khaled Sameer<khaled.smq@hotmail.com>
+ *
+ * Licensed under MIT, https://opensource.org/licenses/MIT/
+ * Please visit https://github.com/KhaledSMQ/Rk4thSpring for details.
+ */
+
+/**
+ * @class Rk4thSpring
+ * @preserve
+ * A spring animation class that simulates a damped harmonic oscillator.
+ */

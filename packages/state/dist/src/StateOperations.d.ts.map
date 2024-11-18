@@ -1,0 +1,1 @@
+{"version":3,"file":"StateOperations.d.ts","sourceRoot":"","sources":["../../src/StateOperations.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,gBAAgB,EAAE,MAAM,SAAS,CAAC;AAE3C,qBAAa,eAAgB,YAAW,gBAAgB;IACpD;;OAEG;IACI,QAAQ,CAAC,CAAC,EAAE,GAAG,EAAE,CAAC,GAAG,CAAC;IA8B7B;;OAEG;IACI,WAAW,CAAC,CAAC,EAAE,KAAK,EAAE,CAAC,GAAG,QAAQ,CAAC,CAAC,CAAC;CAe/C"}

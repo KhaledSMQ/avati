@@ -1,0 +1,1 @@
+{"version":3,"file":"StateValidator.d.ts","sourceRoot":"","sources":["../../src/StateValidator.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,eAAe,EAAE,MAAM,SAAS,CAAC;AAE1C,qBAAa,cAAe,YAAW,eAAe;IAClD;;OAEG;IACI,aAAa,CAAC,CAAC,EAAE,KAAK,EAAE,CAAC,GAAG,OAAO;IAO1C;;OAEG;IACI,gBAAgB,CAAC,CAAC,SAAS,MAAM,EAAE,KAAK,EAAE,CAAC,EAAE,GAAG,EAAE,MAAM,CAAC,GAAG,OAAO;CAM7E"}

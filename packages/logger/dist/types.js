@@ -1,0 +1,1 @@
+export var LogLevel;!function(R){R[R.ERROR=0]="ERROR",R[R.WARN=1]="WARN",R[R.INFO=2]="INFO",R[R.DEBUG=3]="DEBUG"}(LogLevel||(LogLevel={}));
