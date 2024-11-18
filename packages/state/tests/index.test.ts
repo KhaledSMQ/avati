@@ -117,7 +117,7 @@ describe('State Management System', () => {
             test('should throw for non-existent keys', () => {
                 const state = { a: 1 };
                 expect(() =>
-                    validator.validateStateKey(state, 'b' as keyof typeof state)
+                    validator.validateStateKey(state, 'b' as keyof typeof state),
                 ).toThrow();
             });
         });
@@ -151,7 +151,7 @@ describe('State Management System', () => {
                 initialState,
                 { debug: true },
                 mockStateOps,
-                mockValidator
+                mockValidator,
             );
         });
 

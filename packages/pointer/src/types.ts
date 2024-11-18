@@ -77,7 +77,7 @@ export class PointerEventHandlerError extends Error {
     constructor(
         public readonly type: PointerEventError,
         public readonly details: string,
-        public readonly originalError?: Error
+        public readonly originalError?: Error,
     ) {
         super(`${type}: ${details}`);
         this.name = 'PointerEventHandlerError';

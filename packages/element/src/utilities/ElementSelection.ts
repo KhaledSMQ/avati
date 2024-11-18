@@ -3,7 +3,7 @@
  */
 export function selectElement<T extends HTMLElement = HTMLElement>(
     selector: string,
-    context: ParentNode = document
+    context: ParentNode = document,
 ): T | null {
     if (typeof document === 'undefined') {
         return null;
@@ -17,7 +17,7 @@ export function selectElement<T extends HTMLElement = HTMLElement>(
  */
 export function selectAllElements<T extends HTMLElement = HTMLElement>(
     selector: string,
-    context: ParentNode = document
+    context: ParentNode = document,
 ): NodeListOf<T> {
     return context.querySelectorAll<T>(selector);
 }

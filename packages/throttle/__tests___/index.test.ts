@@ -158,7 +158,7 @@ describe('throttle', () => {
         it('should maintain the correct this context', () => {
             const context = {
                 value: 'test',
-                handler: throttle(function (this: any, _event: Event) {
+                handler: throttle(function(this: any, _event: Event) {
                     expect(this.value).toBe('test');
                 }, 100),
             };
@@ -169,7 +169,8 @@ describe('throttle', () => {
 
     describe('event types', () => {
         it('should handle different event types', () => {
-            const mouseCallback = jest.fn((_e: MouseEvent) => {});
+            const mouseCallback = jest.fn((_e: MouseEvent) => {
+            });
             const throttledMouse = throttle(mouseCallback, 100);
             const mouseEvent = new MouseEvent('click');
 

@@ -57,10 +57,10 @@ const _generateEventId = Symbol('generateEventId');
 const _eventIdCounter = Symbol('eventIdCounter');
 
 class EventListenerManager {
+    public readonly defaultOptions: Readonly<EventOptions>;
     private readonly [_listeners]: Map<EventId, ListenerDetails>;
     private readonly [_weakRefMap]: WeakMap<Element, Set<EventId>>;
     private [_eventIdCounter]: number;
-    public readonly defaultOptions: Readonly<EventOptions>;
     // TODO - Add more event mappings
     private readonly EVENT_MAPPINGS: Record<LimiterType, Set<EventType>> = {
         debounce: new Set(['input', 'change', 'keyup', 'keydown', 'focus', 'blur', 'click']),
@@ -85,60 +85,6 @@ class EventListenerManager {
     }
 
     /**
-     * Validates input parameters
-     * @private
-     */
-    private [_validateParams](element: unknown, eventType: unknown, callback: unknown): void {
-        if (
-            !(
-                element instanceof Element ||
-                element instanceof Window ||
-                element instanceof global.Document
-            )
-        ) {
-            throw new TypeError('Element must be an instance of Element, Window, or Document');
-        }
-
-        if (typeof eventType !== 'string') {
-            throw new TypeError('Event type must be a string');
-        }
-
-        if (typeof callback !== 'function') {
-            throw new TypeError('Callback must be a function');
-        }
-    }
-
-    /**
-     * Generates a unique event ID
-     * @private
-     */
-    private [_generateEventId](): EventId {
-        return `event_${++this[_eventIdCounter]}`;
-    }
-
-    /**
-     * Handles WeakRef management
-     * @private
-     */
-    private [_handleWeakRef](element: Element, eventId: EventId): void {
-        let elementRefs = this[_weakRefMap].get(element);
-        if (!elementRefs) {
-            elementRefs = new Set<EventId>();
-            this[_weakRefMap].set(element, elementRefs);
-        }
-        elementRefs.add(eventId);
-    }
-
-    private recommendation(eventType: EventType, limiterType: LimiterType) {
-        const oppositeType: LimiterType = limiterType === 'throttle' ? 'debounce' : 'throttle';
-        if (this.EVENT_MAPPINGS[oppositeType].has(eventType)) {
-            console.warn(
-                `Event type '${eventType}' is recommended to be ${oppositeType}d instead of ${limiterType}d.`
-            );
-        }
-    }
-
-    /**
      * Adds an event listener with advanced options.
      * @param element - The target element to attach the event listener.
      * @param eventType - The type of the event to listen for.
@@ -150,7 +96,7 @@ class EventListenerManager {
         element: Element,
         eventType: string,
         callback: EventListener,
-        options: EventOptions = {}
+        options: EventOptions = {},
     ): EventId {
         this[_validateParams](element, eventType, callback);
 
@@ -273,7 +219,7 @@ class EventListenerManager {
         element: Element,
         eventType: string,
         callback: EventListener,
-        options: EventOptions = {}
+        options: EventOptions = {},
     ): () => void {
         const eventId = this.add(element, eventType, callback, options);
         return () => this.remove(eventId);
@@ -330,9 +276,63 @@ class EventListenerManager {
         element: Element,
         eventType: string,
         callback: EventListener,
-        options: EventOptions = {}
+        options: EventOptions = {},
     ): EventId {
         return this.add(element, eventType, callback, { ...options, once: true });
+    }
+
+    /**
+     * Validates input parameters
+     * @private
+     */
+    private [_validateParams](element: unknown, eventType: unknown, callback: unknown): void {
+        if (
+            !(
+                element instanceof Element ||
+                element instanceof Window ||
+                element instanceof global.Document
+            )
+        ) {
+            throw new TypeError('Element must be an instance of Element, Window, or Document');
+        }
+
+        if (typeof eventType !== 'string') {
+            throw new TypeError('Event type must be a string');
+        }
+
+        if (typeof callback !== 'function') {
+            throw new TypeError('Callback must be a function');
+        }
+    }
+
+    /**
+     * Generates a unique event ID
+     * @private
+     */
+    private [_generateEventId](): EventId {
+        return `event_${++this[_eventIdCounter]}`;
+    }
+
+    /**
+     * Handles WeakRef management
+     * @private
+     */
+    private [_handleWeakRef](element: Element, eventId: EventId): void {
+        let elementRefs = this[_weakRefMap].get(element);
+        if (!elementRefs) {
+            elementRefs = new Set<EventId>();
+            this[_weakRefMap].set(element, elementRefs);
+        }
+        elementRefs.add(eventId);
+    }
+
+    private recommendation(eventType: EventType, limiterType: LimiterType) {
+        const oppositeType: LimiterType = limiterType === 'throttle' ? 'debounce' : 'throttle';
+        if (this.EVENT_MAPPINGS[oppositeType].has(eventType)) {
+            console.warn(
+                `Event type '${eventType}' is recommended to be ${oppositeType}d instead of ${limiterType}d.`,
+            );
+        }
     }
 }
 

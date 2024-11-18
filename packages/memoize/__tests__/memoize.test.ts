@@ -96,7 +96,7 @@ describe('memoize function', () => {
         class Calculator {
             factor = 2;
 
-            multiply = memoize(function (this: Calculator, x: number) {
+            multiply = memoize(function(this: Calculator, x: number) {
                 return x * this.factor;
             });
         }

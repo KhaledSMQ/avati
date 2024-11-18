@@ -111,12 +111,10 @@ export class Signal<T> implements WritableSignal<T> {
      * Used to determine if dependents should be notified of changes.
      */
     equals: EqualityFunction<T>;
-
     /**
-     * The current value stored in the signal
+     * Optional name for debugging and identification purposes
      */
-    protected _value: T;
-
+    name?: string;
     /**
      * Set of computations that depend on this signal's value
      */
@@ -126,12 +124,6 @@ export class Signal<T> implements WritableSignal<T> {
      * Flag indicating whether this signal has been disposed
      */
     protected disposed = false;
-
-    /**
-     * Optional name for debugging and identification purposes
-     */
-    name?: string;
-
 
     /**
      * Creates a new Signal instance
@@ -145,6 +137,11 @@ export class Signal<T> implements WritableSignal<T> {
         this.equals = options.equals ?? Object.is;
         this.name = options.name || 'anonymous';
     }
+
+    /**
+     * The current value stored in the signal
+     */
+    protected _value: T;
 
     /**
      * Gets the current value of the signal.
@@ -209,17 +206,6 @@ export class Signal<T> implements WritableSignal<T> {
         });
 
         return () => computed.dispose();
-    }
-
-    /**
-     * Tracks the current computation as dependent on this signal
-     */
-    protected trackDependency(): void {
-        const computation = SignalContext.getInstance().getCurrentComputation();
-        if (computation) {
-            computation.addDependency(this);
-            this.addDependent(computation);
-        }
     }
 
     /**
@@ -310,6 +296,17 @@ export class Signal<T> implements WritableSignal<T> {
 
     toString(): string {
         return `Signal(${this.name})`;
+    }
+
+    /**
+     * Tracks the current computation as dependent on this signal
+     */
+    protected trackDependency(): void {
+        const computation = SignalContext.getInstance().getCurrentComputation();
+        if (computation) {
+            computation.addDependency(this);
+            this.addDependent(computation);
+        }
     }
 }
 

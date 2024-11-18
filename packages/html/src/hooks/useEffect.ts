@@ -31,7 +31,7 @@ const Validators = {
                     'useEffect received a function as a dependency at index',
                     index,
                     '\nThis may cause unnecessary effect reruns.',
-                    '\nConsider using a ref or state for function dependencies.'
+                    '\nConsider using a ref or state for function dependencies.',
                 );
             }
 
@@ -40,7 +40,7 @@ const Validators = {
                     'useEffect received a mutable object as a dependency at index',
                     index,
                     '\nThis may cause unnecessary effect reruns.',
-                    '\nConsider using a primitive value or useMemo.'
+                    '\nConsider using a primitive value or useMemo.',
                 );
             }
 
@@ -48,11 +48,11 @@ const Validators = {
                 console.warn(
                     'useEffect received null or undefined as a dependency at index',
                     index,
-                    '\nThis might indicate a missing dependency.'
+                    '\nThis might indicate a missing dependency.',
                 );
             }
         });
-    }
+    },
 };
 
 /**
@@ -107,13 +107,13 @@ export function useEffect(effect: EffectCallback, deps?: DependencyList): void {
     // Input validation
     if (!Validators.isEffectCallback(effect)) {
         throw new TypeError(
-            `useEffect first argument must be a function, received: ${typeof effect}`
+            `useEffect first argument must be a function, received: ${typeof effect}`,
         );
     }
 
     if (!Validators.isDepsArray(deps)) {
         throw new TypeError(
-            `useEffect second argument must be an array or undefined, received: ${typeof deps}`
+            `useEffect second argument must be an array or undefined, received: ${typeof deps}`,
         );
     }
 

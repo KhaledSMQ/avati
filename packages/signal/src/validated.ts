@@ -67,6 +67,6 @@ export function validated<T>(
                 target.value = value;
             }
             return true;
-        }
+        },
     });
 }

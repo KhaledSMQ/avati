@@ -55,8 +55,8 @@ describe('combine function', () => {
 
         const combined = combine([sig1, sig2], {
             equals: (prev, next) => {
-                if(prev == next) return true;
-                if(!prev || !next) return false;
+                if (prev == next) return true;
+                if (!prev || !next) return false;
 
                 // Custom equality: only care about array lengths
                 return prev.every((arr, idx) => arr.length === next[idx].length);

@@ -3,14 +3,7 @@
  * @version 2.0.0
  */
 
-import {
-    Acceleration2D,
-    PointerState,
-    Position,
-    Position2D,
-    SinglePointerState,
-    Vector2D,
-} from './types';
+import { Acceleration2D, PointerState, Position, Position2D, SinglePointerState, Vector2D } from './types';
 import { calculateAcceleration, calculateSpeed, calculateVelocity } from './utils';
 import { throttle } from '@avati/throttle';
 import { memoize } from '@avati/memoize';
@@ -63,7 +56,7 @@ export class EventHandler {
         allPositions: Position,
         velocity: Vector2D,
         acceleration: Acceleration2D,
-        speed: number
+        speed: number,
     ) => void;
 
     /**
@@ -98,7 +91,7 @@ export class EventHandler {
             {
                 trailing: true,
                 leading: true,
-            }
+            },
         );
     }
 
@@ -169,7 +162,7 @@ export class EventHandler {
                         lastPos,
                         currentPos,
                         deltaTime,
-                        currentTime
+                        currentTime,
                     );
                 }
             }
@@ -329,7 +322,7 @@ export class EventHandler {
         lastPos: Position2D,
         currentPos: Position2D,
         deltaTime: number,
-        currentTime: number
+        currentTime: number,
     ): void {
         const velocity = calculateVelocity(lastPos, currentPos, deltaTime);
         const speed = this.memoizedCalculateSpeed(velocity.vx, velocity.vy);
@@ -341,7 +334,7 @@ export class EventHandler {
             allPositions,
             velocity,
             acceleration,
-            speed
+            speed,
         );
 
         this.updateTemporaryData(pointerId, currentTime, currentPos, velocity);
@@ -362,7 +355,7 @@ export class EventHandler {
         allPositions: Position,
         velocity: Vector2D,
         acceleration: Acceleration2D,
-        speed: number
+        speed: number,
     ): void {
         const pointer = this.state.pointers.get(pointerId);
         if (pointer) {
@@ -387,7 +380,7 @@ export class EventHandler {
         pointerId: number,
         time: number,
         position: Position2D,
-        velocity: Vector2D
+        velocity: Vector2D,
     ): void {
         this.lastMoveTime.set(pointerId, time);
         this.lastPosition.set(pointerId, { ...position });
@@ -417,7 +410,7 @@ export class EventHandler {
         pointerId: number,
         x: number,
         y: number,
-        allPositions: Position
+        allPositions: Position,
     ): void {
         const initialState: SinglePointerState = {
             isDown: false,

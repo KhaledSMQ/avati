@@ -20,7 +20,7 @@ export function appendChildToElement(parent: Element, child: Element | string): 
 export function insertElementBefore(
     parent: Element,
     newElement: Element,
-    referenceElement: Element
+    referenceElement: Element,
 ): void {
     if (typeof document === 'undefined') {
         return;

@@ -11,7 +11,7 @@ import { Attributes } from './types';
 export function createElement<K extends keyof HTMLElementTagNameMap>(
     tagName: K,
     attributes?: Attributes,
-    children?: (HTMLElement | string)[]
+    children?: (HTMLElement | string)[],
 ): HTMLElementTagNameMap[K] | null {
     if (typeof document === 'undefined') {
         // Server-side environment; return null or a virtual representation if needed
@@ -47,7 +47,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
 export function createSvgElement<K extends keyof SVGElementTagNameMap>(
     tagName: K,
     attributes?: Attributes,
-    children?: (SVGElement | string)[]
+    children?: (SVGElement | string)[],
 ): SVGElementTagNameMap[K] | null {
     if (typeof document === 'undefined') {
         // Server-side environment; return null or a virtual representation if needed

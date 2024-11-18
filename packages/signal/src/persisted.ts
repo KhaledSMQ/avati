@@ -145,9 +145,9 @@ export type PersistedSignalStorage<T> = {
 export type PersistedSignalSignalOptions<T> = SignalOptions<T> & PersistedSignalStorage<T>;
 
 export class Persisted<T> extends Signal<T> {
+    disposed = false;
     private readonly storage: StorageProvider<T>;
     private readonly key: string;
-    disposed = false;
 
     constructor(
         key: string,
@@ -221,7 +221,7 @@ export function persisted<T>(
     key: string,
     initialValue: T,
     storage: StorageProvider<T>,
-    options?: SignalOptions<T>
+    options?: SignalOptions<T>,
 ): Persisted<T> {
     return new Persisted(key, initialValue, storage, options);
 }

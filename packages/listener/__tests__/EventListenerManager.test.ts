@@ -181,7 +181,8 @@ describe('EventListenerManager', () => {
     });
 
     test('should attach metadata to events when metadata option is true', () => {
-        const mockCallback = jest.fn(() => {});
+        const mockCallback = jest.fn(() => {
+        });
 
         eventManager.add(element, 'click', mockCallback, {
             metadata: true,

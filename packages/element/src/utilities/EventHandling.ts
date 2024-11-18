@@ -4,7 +4,7 @@
 export function addEventListenerToElement<K extends keyof HTMLElementEventMap>(
     element: HTMLElement,
     event: K,
-    handler: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any
+    handler: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
 ): void {
     if (typeof document === 'undefined') {
         return;
@@ -19,7 +19,7 @@ export function addEventListenerToElement<K extends keyof HTMLElementEventMap>(
 export function removeEventListenerFromElement<K extends keyof HTMLElementEventMap>(
     element: HTMLElement,
     event: K,
-    handler: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any
+    handler: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
 ): void {
     if (typeof document === 'undefined') {
         return;

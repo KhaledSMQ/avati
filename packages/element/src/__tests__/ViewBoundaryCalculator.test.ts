@@ -29,7 +29,7 @@ describe('ViewBoundaryCalculator', () => {
     // Helper function to create a child view with consistent dimensions
     const createMockChildView = (
         bounds: Partial<ViewBounds> = {},
-        includeInLayout: boolean = true
+        includeInLayout: boolean = true,
     ): ChildView => {
         const defaultBounds: ViewBounds = {
             element: {
@@ -428,16 +428,16 @@ describe('ViewBoundaryCalculator 2', () => {
     describe('validateNumber', () => {
         it('should throw an error if the number is not finite', () => {
             expect(() => ViewBoundaryCalculator['validateNumber'](Infinity, 'test')).toThrow(
-                BoundaryCalculationError
+                BoundaryCalculationError,
             );
             expect(() => ViewBoundaryCalculator['validateNumber'](NaN, 'test')).toThrow(
-                BoundaryCalculationError
+                BoundaryCalculationError,
             );
         });
 
         it('should throw an error if the number exceeds MAX_SAFE_COORDINATE', () => {
             expect(() => ViewBoundaryCalculator['validateNumber'](1e8, 'test')).toThrow(
-                BoundaryCalculationError
+                BoundaryCalculationError,
             );
         });
 
@@ -450,14 +450,14 @@ describe('ViewBoundaryCalculator 2', () => {
         it('should throw an error if the rectangle has negative dimensions', () => {
             const rect: Rectangle = { x: 0, y: 0, width: -10, height: 10, right: -10, bottom: 10 };
             expect(() => ViewBoundaryCalculator['validateRectangle'](rect)).toThrow(
-                BoundaryCalculationError
+                BoundaryCalculationError,
             );
         });
 
         it('should throw an error if the rectangle coordinates are inconsistent with dimensions', () => {
             const rect: Rectangle = { x: 0, y: 0, width: 10, height: 10, right: 15, bottom: 10 };
             expect(() => ViewBoundaryCalculator['validateRectangle'](rect)).toThrow(
-                BoundaryCalculationError
+                BoundaryCalculationError,
             );
         });
 
@@ -471,7 +471,7 @@ describe('ViewBoundaryCalculator 2', () => {
         it('should throw an error if any margin is negative', () => {
             const margins: Margins = { top: -1, right: 0, bottom: 0, left: 0 };
             expect(() => ViewBoundaryCalculator['validateMargins'](margins)).toThrow(
-                BoundaryCalculationError
+                BoundaryCalculationError,
             );
         });
 
@@ -485,7 +485,7 @@ describe('ViewBoundaryCalculator 2', () => {
         it('should throw an error if scale factors are not positive', () => {
             const scale = { x: 0, y: 1 };
             expect(() => ViewBoundaryCalculator['validateScale'](scale)).toThrow(
-                BoundaryCalculationError
+                BoundaryCalculationError,
             );
         });
 
@@ -512,7 +512,7 @@ describe('ViewBoundaryCalculator 2', () => {
             const bounds = ViewBoundaryCalculator.calculateBounds(
                 elementBounds,
                 childViews,
-                config
+                config,
             );
 
             expect(bounds.inner).toEqual({
@@ -566,7 +566,7 @@ describe('ViewBoundaryCalculator 2', () => {
             const bounds = ViewBoundaryCalculator.calculateBounds(
                 elementBounds,
                 childViews,
-                config
+                config,
             );
 
             expect(bounds.inner).toEqual({

@@ -116,7 +116,9 @@ describe('peek', () => {
     it('should maintain correct computation stack even if signal read throws', () => {
         const throwingSignal = new Signal<number>(0);
         Object.defineProperty(throwingSignal, 'value', {
-            get: () => { throw new Error('Signal read error'); }
+            get: () => {
+                throw new Error('Signal read error');
+            },
         });
 
         const normalSignal = new Signal(42);

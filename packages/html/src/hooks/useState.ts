@@ -1,7 +1,7 @@
 import { HooksContext, HookState } from '../hooksContext';
 
 export function useState<T>(
-    initialState: T | (() => T)
+    initialState: T | (() => T),
 ): [T, (value: T | ((prev: T) => T)) => void] {
     const context = HooksContext.getInstance();
     const hookState = context.getHookState<HookState>({

@@ -708,7 +708,7 @@ describe('Signal System', () => {
         });
 
 
-         ;
+
 
 
         test('should handle cyclic updates gracefully', () => {

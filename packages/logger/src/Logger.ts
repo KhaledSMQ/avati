@@ -61,59 +61,6 @@ export class ConsoleLogger implements ILogger {
     }
 
     /**
-     * Checks if a log level should be processed
-     * @param level - Level to check
-     */
-    private shouldLog(level: LogLevelString): boolean {
-        return LogLevel[level] <= LogLevel[this.config.level];
-    }
-
-    /**
-     * Formats the prefix for log messages
-     */
-    private getPrefix(): string {
-        const parts: string[] = [];
-
-        if (this.config.enableTimestamp) {
-            parts.push(`[${new Date().toISOString()}]`);
-        }
-
-        if (this.config.prefix) {
-            parts.push(`[${this.config.prefix}]`);
-        }
-
-        return parts.length ? parts.join(' ') + ' ' : '';
-    }
-
-    /**
-     * Core logging method
-     * @param level - Log level
-     * @param message - Main message
-     * @param args - Additional arguments to log
-     */
-    private log(level: LogLevelString, message: string, ...args: unknown[]): void {
-        if (!this.shouldLog(level)) return;
-
-        const prefix = this.getPrefix();
-        const logMessage = `${prefix}${message}`;
-
-        switch (level) {
-            case 'ERROR':
-                console.error(logMessage, ...args);
-                break;
-            case 'WARN':
-                console.warn(logMessage, ...args);
-                break;
-            case 'INFO':
-                console.info(logMessage, ...args);
-                break;
-            case 'DEBUG':
-                console.debug(logMessage, ...args);
-                break;
-        }
-    }
-
-    /**
      * Logs an error message
      * @param message - Error message
      * @param args - Additional arguments
@@ -214,5 +161,58 @@ export class ConsoleLogger implements ILogger {
      */
     public clear(): void {
         console.clear();
+    }
+
+    /**
+     * Checks if a log level should be processed
+     * @param level - Level to check
+     */
+    private shouldLog(level: LogLevelString): boolean {
+        return LogLevel[level] <= LogLevel[this.config.level];
+    }
+
+    /**
+     * Formats the prefix for log messages
+     */
+    private getPrefix(): string {
+        const parts: string[] = [];
+
+        if (this.config.enableTimestamp) {
+            parts.push(`[${new Date().toISOString()}]`);
+        }
+
+        if (this.config.prefix) {
+            parts.push(`[${this.config.prefix}]`);
+        }
+
+        return parts.length ? parts.join(' ') + ' ' : '';
+    }
+
+    /**
+     * Core logging method
+     * @param level - Log level
+     * @param message - Main message
+     * @param args - Additional arguments to log
+     */
+    private log(level: LogLevelString, message: string, ...args: unknown[]): void {
+        if (!this.shouldLog(level)) return;
+
+        const prefix = this.getPrefix();
+        const logMessage = `${prefix}${message}`;
+
+        switch (level) {
+            case 'ERROR':
+                console.error(logMessage, ...args);
+                break;
+            case 'WARN':
+                console.warn(logMessage, ...args);
+                break;
+            case 'INFO':
+                console.info(logMessage, ...args);
+                break;
+            case 'DEBUG':
+                console.debug(logMessage, ...args);
+                break;
+        }
     }
 }

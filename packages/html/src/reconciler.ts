@@ -43,7 +43,8 @@ export class Reconciler {
     private pendingUpdates = new Set<Instance>();
     private isProcessingUpdates = false;
 
-    private constructor() {}
+    private constructor() {
+    }
 
     static getInstance(): Reconciler {
         if (!Reconciler.instance) {
@@ -74,7 +75,7 @@ export class Reconciler {
     private reconcile(
         parentDom: HTMLElement,
         instance?: Instance | null,
-        vnode?: VNode | null
+        vnode?: VNode | null,
     ): Instance | null {
         try {
             if (!vnode) {
@@ -132,7 +133,7 @@ export class Reconciler {
     private reconcileText(
         parentDom: HTMLElement,
         instance: Instance | null,
-        text: string
+        text: string,
     ): Instance {
         if (instance && instance.type === 'TEXT_ELEMENT') {
             // Update existing text node
@@ -158,14 +159,14 @@ export class Reconciler {
     private reconcileDOMComponent(
         parentDom: HTMLElement,
         instance: Instance | null,
-        vnode: VElement
+        vnode: VElement,
     ): Instance {
         if (instance && instance.type === vnode.type) {
             // Update existing DOM element
             this.updateDOMProperties(
                 instance.dom as HTMLElement,
                 instance.vnode.props,
-                vnode.props
+                vnode.props,
             );
             instance.vnode = vnode;
             instance.childInstances = this.reconcileChildren(instance, vnode);
@@ -192,7 +193,7 @@ export class Reconciler {
     private reconcileClassComponent(
         parentDom: HTMLElement,
         instance: Instance | null,
-        vnode: VElement
+        vnode: VElement,
     ): Instance {
         let componentInstance: Component;
         let dom: HTMLElement | Text | null = null;
@@ -211,7 +212,7 @@ export class Reconciler {
                 const childInstance = this.reconcile(
                     parentDom,
                     instance.childInstances.get('0'),
-                    rendered as VElement
+                    rendered as VElement,
                 );
 
                 if (childInstance) {
@@ -263,7 +264,7 @@ export class Reconciler {
     private reconcileFunctionComponent(
         parentDom: HTMLElement,
         instance: Instance | null,
-        vnode: VElement
+        vnode: VElement,
     ): Instance {
         const type = vnode.type as FunctionComponent;
         let componentInstance: ComponentInstance;
@@ -283,12 +284,11 @@ export class Reconciler {
                 _hooks: HookState[] = [];
                 _currentHookIndex = 0;
                 _mounted = false;
+                render = functionComponent;
 
                 setState = (state: any) => {
                     _this.scheduleUpdate(componentInstance);
                 };
-
-                render = functionComponent;
             })();
         }
 
@@ -302,7 +302,7 @@ export class Reconciler {
             const childInstance = this.reconcile(
                 parentDom,
                 instance?.childInstances.get('0') ?? null,
-                rendered
+                rendered,
             );
 
             const newInstance: Instance = {
@@ -585,7 +585,7 @@ export class Reconciler {
     private replaceNode(
         parentDom: HTMLElement,
         newDom: HTMLElement | Text,
-        oldDom?: HTMLElement | Text | null
+        oldDom?: HTMLElement | Text | null,
     ): void {
         if (oldDom && oldDom.parentNode === parentDom) {
             parentDom.replaceChild(newDom, oldDom);

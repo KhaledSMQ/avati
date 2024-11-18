@@ -32,7 +32,8 @@ describe('ConsoleLogger', () => {
 
         // Prevent actual console output during tests
         Object.keys(consoleSpy).forEach((key) => {
-            consoleSpy[key].mockImplementation(() => {});
+            consoleSpy[key].mockImplementation(() => {
+            });
         });
 
         fakeTime = 0;
@@ -137,7 +138,7 @@ describe('ConsoleLogger', () => {
 
             logger.info('Test message');
             expect(consoleSpy.info).toHaveBeenCalledWith(
-                expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
+                expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/),
             );
         });
 

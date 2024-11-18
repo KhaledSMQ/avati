@@ -53,7 +53,7 @@ class LRUCache<K, V> {
  */
 export function memoize<Args extends any[], Return>(
     fn: (...args: Args) => Return,
-    options: MemoizeOptions = {}
+    options: MemoizeOptions = {},
 ): (...args: Args) => Return {
     const { maxCacheSize = Infinity, ttl } = options;
     const cache = new LRUCache<string, { value: Return; timestamp: number }>(maxCacheSize);
@@ -83,7 +83,7 @@ export function memoize<Args extends any[], Return>(
             .join('|');
     }
 
-    return function (this: any, ...args: Args): Return {
+    return function(this: any, ...args: Args): Return {
         const key = generateKey(args);
         const now = Date.now();
 

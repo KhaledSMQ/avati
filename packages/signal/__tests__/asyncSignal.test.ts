@@ -21,7 +21,7 @@ describe('asyncSignal', () => {
             data: { id: 1 },
             loading: false,
             error: null,
-            timestamp: expect.any(Number)
+            timestamp: expect.any(Number),
         });
     });
 
@@ -35,8 +35,8 @@ describe('asyncSignal', () => {
             retryConfig: {
                 attempts: 2,
                 delay: 1000,
-                backoffFactor: 2
-            }
+                backoffFactor: 2,
+            },
         });
 
         const fetchPromise = signal.fetch();
@@ -65,8 +65,8 @@ describe('asyncSignal', () => {
         const signal = asyncSignal(mockFetch, {
             cache: {
                 enabled: true,
-                ttl: 5000
-            }
+                ttl: 5000,
+            },
         });
 
         await signal.fetch();
@@ -93,7 +93,7 @@ describe('asyncSignal', () => {
                 attempts: 1,
                 delay: 0,
                 backoffFactor: 0,
-            }
+            },
         });
 
         await signal.fetch();
@@ -104,7 +104,8 @@ describe('asyncSignal', () => {
     it('aborts previous fetch on new request', async () => {
         const abortError = new DOMException('Aborted', 'AbortError');
         const mockFetch = jest.fn()
-            .mockImplementationOnce(() => new Promise(() => {}))
+            .mockImplementationOnce(() => new Promise(() => {
+            }))
             .mockRejectedValueOnce(abortError)
             .mockResolvedValueOnce({ id: 2 });
 

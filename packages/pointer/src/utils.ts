@@ -10,7 +10,7 @@ import { Acceleration2D } from './types';
 export function calculateVelocity(
     prevPos: { x: number; y: number },
     currentPos: { x: number; y: number },
-    deltaTime: number
+    deltaTime: number,
 ): { vx: number; vy: number } {
     const vx = (currentPos.x - prevPos.x) / deltaTime;
     const vy = (currentPos.y - prevPos.y) / deltaTime;
@@ -37,7 +37,7 @@ export function calculateSpeed(vx: number, vy: number): number {
 export function calculateAcceleration(
     prevVelocity: { vx: number; vy: number },
     currentVelocity: { vx: number; vy: number },
-    deltaTime: number
+    deltaTime: number,
 ): Acceleration2D {
     const ax = (currentVelocity.vx - prevVelocity.vx) / deltaTime;
     const ay = (currentVelocity.vy - prevVelocity.vy) / deltaTime;

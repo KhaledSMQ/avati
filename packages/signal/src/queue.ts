@@ -86,11 +86,11 @@ export class QueueSignal<T> {
             id,
             data,
             priority,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         };
 
         this.queue.value = [...this.queue.value, item].sort(
-            (a, b) => b.priority - a.priority || a.timestamp - b.timestamp
+            (a, b) => b.priority - a.priority || a.timestamp - b.timestamp,
         );
 
         return id;

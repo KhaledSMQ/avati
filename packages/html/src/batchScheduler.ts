@@ -26,6 +26,17 @@ export class BatchScheduler {
         }
     }
 
+    startBatch(): void {
+        this.batchDepth++;
+    }
+
+    endBatch(): void {
+        this.batchDepth--;
+        if (this.batchDepth === 0) {
+            this.processQueue();
+        }
+    }
+
     private processQueue(): void {
         if (this.batchDepth > 0) {
             return;
@@ -51,17 +62,6 @@ export class BatchScheduler {
             }
         }
     }
-
-    startBatch(): void {
-        this.batchDepth++;
-    }
-
-    endBatch(): void {
-        this.batchDepth--;
-        if (this.batchDepth === 0) {
-            this.processQueue();
-        }
-    }
 }
 
 // Higher-order function for batch updates
@@ -74,6 +74,7 @@ export function batchUpdates<T>(fn: () => T): T {
         scheduler.endBatch();
     }
 }
+
 //
 // // Custom hook for batched state updates
 // export function useBatchedState<T>(initialState: T): [T, (value: T | ((prev: T) => T)) => void] {

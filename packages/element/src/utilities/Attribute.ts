@@ -9,12 +9,13 @@ import { Attributes } from './types';
 export function setAttributes(
     element: Element,
     attributes: Attributes,
-    isSvg: boolean = false
+    isSvg: boolean = false,
 ): void {
     Object.entries(attributes).forEach(([key, value]) => {
         setAttribute(element, key, value, isSvg);
     });
 }
+
 /**
  * Sets a single attribute on an element.
  * @param element - The target Element (HTMLElement or SVGElement).
@@ -26,7 +27,7 @@ export function setAttribute(
     element: Element,
     key: string,
     value: any,
-    isSvg: boolean = false
+    isSvg: boolean = false,
 ): void {
     if (key === 'className') {
         // @ts-ignore
@@ -63,7 +64,7 @@ export function removeAttribute(element: HTMLElement, key: string): void {
         const event = key.substring(2).toLowerCase();
         // Note: To remove an event listener, you need a reference to the handler
         console.warn(
-            `Cannot remove event listener for ${event}. You need to keep a reference to the handler.`
+            `Cannot remove event listener for ${event}. You need to keep a reference to the handler.`,
         );
     } else {
         element.removeAttribute(key);

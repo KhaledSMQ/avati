@@ -9,10 +9,10 @@ declare const __DEV__: boolean;
 
 declare namespace JSX {
     interface Element {
-        type: any
+        type: any;
         props: any;
         key?: any;
-        ref?: any
+        ref?: any;
         displayName?: string | null;
     }
 }

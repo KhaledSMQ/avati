@@ -29,7 +29,7 @@ export class StateManager<T extends Record<string, any>> implements IStateManage
         initialState: T,
         options: StateManagerOptions = {},
         stateOps: IStateOperations = new StateOperations(),
-        validator: IStateValidator = new StateValidator()
+        validator: IStateValidator = new StateValidator(),
     ) {
         this.stateOps = stateOps;
         this.validator = validator;

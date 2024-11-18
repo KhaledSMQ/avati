@@ -56,7 +56,7 @@ export function mergeRefs<T>(...refs: Array<Ref<T>>): RefCallback<T> {
  * Forward ref HOC
  */
 export function forwardRef<T, P = {}>(
-    render: (props: P, ref: Ref<T>) => JSX.Element
+    render: (props: P, ref: Ref<T>) => JSX.Element,
 ): FunctionComponent<P & { ref?: Ref<T> }> {
     function ForwardRefComponent(props: P & { ref?: Ref<T> }) {
         const { ref, ...rest } = props as any;

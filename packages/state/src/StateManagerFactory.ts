@@ -6,7 +6,7 @@ import { StateValidator } from './StateValidator';
 export class StateManagerFactory {
     public static create<T extends Record<string, any>>(
         initialState: T,
-        options: StateManagerOptions = {}
+        options: StateManagerOptions = {},
     ): StateManager<T> {
         const stateOps = new StateOperations();
         const validator = new StateValidator();

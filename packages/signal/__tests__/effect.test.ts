@@ -5,7 +5,7 @@ describe('Effect', () => {
     // Reset any shared state before each test
     beforeEach(() => {
         // Reset SignalContext singleton if needed
-        resetSignalSystem()
+        resetSignalSystem();
     });
 
     describe('Basic Functionality', () => {
@@ -95,7 +95,7 @@ describe('Effect', () => {
             count.value = 1; // Trigger cleanup
             expect(consoleSpy).toHaveBeenCalledWith(
                 'Error in effect cleanup:',
-                expect.any(Error)
+                expect.any(Error),
             );
 
             disposable.dispose();
@@ -120,7 +120,7 @@ describe('Effect', () => {
 
             expect(consoleSpy).toHaveBeenCalledWith(
                 'Error in effect:',
-                expect.any(Error)
+                expect.any(Error),
             );
 
             consoleSpy.mockRestore();
@@ -168,7 +168,8 @@ describe('Effect', () => {
         });
 
         test('should be safe to dispose multiple times', () => {
-            const disposable = effect(() => {});
+            const disposable = effect(() => {
+            });
 
             disposable.dispose();
             expect(() => disposable.dispose()).not.toThrow();
@@ -226,7 +227,7 @@ describe('Effect', () => {
             batch(() => {
                 count1.value = 1;
                 count2.value = 1;
-            })
+            });
 
 
             expect(mockFn).toHaveBeenCalledWith(1, 1);

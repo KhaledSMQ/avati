@@ -90,9 +90,12 @@ export class Scrollable {
             precision: 0.1,
             maskFeatherSize: '2rem',
             maskOpacity: 0.3,
-            onScroll: () => {},
-            onScrollStart: () => {},
-            onScrollEnd: () => {},
+            onScroll: () => {
+            },
+            onScrollStart: () => {
+            },
+            onScrollEnd: () => {
+            },
             ...options,
         };
 
@@ -109,6 +112,127 @@ export class Scrollable {
         }
 
         this.init();
+    }
+
+    private get canScrollVertically(): boolean {
+        return this.detectedDirection === 'vertical' || this.detectedDirection === 'both';
+    }
+
+    private get canScrollHorizontally(): boolean {
+        return this.detectedDirection === 'horizontal' || this.detectedDirection === 'both';
+    }
+
+    /**
+     * Update the scroll direction
+     * @param direction
+     */
+    public updateScrollDirection(direction: Direction): void {
+        this.options.direction = direction;
+        if (direction === 'auto') {
+            this.detectScrollDirection();
+        } else {
+            this.detectedDirection = direction;
+        }
+        this.computeBounds();
+    }
+
+    /**
+     * Programmatically scroll to a specific position with animation
+     */
+    public scrollTo(x: number, y: number, animate: boolean = true): void {
+        this.stopAnimations();
+        this.options.onScrollStart();
+
+        const targetX = this.clamp(x, this.bounds.minX, this.bounds.maxX);
+        const targetY = this.clamp(y, this.bounds.minY, this.bounds.maxY);
+
+        if (!animate) {
+            this.setScrollPosition(targetX, targetY);
+            this.options.onScrollEnd();
+            return;
+        }
+
+        this.targetPos = { x: targetX, y: targetY };
+        this.updateTransform();
+    }
+
+    /**
+     * Programmatically scroll by a specific amount with animation
+     */
+    public scrollBy(deltaX: number, deltaY: number, animate: boolean = true): void {
+        this.scrollTo(this.currentPos.x + deltaX, this.currentPos.y + deltaY, animate);
+    }
+
+    /**
+     * Get the current scroll position
+     */
+    public getScrollPosition(): Position {
+        return { ...this.currentPos };
+    }
+
+    /**
+     * Get the current scroll bounds
+     */
+    public getBounds(): Bounds {
+        return { ...this.bounds };
+    }
+
+    /**
+     * Check if the content is currently scrolling
+     */
+    public isScrolling(): boolean {
+        return this.isDragging || this.isScrollingWithWheel || this.rafId !== null;
+    }
+
+    /**
+     * Force a recalculation of the scroll bounds
+     */
+    public recalculateBounds(): void {
+        this.computeBounds();
+    }
+
+    /**
+     * Destroy the Scrollable instance and clean up all resources
+     */
+    public destroy(): void {
+        // Remove event listeners
+        this.container.removeEventListener('mousedown', this.onDragStartBound);
+        this.container.removeEventListener('touchstart', this.onDragStartBound);
+        this.container.removeEventListener('wheel', this.onWheelBound);
+
+        window.removeEventListener('mousemove', this.onDragMoveBound);
+        window.removeEventListener('touchmove', this.onDragMoveBound);
+        window.removeEventListener('mouseup', this.onDragEndBound);
+        window.removeEventListener('touchend', this.onDragEndBound);
+
+        // Stop animations and timers
+        this.stopAnimations();
+        if (this.scrollEndTimeoutId !== null) {
+            clearTimeout(this.scrollEndTimeoutId);
+        }
+
+        // Disconnect observer
+        this.observer.disconnect();
+
+        // Remove styles
+        this.container.style.touchAction = '';
+        this.container.style.overflow = '';
+        this.container.style.webkitMask = '';
+        this.container.style.mask = '';
+        this.container.style.contain = '';
+        this.content.style.transform = '';
+        this.content.style.willChange = '';
+
+        // Remove CSS variables
+        const cssVars = [
+            '--mask-angle',
+            '--scrollable-feather-start-opacity',
+            '--scrollable-feather-end-opacity',
+            '--scrollable-feather-size',
+        ];
+        cssVars.forEach((variable) => {
+            this.container.style.removeProperty(variable);
+        });
     }
 
     private init(): void {
@@ -176,14 +300,6 @@ export class Scrollable {
         this.content.style.willChange = 'transform';
     }
 
-    private get canScrollVertically(): boolean {
-        return this.detectedDirection === 'vertical' || this.detectedDirection === 'both';
-    }
-
-    private get canScrollHorizontally(): boolean {
-        return this.detectedDirection === 'horizontal' || this.detectedDirection === 'both';
-    }
-
     private handleVerticalSpringUpdate(value: number): void {
         this.setScrollPosition(this.currentPos.x, value);
     }
@@ -204,8 +320,8 @@ export class Scrollable {
                 this.detectedDirection === 'both'
                     ? '0deg'
                     : this.detectedDirection === 'horizontal'
-                      ? '90deg'
-                      : '0deg',
+                        ? '90deg'
+                        : '0deg',
             '--scrollable-feather-start-opacity': '1',
             '--scrollable-feather-end-opacity': '0',
             '--scrollable-feather-size': this.options.maskFeatherSize,
@@ -532,6 +648,8 @@ export class Scrollable {
         }
     }
 
+    // Public Methods
+
     private checkBounceNeeded(): boolean {
         const horizontalOverscroll =
             this.currentPos.x > this.bounds.maxX || this.currentPos.x < this.bounds.minX;
@@ -616,120 +734,5 @@ export class Scrollable {
 
     private clamp(value: number, min: number, max: number): number {
         return Math.max(min, Math.min(max, value));
-    }
-
-    // Public Methods
-
-    /**
-     * Update the scroll direction
-     * @param direction
-     */
-    public updateScrollDirection(direction: Direction): void {
-        this.options.direction = direction;
-        if (direction === 'auto') {
-            this.detectScrollDirection();
-        } else {
-            this.detectedDirection = direction;
-        }
-        this.computeBounds();
-    }
-
-    /**
-     * Programmatically scroll to a specific position with animation
-     */
-    public scrollTo(x: number, y: number, animate: boolean = true): void {
-        this.stopAnimations();
-        this.options.onScrollStart();
-
-        const targetX = this.clamp(x, this.bounds.minX, this.bounds.maxX);
-        const targetY = this.clamp(y, this.bounds.minY, this.bounds.maxY);
-
-        if (!animate) {
-            this.setScrollPosition(targetX, targetY);
-            this.options.onScrollEnd();
-            return;
-        }
-
-        this.targetPos = { x: targetX, y: targetY };
-        this.updateTransform();
-    }
-
-    /**
-     * Programmatically scroll by a specific amount with animation
-     */
-    public scrollBy(deltaX: number, deltaY: number, animate: boolean = true): void {
-        this.scrollTo(this.currentPos.x + deltaX, this.currentPos.y + deltaY, animate);
-    }
-
-    /**
-     * Get the current scroll position
-     */
-    public getScrollPosition(): Position {
-        return { ...this.currentPos };
-    }
-
-    /**
-     * Get the current scroll bounds
-     */
-    public getBounds(): Bounds {
-        return { ...this.bounds };
-    }
-
-    /**
-     * Check if the content is currently scrolling
-     */
-    public isScrolling(): boolean {
-        return this.isDragging || this.isScrollingWithWheel || this.rafId !== null;
-    }
-
-    /**
-     * Force a recalculation of the scroll bounds
-     */
-    public recalculateBounds(): void {
-        this.computeBounds();
-    }
-
-    /**
-     * Destroy the Scrollable instance and clean up all resources
-     */
-    public destroy(): void {
-        // Remove event listeners
-        this.container.removeEventListener('mousedown', this.onDragStartBound);
-        this.container.removeEventListener('touchstart', this.onDragStartBound);
-        this.container.removeEventListener('wheel', this.onWheelBound);
-
-        window.removeEventListener('mousemove', this.onDragMoveBound);
-        window.removeEventListener('touchmove', this.onDragMoveBound);
-        window.removeEventListener('mouseup', this.onDragEndBound);
-        window.removeEventListener('touchend', this.onDragEndBound);
-
-        // Stop animations and timers
-        this.stopAnimations();
-        if (this.scrollEndTimeoutId !== null) {
-            clearTimeout(this.scrollEndTimeoutId);
-        }
-
-        // Disconnect observer
-        this.observer.disconnect();
-
-        // Remove styles
-        this.container.style.touchAction = '';
-        this.container.style.overflow = '';
-        this.container.style.webkitMask = '';
-        this.container.style.mask = '';
-        this.container.style.contain = '';
-        this.content.style.transform = '';
-        this.content.style.willChange = '';
-
-        // Remove CSS variables
-        const cssVars = [
-            '--mask-angle',
-            '--scrollable-feather-start-opacity',
-            '--scrollable-feather-end-opacity',
-            '--scrollable-feather-size',
-        ];
-        cssVars.forEach((variable) => {
-            this.container.style.removeProperty(variable);
-        });
     }
 }

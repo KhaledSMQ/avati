@@ -125,6 +125,23 @@ export class EffectImpl implements Disposable {
     }
 
     /**
+     * Disposes of the effect, running cleanup and preventing further executions
+     */
+    dispose(): void {
+        if (this.disposed) return;
+
+        this.disposed = true;
+        if (this.cleanup) {
+            try {
+                this.cleanup();
+            } catch (error) {
+                console.error('Error in effect cleanup:', error);
+            }
+        }
+        this.computation.dispose();
+    }
+
+    /**
      * Executes the effect function and manages cleanup
      * Handles error boundaries for both effect and cleanup execution
      */
@@ -147,23 +164,6 @@ export class EffectImpl implements Disposable {
             console.error('Error in effect:', error);
             throw error;
         }
-    }
-
-    /**
-     * Disposes of the effect, running cleanup and preventing further executions
-     */
-    dispose(): void {
-        if (this.disposed) return;
-
-        this.disposed = true;
-        if (this.cleanup) {
-            try {
-                this.cleanup();
-            } catch (error) {
-                console.error('Error in effect cleanup:', error);
-            }
-        }
-        this.computation.dispose();
     }
 }
 

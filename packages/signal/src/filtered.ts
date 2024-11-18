@@ -7,7 +7,7 @@
 
 import { SignalOptions } from './interfaces';
 import { createSignal } from './createSignal';
-import {  Signal } from './signal';
+import { Signal } from './signal';
 import { effect } from './effect';
 
 /**

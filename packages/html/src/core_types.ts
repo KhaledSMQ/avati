@@ -6,6 +6,8 @@ export type VNode = VElement | string | number | boolean | null | undefined;
 export type Ref<T> = RefObject<T> | ((instance: T | null) => void);
 
 export abstract class Component<P = {}, S = {}> {
+    // Add isReactComponent flag for type checking
+    static readonly isReactComponent = true;
     props: Readonly<P>;
     state: Readonly<S>;
 
@@ -15,17 +17,19 @@ export abstract class Component<P = {}, S = {}> {
     }
 
     abstract render(): JSX.Element;
+
     abstract componentDidMount?(): void;
+
     abstract componentDidUpdate?(prevProps: Readonly<P>, prevState: Readonly<S>): void;
+
     abstract componentWillUnmount?(): void;
+
     abstract shouldComponentUpdate?(nextProps: Readonly<P>, nextState: Readonly<S>): boolean;
+
     abstract setState(
         updater: Partial<S> | ((prevState: Readonly<S>, props: Readonly<P>) => Partial<S>),
-        callback?: () => void
+        callback?: () => void,
     ): void;
-
-    // Add isReactComponent flag for type checking
-    static readonly isReactComponent = true;
 }
 
 export type VNodeType = string | FunctionComponent | typeof Component;
@@ -39,6 +43,7 @@ export interface Props {
     ref?: RefObject<any>;
     className?: string;
     style?: Partial<CSSStyleDeclaration>;
+
     [key: string]: any;
 }
 
@@ -55,7 +60,6 @@ export interface VElement {
  * Function component definition
  */
 export interface FunctionComponent<P = {}> {
-    (props: P): JSX.Element;
     defaultProps?: Partial<P>;
     displayName?: string;
     _owner?: Component | null;
@@ -63,6 +67,8 @@ export interface FunctionComponent<P = {}> {
     _hookIndex?: number;
     _signals?: Set<ISignal<any>> | null;
     setState?: (state: any) => void;
+
+    (props: P): JSX.Element;
 }
 
 export type FC<P = {}> = FunctionComponent<P>;
@@ -75,8 +81,9 @@ export interface RefObject<T = any> {
 }
 
 export interface ForwardRefRenderFunction<T, P = {}> {
-    (props: P, ref: RefObject<T>): JSX.Element;
     displayName?: string;
+
+    (props: P, ref: RefObject<T>): JSX.Element;
 }
 
 export interface ForwardRefExoticComponent<P> extends FunctionComponent<P> {
@@ -136,10 +143,11 @@ export enum ComponentLifecycleState {
 }
 
 export interface ComponentClass<P = {}> {
-    new (props: P): Component<P>;
     contextType?: Context<any>;
     defaultProps?: Partial<P>;
     displayName?: string;
+
+    new(props: P): Component<P>;
 }
 
 export interface ErrorInfo {
@@ -149,8 +157,11 @@ export interface ErrorInfo {
 export interface ISignal<T> {
     value: T;
     subscribers: Set<() => void>;
+
     subscribe(callback: () => void): () => void;
+
     unsubscribe(callback: () => void): void;
+
     emit(value: T): void;
 }
 

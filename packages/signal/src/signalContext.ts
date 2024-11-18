@@ -78,7 +78,7 @@ export class SignalContext {
         }
         // Mark all computations as dirty
         for (const computation of computations) {
-            computation.markDirty()
+            computation.markDirty();
         }
     }
 

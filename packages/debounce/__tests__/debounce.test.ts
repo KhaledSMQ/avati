@@ -110,8 +110,10 @@ describe('Debounce Utility Function', () => {
         const func = jest.fn();
         const debouncedFunc = debounce(func, { wait: 100 });
 
-        debouncedFunc().catch(() => {});
-        debouncedFunc().catch(() => {});
+        debouncedFunc().catch(() => {
+        });
+        debouncedFunc().catch(() => {
+        });
 
         debouncedFunc.cancel();
 
@@ -198,7 +200,8 @@ describe('Debounce Utility Function', () => {
             await expect(promise).rejects.toThrow('Test error');
 
             expect(errorFunc).toHaveBeenCalledTimes(1);
-        } catch (e) {}
+        } catch (e) {
+        }
     });
 
     test('should execute when both leading and trailing are false', () => {
@@ -219,10 +222,10 @@ describe('Debounce Utility Function', () => {
             value = 42;
 
             getValue = debounce(
-                function (this: TestClass) {
+                function(this: TestClass) {
                     return this.value;
                 },
-                { wait: 100 }
+                { wait: 100 },
             );
         }
 

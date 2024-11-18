@@ -106,7 +106,7 @@ describe('throttle', () => {
 
     test('should preserve the correct `this` context', () => {
         const context = { value: 42 };
-        const method = jest.fn(function (this: any) {
+        const method = jest.fn(function(this: any) {
             return this.value;
         });
 

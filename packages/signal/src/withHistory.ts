@@ -36,7 +36,7 @@ export function withHistory<T>(
 
     const signal = createSignal(initialValue, {
         ...options,
-        equals: equalsFn // Ensure equals function is properly passed
+        equals: equalsFn, // Ensure equals function is properly passed
     });
     const history = createSignal<T[]>([initialValue]);
     const currentIndex = createSignal(0);

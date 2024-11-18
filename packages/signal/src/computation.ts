@@ -92,6 +92,13 @@ export abstract class Computation implements Disposable {
         }
     }
 
+    /**
+     * Check if signal is a dependency of this computation
+     * @param signal
+     */
+    hasSignal(signal: Signal<any>): boolean {
+        return this.dependencies.has(signal);
+    }
 
     /**
      * Clear all dependencies and update depth
@@ -124,13 +131,5 @@ export abstract class Computation implements Disposable {
                 dependent.updateDepth();
             }
         }
-    }
-
-    /**
-     * Check if signal is a dependency of this computation
-     * @param signal
-     */
-    hasSignal(signal: Signal<any>): boolean {
-        return this.dependencies.has(signal);
     }
 }

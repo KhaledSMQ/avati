@@ -6,7 +6,6 @@
  **/
 
 
-
 /**
  * Environment and development mode detection
  */
@@ -23,11 +22,11 @@ export const Environment = {
                     process.env.NODE_ENV === 'development') ||
                 // Check for any custom development flags you might use
                 (typeof window !== 'undefined' &&
-                    (window as any).__DEVELOPMENT__)
+                    (window as any).__DEVELOPMENT__),
             );
         } catch {
             // If we can't determine, assume production for safety
             return false;
         }
-    }
+    },
 };

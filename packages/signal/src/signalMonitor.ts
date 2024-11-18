@@ -6,7 +6,6 @@
  **/
 
 
-
 import { SignalMetrics } from './interfaces';
 
 /**

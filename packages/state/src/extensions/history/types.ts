@@ -53,11 +53,18 @@ export type HistoryAction = UndoAction | RedoAction | ClearHistoryAction | Rever
  */
 export interface IHistoryManager<T> {
     undo(): boolean;
+
     redo(): boolean;
+
     revertTo(index: number): boolean;
+
     clearHistory(): void;
+
     canUndo(): boolean;
+
     canRedo(): boolean;
+
     getHistory(): HistoryState<T>;
+
     getHistoryLength(): { past: number; future: number };
 }

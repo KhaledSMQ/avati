@@ -46,7 +46,7 @@ export class PubSub {
      */
     public subscribe<K extends PubSubEventType>(
         eventType: K,
-        handler: () => void | Promise<void>
+        handler: () => void | Promise<void>,
     ): void {
         if (!this.subscribers.has(eventType)) {
             this.subscribers.set(eventType, new Set<Function>());
@@ -61,7 +61,7 @@ export class PubSub {
      */
     public unsubscribe<K extends PubSubEventType>(
         eventType: K,
-        handler: () => void | Promise<void> | PubSubHandlers[K]
+        handler: () => void | Promise<void> | PubSubHandlers[K],
     ): void {
         if (this.subscribers.has(eventType)) {
             this.subscribers.get(eventType)!.delete(handler as Function);

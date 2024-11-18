@@ -2,7 +2,6 @@ export * from './batchScheduler';
 export * from './component';
 export * from './createRoot';
 export * from './reconciler';
-export * from './signal';
 export * from './Jsx';
 export * from './hooksContext';
 export * from './utility';

@@ -217,7 +217,7 @@ describe('EventListenerManager - Debounce and Throttle', () => {
     });
 
     test('debounce should pass the correct context and arguments', () => {
-        const mockCallback = jest.fn(function (this: any, event: Event) {
+        const mockCallback = jest.fn(function(this: any, event: Event) {
             expect(this).toBe(element);
             expect(event).toBeInstanceOf(Event);
         });
@@ -231,7 +231,7 @@ describe('EventListenerManager - Debounce and Throttle', () => {
     });
 
     test('throttle should pass the correct context and arguments', () => {
-        const mockCallback = jest.fn(function (this: any, event: Event) {
+        const mockCallback = jest.fn(function(this: any, event: Event) {
             expect(this).toBe(element);
             expect(event).toBeInstanceOf(Event);
         });

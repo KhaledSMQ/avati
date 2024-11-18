@@ -1,9 +1,11 @@
-import {
-    ComponentClass,
-    ForwardRefExoticComponent,
-    FunctionComponent,
-    VElement,
-} from './core_types';
+/**
+ * Copyright (c) 2024 Khaled Sameer <khaled.smq@hotmail.com>.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ **/
+
+import { ComponentClass, ForwardRefExoticComponent, FunctionComponent, VElement } from './core_types';
 
 /**
  * Type guards
@@ -17,7 +19,7 @@ export function isFunctionComponent(component: any): component is FunctionCompon
 }
 
 export function isForwardRef<T = any, P = any>(
-    component: any
+    component: any,
 ): component is ForwardRefExoticComponent<P> {
     return Boolean(component?.__forwarded);
 }

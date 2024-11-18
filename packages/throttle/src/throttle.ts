@@ -62,7 +62,7 @@ type ThrottledFunction<T extends (...args: any[]) => any> = ((...args: Parameter
 export function throttle<T extends (...args: any[]) => any>(
     callback: T,
     limit: number = 1000 / 120, // 120 FPS
-    options: ThrottleOptions = {}
+    options: ThrottleOptions = {},
 ): ThrottledFunction<T> {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
     let lastCallTime: number | null = null;
@@ -99,7 +99,7 @@ export function throttle<T extends (...args: any[]) => any>(
         const executionTime = now() - startTime;
         if (executionTime > limit) {
             console.warn(
-                `Execution time (${executionTime}ms) exceeded throttle limit (${limit}ms)`
+                `Execution time (${executionTime}ms) exceeded throttle limit (${limit}ms)`,
             );
         }
     };
@@ -142,7 +142,7 @@ export function throttle<T extends (...args: any[]) => any>(
     /**
      * The throttled function that controls the execution rate of the callback.
      */
-    const throttled = function (this: any, ...args: Parameters<T>) {
+    const throttled = function(this: any, ...args: Parameters<T>) {
         const _now = now();
 
         // Handle first call optimization

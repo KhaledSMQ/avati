@@ -75,6 +75,7 @@ export interface AsyncSignalOptions<T, E = Error> extends SignalOptions<AsyncSta
     onError?: (error: E) => void;    // Error callback
     onSuccess?: (data: T) => void;   // Success callback
 }
+
 /**
  * A Signal subclass for managing asynchronous operations with built-in
  * loading states, caching, and retry logic
@@ -279,17 +280,6 @@ export class AsyncSignal<T, E = Error> extends Signal<AsyncState<T, E>> {
     }
 
     /**
-     * Checks if cached data is still valid based on TTL
-     */
-    private isCacheValid(): boolean {
-        if (!this.options.cache?.enabled) return false;
-        if (!this.value.data) return false;
-
-        const ttl = this.options.cache.ttl || 5 * 60 * 1000; // Default 5 minutes
-        return Date.now() - this.value.timestamp < ttl;
-    }
-
-    /**
      * Forces a fresh fetch, bypassing cache
      */
     refresh(): Promise<T | null> {
@@ -304,6 +294,17 @@ export class AsyncSignal<T, E = Error> extends Signal<AsyncState<T, E>> {
             this.abortController.abort();
         }
         super.dispose();
+    }
+
+    /**
+     * Checks if cached data is still valid based on TTL
+     */
+    private isCacheValid(): boolean {
+        if (!this.options.cache?.enabled) return false;
+        if (!this.value.data) return false;
+
+        const ttl = this.options.cache.ttl || 5 * 60 * 1000; // Default 5 minutes
+        return Date.now() - this.value.timestamp < ttl;
     }
 }
 

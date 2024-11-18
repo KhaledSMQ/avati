@@ -6,7 +6,6 @@
  **/
 
 
-
 import { EqualityFunction, TransformFunction, VoidCallbackFunction } from './types';
 
 /**

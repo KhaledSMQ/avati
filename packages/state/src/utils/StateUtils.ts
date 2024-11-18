@@ -15,7 +15,7 @@ export class StateUtils {
                 if (this.isObject(sourceValue) && this.isObject(targetValue)) {
                     result[key] = this.deepMerge(
                         targetValue,
-                        sourceValue as DeepPartial<typeof targetValue>
+                        sourceValue as DeepPartial<typeof targetValue>,
                     );
                 } else if (sourceValue !== undefined) {
                     result[key] = this.cloneValue(sourceValue) as T[typeof key];

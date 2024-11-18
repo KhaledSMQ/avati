@@ -1,4 +1,3 @@
-
 import { Signal, threshold } from '../src';
 
 describe('threshold', () => {
@@ -38,7 +37,7 @@ describe('threshold', () => {
 
     it('should maintain custom equality function', () => {
         const thresholded = threshold(source, 0.5, {
-            equals: (a, b) => Math.floor(a) === Math.floor(b)
+            equals: (a, b) => Math.floor(a) === Math.floor(b),
         });
 
         source.value = 0.7;

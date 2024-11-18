@@ -44,9 +44,6 @@ interface DebounceOptions {
  * @template T - The type of the original function
  */
 interface DebouncedFunction<T extends AnyFunction> {
-    /** The debounced function that wraps the original */
-    (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>>;
-
     /** Cancels any pending function invocations */
     readonly cancel: () => void;
     /** Immediately executes any pending function call */
@@ -55,6 +52,9 @@ interface DebouncedFunction<T extends AnyFunction> {
     readonly pending: () => boolean;
     /** Cleans up resources used by the debounced function */
     readonly cleanup: () => void;
+
+    /** The debounced function that wraps the original */
+    (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>>;
 }
 
 /**
@@ -127,7 +127,7 @@ const createLogger = (debug: boolean) => ({
  */
 function debounce<T extends AnyFunction>(
     func: T,
-    options: DebounceOptions = {}
+    options: DebounceOptions = {},
 ): DebouncedFunction<T> {
     // Input validation
     if (typeof func !== 'function') {
@@ -199,7 +199,7 @@ function debounce<T extends AnyFunction>(
         const error = new Error('Debounced function cancelled');
         handleError(error);
         state.pendingPromises.forEach(({ reject }) =>
-            reject(new Error('Debounced function cancelled'))
+            reject(new Error('Debounced function cancelled')),
         );
         state.pendingPromises = [];
     }
@@ -302,7 +302,7 @@ function debounce<T extends AnyFunction>(
                     cancelTimers();
                     invokeFunc(Date.now());
                 },
-                Math.max(0, timeToMaxWait)
+                Math.max(0, timeToMaxWait),
             );
             logger.log(`Started max wait timer for ${timeToMaxWait}ms`);
         }
@@ -403,7 +403,7 @@ function debounce<T extends AnyFunction>(
      * @param {...Parameters<T>} args - Function arguments
      * @returns {Promise<ReturnType<T>>} Promise resolving to function result
      */
-    const debounced = function (
+    const debounced = function(
         this: any,
         ...args: Parameters<T>
     ): Promise<Awaited<ReturnType<T>>> {

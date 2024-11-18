@@ -2,6 +2,33 @@ import { EasingFunction, TweenOptions, Vector2D } from './types';
 import { TweenManager } from './tweenManager';
 
 export class Tween<T> {
+    // Static collection of easing functions
+    static EasingFunctions = {
+        linear: (t: number): number => t,
+        easeInCubic: (t: number): number => t * t * t,
+        easeOutCubic: (t: number): number => 1 - Math.pow(1 - t, 3),
+        easeInOutCubic: (t: number): number =>
+            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+        easeInQuad: (t: number): number => t * t,
+        easeOutQuad: (t: number): number => t * (2 - t),
+        easeInOutQuad: (t: number): number => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
+        easeInElastic: (t: number): number => {
+            const c4 = (2 * Math.PI) / 3;
+            return t === 0
+                ? 0
+                : t === 1
+                    ? 1
+                    : -Math.pow(2, 10 * t - 10) * Math.sin((t * 10 - 10.75) * c4);
+        },
+        bounce: (t: number): number => {
+            const n1 = 7.5625;
+            const d1 = 2.75;
+            if (t < 1 / d1) return n1 * t * t;
+            if (t < 2 / d1) return n1 * (t -= 1.5 / d1) * t + 0.75;
+            if (t < 2.5 / d1) return n1 * (t -= 2.25 / d1) * t + 0.9375;
+            return n1 * (t -= 2.625 / d1) * t + 0.984375;
+        },
+    };
     private from: T;
     private to: T;
     private duration: number;
@@ -19,34 +46,6 @@ export class Tween<T> {
         this.onUpdate = options.onUpdate;
         this.onComplete = options.onComplete;
     }
-
-    // Static collection of easing functions
-    static EasingFunctions = {
-        linear: (t: number): number => t,
-        easeInCubic: (t: number): number => t * t * t,
-        easeOutCubic: (t: number): number => 1 - Math.pow(1 - t, 3),
-        easeInOutCubic: (t: number): number =>
-            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
-        easeInQuad: (t: number): number => t * t,
-        easeOutQuad: (t: number): number => t * (2 - t),
-        easeInOutQuad: (t: number): number => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
-        easeInElastic: (t: number): number => {
-            const c4 = (2 * Math.PI) / 3;
-            return t === 0
-                ? 0
-                : t === 1
-                  ? 1
-                  : -Math.pow(2, 10 * t - 10) * Math.sin((t * 10 - 10.75) * c4);
-        },
-        bounce: (t: number): number => {
-            const n1 = 7.5625;
-            const d1 = 2.75;
-            if (t < 1 / d1) return n1 * t * t;
-            if (t < 2 / d1) return n1 * (t -= 1.5 / d1) * t + 0.75;
-            if (t < 2.5 / d1) return n1 * (t -= 2.25 / d1) * t + 0.9375;
-            return n1 * (t -= 2.625 / d1) * t + 0.984375;
-        },
-    };
 
     start(): void {
         if (this.isActive) return;

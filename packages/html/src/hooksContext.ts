@@ -34,7 +34,8 @@ export class HooksContext {
     private hookStates = new WeakMap<ComponentInstance, HookState[]>();
     private updateScheduled = new WeakSet<ComponentInstance>();
 
-    private constructor() {}
+    private constructor() {
+    }
 
     static getInstance(): HooksContext {
         if (!HooksContext.instance) {

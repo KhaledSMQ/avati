@@ -106,7 +106,7 @@ function getTotalScrollOffsets(element: HTMLElement): {
 function adjustForTransform(
     relativeX: number,
     relativeY: number,
-    inverseMatrix: DOMMatrix
+    inverseMatrix: DOMMatrix,
 ): { adjustedX: number; adjustedY: number } {
     const point = new DOMPoint(relativeX, relativeY).matrixTransform(inverseMatrix);
     return { adjustedX: point.x, adjustedY: point.y };
@@ -145,7 +145,7 @@ function getRealCoords(el: HTMLElement): Coordinates {
  */
 export function getElementPositionInfo(
     event: PointerEvent,
-    element: HTMLElement
+    element: HTMLElement,
 ): ElementPositionInfo {
     // Get the bounding rectangle of the element
     const rect = element.getBoundingClientRect();
@@ -165,7 +165,7 @@ export function getElementPositionInfo(
             const transformed = adjustForTransform(
                 relativeX,
                 relativeY,
-                inverseTransformationMatrix
+                inverseTransformationMatrix,
             );
             relativeX = transformed.adjustedX;
             relativeY = transformed.adjustedY;

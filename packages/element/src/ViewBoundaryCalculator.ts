@@ -250,7 +250,7 @@ export const GetElementBounds = (element: HTMLElement): Rectangle & { margins: M
  */
 export const ChildViewElement = (
     element: HTMLElement,
-    includeInLayout: boolean = false
+    includeInLayout: boolean = false,
 ): ChildView => {
     return {
         shouldIncludeInLayout(): boolean {
@@ -346,6 +346,48 @@ export class BoundaryCalculationError extends Error {
  */
 export class ViewBoundaryCalculator {
     /**
+     * Calculates view boundaries based on element bounds and child views.
+     *
+     * @throws {BoundaryCalculationError} If input parameters are invalid
+     * @param {Rectangle & { margins: Margins }} elementBounds - The main element bounds
+     * @param {ChildView[]} childViews - Array of child views
+     * @param {ViewConfig} [config={}] - Optional configuration parameters
+     * @returns {ViewBounds} The calculated view boundaries
+     *
+     * @example
+     * ```typescript
+     * const bounds = ViewBoundaryCalculator.calculateBounds(
+     *   elementBounds,
+     *   childViews,
+     *   { scale: { x: 2, y: 2 } }
+     * );
+     * ```
+     */
+    public static calculateBounds(
+        elementBounds: Rectangle & { margins: Margins },
+        childViews: ChildView[],
+        config: ViewConfig = {},
+    ): ViewBounds {
+        this.validateRectangle(elementBounds, 'elementBounds');
+        this.validateMargins(elementBounds.margins);
+
+        const { offset = { x: 0, y: 0 }, scale = { x: 1, y: 1 } } = config;
+
+        this.validateNumber(offset.x, 'offset.x');
+        this.validateNumber(offset.y, 'offset.y');
+        this.validateScale(scale);
+
+        const baseBounds = this.createBaseBounds(elementBounds, offset, scale);
+        const childBounds = this.calculateCombinedChildBounds(childViews);
+        const combinedBounds = this.combineBounds(baseBounds, childBounds, elementBounds.margins);
+
+        this.validateRectangle(combinedBounds.inner, 'combinedBounds.inner');
+        this.validateRectangle(combinedBounds.outer, 'combinedBounds.outer');
+
+        return combinedBounds;
+    }
+
+    /**
      * Validates that a numeric value is finite and within safe bounds.
      *
      * @throws {BoundaryCalculationError} If the value is invalid
@@ -388,7 +430,7 @@ export class ViewBoundaryCalculator {
             Math.abs(calculatedBottom - rect.bottom) > EPSILON
         ) {
             throw new BoundaryCalculationError(
-                `${name} coordinates are inconsistent with dimensions`
+                `${name} coordinates are inconsistent with dimensions`,
             );
         }
     }
@@ -418,48 +460,6 @@ export class ViewBoundaryCalculator {
     }
 
     /**
-     * Calculates view boundaries based on element bounds and child views.
-     *
-     * @throws {BoundaryCalculationError} If input parameters are invalid
-     * @param {Rectangle & { margins: Margins }} elementBounds - The main element bounds
-     * @param {ChildView[]} childViews - Array of child views
-     * @param {ViewConfig} [config={}] - Optional configuration parameters
-     * @returns {ViewBounds} The calculated view boundaries
-     *
-     * @example
-     * ```typescript
-     * const bounds = ViewBoundaryCalculator.calculateBounds(
-     *   elementBounds,
-     *   childViews,
-     *   { scale: { x: 2, y: 2 } }
-     * );
-     * ```
-     */
-    public static calculateBounds(
-        elementBounds: Rectangle & { margins: Margins },
-        childViews: ChildView[],
-        config: ViewConfig = {}
-    ): ViewBounds {
-        this.validateRectangle(elementBounds, 'elementBounds');
-        this.validateMargins(elementBounds.margins);
-
-        const { offset = { x: 0, y: 0 }, scale = { x: 1, y: 1 } } = config;
-
-        this.validateNumber(offset.x, 'offset.x');
-        this.validateNumber(offset.y, 'offset.y');
-        this.validateScale(scale);
-
-        const baseBounds = this.createBaseBounds(elementBounds, offset, scale);
-        const childBounds = this.calculateCombinedChildBounds(childViews);
-        const combinedBounds = this.combineBounds(baseBounds, childBounds, elementBounds.margins);
-
-        this.validateRectangle(combinedBounds.inner, 'combinedBounds.inner');
-        this.validateRectangle(combinedBounds.outer, 'combinedBounds.outer');
-
-        return combinedBounds;
-    }
-
-    /**
      * Creates the initial boundary structure based on the element's bounds, offset, and scale.
      *
      * @param element - The main element's rectangle including margins.
@@ -470,7 +470,7 @@ export class ViewBoundaryCalculator {
     private static createBaseBounds(
         element: Rectangle & { margins: Margins },
         offset: Point2D,
-        scale: Point2D
+        scale: Point2D,
     ): ViewBounds {
         // Calculate scaled dimensions
         const scaledWidth = element.width * scale.x;
@@ -602,7 +602,7 @@ export class ViewBoundaryCalculator {
     private static combineBounds(
         base: ViewBounds,
         childBounds: Rectangle | null,
-        margins: Margins
+        margins: Margins,
     ): ViewBounds {
         const result: ViewBounds = {
             element: { ...base.element },

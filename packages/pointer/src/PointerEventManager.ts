@@ -57,60 +57,6 @@ export class AdvancedPointerEventManager {
     }
 
     /**
-     * Determines the target for pointermove events based on configuration.
-     * @param target The target specified in the configuration.
-     * @returns The EventTarget to listen to.
-     */
-    // @ts-ignore
-    private getMoveEventTarget(target: 'element' | 'window' | 'document'): EventTarget {
-        switch (target) {
-            case 'window':
-                return window;
-            case 'document':
-                return document;
-            case 'element':
-            default:
-                return this.element;
-        }
-    }
-
-    /**
-     * Initializes event listeners.
-     */
-    private init(): void {
-        // Bind event handlers
-
-        this.events = [
-            eventManager.addWithCleanup(
-                this.element,
-                'pointerdown',
-                this.handlePointerDown,
-                this.listenerOptions
-            ),
-
-            // @ts-ignore // TODO - Add pointerup event listener to the window
-            eventManager.addWithCleanup(
-                window,
-                'pointerup',
-                this.handlePointerUp,
-                this.listenerOptions
-            ),
-
-            // @ts-ignore  // TODO - Add pointermove event listener to the moveEventTarget
-            eventManager.addWithCleanup(window, 'pointermove', this.handlePointerMove, {
-                throttle: 1000 / 120, // 120fps
-                debug: true,
-            }),
-            eventManager.addWithCleanup(this.element, 'pointerenter', this.handlePointerEnter),
-            eventManager.addWithCleanup(this.element, 'pointerleave', this.handlePointerLeave),
-            eventManager.addWithCleanup(this.element, 'pointercancel', this.handlePointerCancel),
-            eventManager.addWithCleanup(this.element, 'click', this.handleClick),
-            eventManager.addWithCleanup(this.element, 'dblclick', this.handleDblClick),
-            eventManager.addWithCleanup(this.element, 'contextmenu', this.handleContextMenu),
-        ];
-    }
-
-    /**
      * Registers an event handler with optional debouncing.
      * Handlers can be asynchronous functions.
      * @param eventType The type of event to listen for.
@@ -154,6 +100,60 @@ export class AdvancedPointerEventManager {
      */
     public getState(): PointerState {
         return this.eventHandler.getState();
+    }
+
+    /**
+     * Determines the target for pointermove events based on configuration.
+     * @param target The target specified in the configuration.
+     * @returns The EventTarget to listen to.
+     */
+    // @ts-ignore
+    private getMoveEventTarget(target: 'element' | 'window' | 'document'): EventTarget {
+        switch (target) {
+            case 'window':
+                return window;
+            case 'document':
+                return document;
+            case 'element':
+            default:
+                return this.element;
+        }
+    }
+
+    /**
+     * Initializes event listeners.
+     */
+    private init(): void {
+        // Bind event handlers
+
+        this.events = [
+            eventManager.addWithCleanup(
+                this.element,
+                'pointerdown',
+                this.handlePointerDown,
+                this.listenerOptions,
+            ),
+
+            // @ts-ignore // TODO - Add pointerup event listener to the window
+            eventManager.addWithCleanup(
+                window,
+                'pointerup',
+                this.handlePointerUp,
+                this.listenerOptions,
+            ),
+
+            // @ts-ignore  // TODO - Add pointermove event listener to the moveEventTarget
+            eventManager.addWithCleanup(window, 'pointermove', this.handlePointerMove, {
+                throttle: 1000 / 120, // 120fps
+                debug: true,
+            }),
+            eventManager.addWithCleanup(this.element, 'pointerenter', this.handlePointerEnter),
+            eventManager.addWithCleanup(this.element, 'pointerleave', this.handlePointerLeave),
+            eventManager.addWithCleanup(this.element, 'pointercancel', this.handlePointerCancel),
+            eventManager.addWithCleanup(this.element, 'click', this.handleClick),
+            eventManager.addWithCleanup(this.element, 'dblclick', this.handleDblClick),
+            eventManager.addWithCleanup(this.element, 'contextmenu', this.handleContextMenu),
+        ];
     }
 
     /**
