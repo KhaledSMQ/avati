@@ -34,6 +34,7 @@ Here’s what I am currently working on:
 - [⌛] Cli and templates scaffolding (`avati-create-lib`)
 - [⌛] Pointer events toolkit (`pointer`)
 - [⌛] Improve demo and examples quality
+- [⌛] Signals Documentation and publish to npm
 
 ### DEV Ops and other
 - [⌛] Add more tests cases
