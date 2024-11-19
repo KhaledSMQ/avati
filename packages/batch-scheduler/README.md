@@ -1,11 +1,5 @@
 # BatchScheduler
 
-<p align="center">
-<a href="https://github.com/khaled-0/batch-scheduler/actions"><img src="https://github.com/khaled-0/batch-scheduler/actions/workflows/tests.yml/badge.svg" alt="Build Status"></a>
-<a href="https://www.npmjs.com/package/batch-scheduler"><img src="https://img.shields.io/npm/v/batch-scheduler" alt="Latest Stable Version"></a>
-<a href="https://www.npmjs.com/package/batch-scheduler"><img src="https://img.shields.io/npm/l/batch-scheduler" alt="License"></a>
-</p>
-
 ## About BatchScheduler
 
 BatchScheduler is an elegant and powerful task scheduling library for JavaScript/TypeScript applications. It provides a simple yet flexible API for managing and executing tasks in batches with support for:
