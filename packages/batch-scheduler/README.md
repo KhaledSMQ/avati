@@ -28,7 +28,7 @@ yarn add @avatijs/batch-scheduler
 ## Basic Usage
 
 ```typescript
-import { BatchScheduler } from '@avati/batch-scheduler';
+import { BatchScheduler } from '@avatijs/batch-scheduler';
 
 // Get the scheduler instance
 const scheduler = BatchScheduler.getInstance();
@@ -55,7 +55,7 @@ scheduler.schedule(async () => {
 Use batching to group multiple tasks together:
 
 ```typescript
-import { batchUpdates } from '@avati/batch-scheduler';
+import { batchUpdates } from '@avatijs/batch-scheduler';
 
 batchUpdates(() => {
     // All tasks scheduled here will be executed together

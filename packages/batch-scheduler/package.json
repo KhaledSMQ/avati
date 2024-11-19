@@ -1,18 +1,29 @@
 {
   "name": "@avatijs/batch-scheduler",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Batch scheduler package part of Avati project",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "browser": "dist/index.umd.js",
-  "unpkg": "dist/index.umd.min.js",
-  "jsdelivr": "dist/index.umd.min.js",
-  "types": "dist/types/index.d.ts",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
+  "browser": "./dist/index.umd.js",
+  "unpkg": "./dist/index.umd.min.js",
+  "jsdelivr": "./dist/index.umd.min.js",
   "exports": {
     ".": {
       "require": "./dist/index.cjs.js",
       "import": "./dist/index.esm.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/index.d.ts"
+      ]
     }
   },
   "scripts": {
@@ -22,7 +33,11 @@
     "build:types": "tsc --emitDeclarationOnly --outDir dist/types",
     "watch": "webpack --mode=development --watch",
     "watch:slient": "webpack --mode=development --watch --silent",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint . --ext .ts",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "files": [
     "dist",

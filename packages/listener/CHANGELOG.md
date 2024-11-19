@@ -50,7 +50,7 @@ npm install @avatijs/listener
 Import the `EventListenerManager` instance and types into your project:
 
 ```typescript
-import eventManager from '@avati/listener';
+import eventManager from '@avatijs/listener';
 // If you need types
 import {
     EventOptions,
@@ -58,7 +58,7 @@ import {
     ListenerMetadata,
     ListenerDetails,
     EventMetadata,
-} from '@avati/listener';
+} from '@avatijs/listener';
 ```
 
 ---
@@ -235,7 +235,7 @@ eventManager.removeAll(element);
 ### Basic Usage
 
 ```typescript
-import eventManager from '@avati/listener';
+import eventManager from '@avatijs/listener';
 
 const button = document.querySelector('button');
 

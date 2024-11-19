@@ -45,7 +45,7 @@ npm install @avatijs/memoize
 Import the `memoize` function into your project:
 
 ```typescript
-import { memoize } from '@avati/memoize';
+import { memoize } from '@avatijs/memoize';
 ```
 
 ### Basic Memoization

@@ -16,7 +16,7 @@ Filtered Signal provides a way to create derived signals that only update when s
 ## Basic Usage
 
 ```typescript
-import { Signal, filtered } from '@avati/signal';
+import { Signal, filtered } from '@avatijs/signal';
 
 // Create a source signal
 const numbers = new Signal(0);

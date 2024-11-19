@@ -23,7 +23,7 @@ npm install @avatijs/element
 ### Basic Usage
 
 ```typescript
-import { ViewBoundaryCalculator } from '@avati/element';
+import { ViewBoundaryCalculator } from '@avatijs/element';
 
 // Create element bounds with margins
 const elementBounds = {

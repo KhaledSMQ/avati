@@ -15,7 +15,7 @@ Throttled Signal provides rate limiting for signal updates, ensuring that rapid 
 ## Basic Usage
 
 ```typescript
-import { Signal, throttled } from '@avati/signal';
+import { Signal, throttled } from '@avatijs/signal';
 
 // Create source signal
 const source = new Signal(0);

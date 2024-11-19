@@ -5,7 +5,7 @@ A utility for tracking and debugging signal updates.
 ## Usage
 
 ```typescript
-import { Signal, debug } from '@avati/signal';
+import { Signal, debug } from '@avatijs/signal';
 
 const counter = new Signal(0);
 const debuggedCounter = debug(counter, 'Counter');

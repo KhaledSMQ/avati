@@ -5,8 +5,8 @@
 
 import { Acceleration2D, PointerState, Position, Position2D, SinglePointerState, Vector2D } from './types';
 import { calculateAcceleration, calculateSpeed, calculateVelocity } from './utils';
-import { throttle } from '@avati/throttle';
-import { memoize } from '@avati/memoize';
+import { throttle } from '@avatijs/throttle';
+import { memoize } from '@avatijs/memoize';
 
 /**
  * Configuration options for EventHandler

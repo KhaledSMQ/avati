@@ -1,5 +1,5 @@
-import { debounce } from '@avati/debounce';
-import { throttle } from '@avati/throttle';
+import { debounce } from '@avatijs/debounce';
+import { throttle } from '@avatijs/throttle';
 
 type EventId = string;
 type ElementWeakRef = WeakRef<Element>;

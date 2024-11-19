@@ -1,1 +1,0 @@
-{"version":3,"file":"createSignal.d.ts","sourceRoot":"","sources":["../src/createSignal.ts"],"names":[],"mappings":"AAAA;;;;;IAKI;AAEJ,OAAO,EAAE,aAAa,EAAE,MAAM,cAAc,CAAC;AAC7C,OAAO,EAAE,MAAM,EAAE,MAAM,UAAU,CAAC;AAElC;;GAEG;AACH,wBAAgB,YAAY,CAAC,CAAC,EAC1B,YAAY,EAAE,CAAC,EACf,OAAO,CAAC,EAAE,aAAa,CAAC,CAAC,CAAC,GAC3B,MAAM,CAAC,CAAC,CAAC,CAEX"}

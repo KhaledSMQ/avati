@@ -28,10 +28,14 @@ export { SignalContext } from './signalContext';
 export { SignalDisposedError, CircularDependencyError } from './errors';
 export {
     persisted,
-    StorageProvider,
     LocalStorageProvider,
     SessionStorageProvider,
     MemoryStorageProvider,
+
+} from './persisted';
+
+export type {
+    StorageProvider,
     PersistedSignalStorage,
     PersistedSignalSignalOptions,
 } from './persisted';

@@ -16,7 +16,7 @@ Validated Signal extends the base Signal functionality by adding validation capa
 ## Basic Usage
 
 ```typescript
-import { validated } from '@avati/signal';
+import { validated } from '@avatijs/signal';
 
 // Simple number validation
 const positiveNumber = validated(1, 

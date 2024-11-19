@@ -15,7 +15,7 @@ Threshold Signal provides a way to filter out minor changes in numeric values, o
 ## Basic Usage
 
 ```typescript
-import { Signal, threshold } from '@avati/signal';
+import { Signal, threshold } from '@avatijs/signal';
 
 // Create a source signal
 const temperature = new Signal(20.0);

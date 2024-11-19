@@ -15,7 +15,7 @@ Peek provides a way to "look at" a signal's current value without having the cur
 ## Basic Usage
 
 ```typescript
-import { Signal, peek } from '@avati/signal';
+import { Signal, peek } from '@avatijs/signal';
 
 const counter = new Signal(0);
 

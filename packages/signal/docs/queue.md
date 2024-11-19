@@ -50,7 +50,7 @@ Queue Signal provides a powerful and flexible way to manage prioritized queues w
 ### Creating a Queue
 
 ```typescript
-import { createQueueSignal } from '@avati/signal';
+import { createQueueSignal } from '@avatijs/signal';
 
 const queue = createQueueSignal<string>();
 ```

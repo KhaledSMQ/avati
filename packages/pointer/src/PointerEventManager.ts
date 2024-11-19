@@ -1,7 +1,7 @@
 import { EventHandler } from './eventHandler';
 import { PubSub, PubSubEventType, PubSubHandlers } from './pubsub';
 import { PointerState, SinglePointerState } from './types';
-import { eventManager } from '@avati/listener';
+import { eventManager } from '@avatijs/listener';
 
 /**
  * Supported pointer and mouse event types.

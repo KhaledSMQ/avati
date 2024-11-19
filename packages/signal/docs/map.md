@@ -16,7 +16,7 @@ Map Signal provides a declarative way to transform signal values. It's perfect f
 ## Basic Usage
 
 ```typescript
-import { Signal, map } from '@avati/signal';
+import { Signal, map } from '@avatijs/signal';
 
 // Basic transformation
 const count = new Signal(5);

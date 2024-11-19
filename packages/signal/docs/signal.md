@@ -18,7 +18,7 @@ Signal is the core building block for reactive state management. It provides a p
 ## Basic Usage
 
 ```typescript
-import { Signal } from '@avati/signal';
+import { Signal } from '@avatijs/signal';
 
 // Create a signal
 const count = new Signal(0);

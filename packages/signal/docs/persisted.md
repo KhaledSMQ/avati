@@ -29,7 +29,7 @@ const memoryData = persisted('key', initialValue, new MemoryStorageProvider());
 ## Basic Usage
 
 ```typescript
-import { persisted, LocalStorageProvider } from '@avati/signal';
+import { persisted, LocalStorageProvider } from '@avatijs/signal';
 
 // Create a persisted signal
 const theme = persisted(

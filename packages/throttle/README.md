@@ -50,7 +50,7 @@ Alternatively, you can directly include the `throttle.ts` file in your project.
 ### Importing the Function
 
 ```typescript
-import { throttle } from '@avati/throttle';  // ES6 import
+import { throttle } from '@avatijs/throttle';  // ES6 import
 // or
 <script src="path/to/throttle.js"></script>  // Browser usage
 ```

@@ -14,7 +14,7 @@ The Signal library provides a reactive state management solution for TypeScript/
 ## Installation
 
 ```typescript
-import { createSignal, computed, effect, batch } from '@avati/signal';
+import { createSignal, computed, effect, batch } from '@avatijs/signal';
 ```
 
 ## Basic Usage

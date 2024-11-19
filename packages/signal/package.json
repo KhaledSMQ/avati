@@ -1,11 +1,50 @@
 {
   "name": "@avatijs/signal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Signal package part of Avati project",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "browser": "dist/index.umd.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
+  "browser": "./dist/index.umd.js",
+  "unpkg": "./dist/index.umd.min.js",
+  "jsdelivr": "./dist/index.umd.min.js",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs.js",
+      "import": "./dist/index.esm.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/index.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "npm run clean && npm run build:types && npm run build:dev && npm run build:packages",
+    "build:dev": "webpack --mode development --config-name umd --config-name esm --config-name cjs",
+    "build:packages": "webpack --mode production --config-name umd --config-name esm --config-name cjs",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist/types",
+    "watch": "webpack --mode=development --watch",
+    "watch:slient": "webpack --mode=development --watch --silent",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint . --ext .ts",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "author": {
     "name": "Khaled Sameer",
     "email": "khaled.smq@hotmail.com",
@@ -18,26 +57,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/KhaledSMQ/avati",
-    "directory": "packages/signal"
+    "url": "git+https://github.com/KhaledSMQ/avati.git",
+    "directory": "packages/batch-scheduler"
   },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "browserslist": [
-    "last 1 version and not Explorer 10",
-    "Explorer 11",
-    "iOS >= 9",
-    "Android >= 4.4"
-  ],
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "webpack --mode production --config-name umd --config-name esm --config-name cjs",
-    "dev": "webpack --mode development --watch --config-name umd --config-name esm --config-name cjs",
-    "test": "jest",
-    "lint": "eslint src --ext .ts,.tsx"
-  }
+  "keywords": [
+    "avati",
+    "scheduler",
+    "batch",
+    "task-queue",
+    "priority-queue",
+    "async",
+    "typescript"
+  ]
 }

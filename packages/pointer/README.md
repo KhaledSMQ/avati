@@ -62,7 +62,7 @@ Alternatively, you can include it directly in your project by downloading the co
 If you're using ES modules, you can import the library as follows:
 
 ```typescript
-import { AdvancedPointerEventManager } from '@avati/pointer';
+import { AdvancedPointerEventManager } from '@avatijs/pointer';
 ```
 
 If you prefer using script tags, ensure that your project is set up to handle ES modules:

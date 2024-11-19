@@ -24,7 +24,7 @@ yarn add @avati/logger
 ## Quick Start
 
 ```typescript
-import { ConsoleLogger } from '@avati/logger';
+import { ConsoleLogger } from '@avatijs/logger';
 
 // Create logger instance
 const logger = ConsoleLogger.getInstance({

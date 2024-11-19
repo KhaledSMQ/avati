@@ -35,7 +35,7 @@ Think of effects as observers that automatically react to signal changes, perfor
 
 ### Basic Effects
 ```typescript
-import { Signal, effect } from '@avati/signal';
+import { Signal, effect } from '@avatijs/signal';
 
 // Simple logging effect
 const counter = new Signal(0);

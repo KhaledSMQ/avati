@@ -8,7 +8,7 @@ Combine Signal merges multiple signals, creating a single signal that updates wh
 ## Usage
 
 ```typescript
-import { Signal, combine } from '@avati/signal';
+import { Signal, combine } from '@avatijs/signal';
 
 // Create source signals
 const nameSignal = new Signal<string>('John');

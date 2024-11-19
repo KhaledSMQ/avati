@@ -8,7 +8,7 @@ import {
     Reducer,
     StateManagerOptions,
 } from './types';
-import { ConsoleLogger } from '@avati/logger';
+import { ConsoleLogger } from '@avatijs/logger';
 import { StateOperations } from './StateOperations';
 import { StateValidator } from './StateValidator';
 import { StateUtils } from './utils/StateUtils';

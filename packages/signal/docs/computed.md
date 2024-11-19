@@ -12,7 +12,7 @@ Reactive computed values that automatically update when their dependencies chang
 ## Usage
 
 ```typescript
-import { Signal, computed } from '@avati/signal';
+import { Signal, computed } from '@avatijs/signal';
 
 // Create base signals
 const firstName = new Signal('John');
