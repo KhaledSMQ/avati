@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  **/
 
+import { debugLog } from './dev';
+
 /**
  * Type definitions for task functions and priorities.
  */
@@ -46,6 +48,7 @@ interface ScheduledTask {
     onError?: (error: unknown) => void;
     token?: CancellationToken;
     promise?: Promise<void>;
+    name?: string;
 }
 
 /**
@@ -64,11 +67,6 @@ interface CancellationToken {
 }
 
 
-const log = (...args: any[]) => {
-    const now = new Date().toISOString().slice(11, 23);
-    console.log('[BatchScheduler]', now, ...args);
-};
-
 /**
  * BatchScheduler is responsible for managing and executing tasks in batches.
  * It supports task prioritization, cancellation, error handling, and batching contexts.
@@ -79,12 +77,12 @@ const log = (...args: any[]) => {
  *
  * // Schedule a task
  * scheduler.schedule(() => {
- *     console.log('Task executed.');
+ *     console.debug('Task executed.');
  * });
  *
  * // Schedule a high-priority task
  * scheduler.schedule(() => {
- *     console.log('High-priority task executed.');
+ *     console.debug('High-priority task executed.');
  * }, { priority: 10 });
  *
  * // Start a batching context
@@ -92,7 +90,7 @@ const log = (...args: any[]) => {
  *
  * // Schedule tasks within the batch
  * scheduler.schedule(() => {
- *     console.log('Task within batch.');
+ *     console.debug('Task within batch.');
  * });
  *
  * // End the batching context to process tasks
@@ -164,13 +162,13 @@ export class BatchScheduler {
      * @example
      * // Schedule a simple task
      * scheduler.schedule(() => {
-     *     console.log('Task executed.');
+     *     console.debug('Task executed.');
      * });
      *
      * @example
      * // Schedule a task with high priority
      * scheduler.schedule(() => {
-     *     console.log('High-priority task executed.');
+     *     console.debug('High-priority task executed.');
      * }, { priority: 5 });
      *
      * @example
@@ -187,7 +185,7 @@ export class BatchScheduler {
      * // Schedule a task with a cancellation token
      * const token = scheduler.createCancellationToken();
      * scheduler.schedule(() => {
-     *     console.log('This task may be cancelled.');
+     *     console.debug('This task may be cancelled.');
      * }, { cancellationToken: token });
      *
      * // Cancel the task before it executes
@@ -197,6 +195,7 @@ export class BatchScheduler {
         if (this.isShuttingDown) {
             throw new Error('Cannot schedule tasks after shutdown has been initiated.');
         }
+        options.name = options.name || 'anonymous';
 
         const {
             priority = 0,
@@ -206,7 +205,7 @@ export class BatchScheduler {
         } = options;
 
         this.taskQueue.push({ task, priority, onError, token });
-        log(`Task scheduled: ${name} (priority: ${priority})`);
+        debugLog(`Task scheduled: ${name} (priority: ${priority})`);
         // Sort the task queue by priority in descending order.
         this.taskQueue.sort((a, b) => b.priority - a.priority);
 
@@ -226,7 +225,7 @@ export class BatchScheduler {
      * scheduler.startBatch();
      * // Schedule tasks within the batch
      * scheduler.schedule(() => {
-     *     console.log('Task within batch.');
+     *     console.debug('Task within batch.');
      * });
      * // End the batching context
      * scheduler.endBatch();
@@ -253,6 +252,7 @@ export class BatchScheduler {
         this.batchDepth--;
 
         if (this.batchDepth === 0 && this.taskQueue.length > 0) {
+            debugLog(`Batch ended, processing tasks (${this.taskQueue.length})`);
             this.currentBatchPromise = this.processQueue();
         }
     }
@@ -264,6 +264,7 @@ export class BatchScheduler {
         this.isScheduled = false;
 
         if (this.batchDepth > 0 || this.isShuttingDown) {
+            debugLog("Batch depth is greater than 0 or shutting down, returning");
             return;
         }
 
@@ -272,6 +273,7 @@ export class BatchScheduler {
 
         for (const scheduledTask of tasksToProcess) {
             if (scheduledTask.token?.isCancelled) {
+                debugLog("Task is cancelled, skipping");
                 continue;
             }
 
@@ -282,11 +284,13 @@ export class BatchScheduler {
                 if (result instanceof Promise) {
                     scheduledTask.promise = result;
                     await result;
+                    debugLog(`Task completed: ${scheduledTask.name}`);
                 } else {
                     // For synchronous tasks, we create a resolved promise
                     scheduledTask.promise = Promise.resolve();
                 }
             } catch (error) {
+                debugLog(`Task failed: ${scheduledTask.name}`);
                 if (scheduledTask.onError) {
                     try {
                         scheduledTask.onError(error);
@@ -300,6 +304,7 @@ export class BatchScheduler {
         }
 
         if (this.taskQueue.length > 0 && this.batchDepth === 0) {
+            debugLog("Task queue is not empty, scheduling next batch");
             this.isScheduled = true;
             queueMicrotask(() => this.processQueue());
         }
@@ -312,6 +317,7 @@ export class BatchScheduler {
      * scheduler.shutdown();
      */
     public shutdown(): void {
+        debugLog('Shutting down scheduler');
         this.isShuttingDown = true;
         this.taskQueue = [];
     }
@@ -325,17 +331,20 @@ export class BatchScheduler {
      * scheduler.flush();
      */
     public flush(): void {
+        debugLog('Flushing scheduler');
         if (this.batchDepth > 0) {
             throw new Error('Cannot flush while in a batching context.');
         }
 
         // Trigger completion of current batch without blocking
         if (this.currentBatchPromise) {
+            debugLog('Completing current batch');
             this.currentBatchPromise.finally()
         }
 
         // Process any remaining tasks without blocking
         if (this.taskQueue.length > 0) {
+            debugLog('Processing remaining tasks');
             this.currentBatchPromise = this.processQueue();
             this.currentBatchPromise.finally();
         }
@@ -349,7 +358,7 @@ export class BatchScheduler {
      * @example
      * const token = scheduler.createCancellationToken();
      * scheduler.schedule(() => {
-     *     console.log('This task may be cancelled.');
+     *     console.debug('This task may be cancelled.');
      * }, { cancellationToken: token });
      *
      * // Cancel the task before it executes
@@ -383,19 +392,21 @@ export class BatchScheduler {
  * batchUpdates(() => {
  *     // Schedule tasks within the batch
  *     scheduler.schedule(() => {
- *         console.log('Task within batch.');
+ *         console.debug('Task within batch.');
  *     });
  *     // Other synchronous operations
- *     console.log('Batching operations complete.');
+ *     console.debug('Batching operations complete.');
  * });
  */
 export function batchUpdates<T>(fn: () => T): T {
     const scheduler = BatchScheduler.getInstance();
+    debugLog('Starting batch...');
     scheduler.startBatch();
 
     try {
         return fn();
     } finally {
         scheduler.endBatch();
+        debugLog('Batch ended.');
     }
 }

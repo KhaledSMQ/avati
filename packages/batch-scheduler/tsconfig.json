@@ -37,15 +37,10 @@
       "esNext",                        // Include all ECMAScript features
       "es2018",
       "dom"                           // Include DOM types if you need them
-    ]
+    ],
   },
   "include": [
     "src/**/*"                        // Include all files in src directory
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts",                   // Exclude test files
-    "**/*.spec.ts"
-  ]
+  "exclude": ["node_modules", "dist", "tests"]
 }

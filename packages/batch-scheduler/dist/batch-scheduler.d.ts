@@ -54,12 +54,12 @@ interface CancellationToken {
  *
  * // Schedule a task
  * scheduler.schedule(() => {
- *     console.log('Task executed.');
+ *     console.debug('Task executed.');
  * });
  *
  * // Schedule a high-priority task
  * scheduler.schedule(() => {
- *     console.log('High-priority task executed.');
+ *     console.debug('High-priority task executed.');
  * }, { priority: 10 });
  *
  * // Start a batching context
@@ -67,7 +67,7 @@ interface CancellationToken {
  *
  * // Schedule tasks within the batch
  * scheduler.schedule(() => {
- *     console.log('Task within batch.');
+ *     console.debug('Task within batch.');
  * });
  *
  * // End the batching context to process tasks
@@ -125,13 +125,13 @@ export declare class BatchScheduler {
      * @example
      * // Schedule a simple task
      * scheduler.schedule(() => {
-     *     console.log('Task executed.');
+     *     console.debug('Task executed.');
      * });
      *
      * @example
      * // Schedule a task with high priority
      * scheduler.schedule(() => {
-     *     console.log('High-priority task executed.');
+     *     console.debug('High-priority task executed.');
      * }, { priority: 5 });
      *
      * @example
@@ -148,7 +148,7 @@ export declare class BatchScheduler {
      * // Schedule a task with a cancellation token
      * const token = scheduler.createCancellationToken();
      * scheduler.schedule(() => {
-     *     console.log('This task may be cancelled.');
+     *     console.debug('This task may be cancelled.');
      * }, { cancellationToken: token });
      *
      * // Cancel the task before it executes
@@ -163,7 +163,7 @@ export declare class BatchScheduler {
      * scheduler.startBatch();
      * // Schedule tasks within the batch
      * scheduler.schedule(() => {
-     *     console.log('Task within batch.');
+     *     console.debug('Task within batch.');
      * });
      * // End the batching context
      * scheduler.endBatch();
@@ -208,7 +208,7 @@ export declare class BatchScheduler {
      * @example
      * const token = scheduler.createCancellationToken();
      * scheduler.schedule(() => {
-     *     console.log('This task may be cancelled.');
+     *     console.debug('This task may be cancelled.');
      * }, { cancellationToken: token });
      *
      * // Cancel the task before it executes
@@ -230,10 +230,10 @@ export declare class BatchScheduler {
  * batchUpdates(() => {
  *     // Schedule tasks within the batch
  *     scheduler.schedule(() => {
- *         console.log('Task within batch.');
+ *         console.debug('Task within batch.');
  *     });
  *     // Other synchronous operations
- *     console.log('Batching operations complete.');
+ *     console.debug('Batching operations complete.');
  * });
  */
 export declare function batchUpdates<T>(fn: () => T): T;
