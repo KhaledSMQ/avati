@@ -38,7 +38,7 @@ A versatile and robust throttle function implemented in TypeScript, designed to 
 You can install the throttle function via npm or yarn:
 
 ```bash
-npm install @avati/throttle
+npm install @avatijs/throttle
 # or
 yarn add @avati/throttle
 ```

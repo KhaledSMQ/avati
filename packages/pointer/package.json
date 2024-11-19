@@ -1,5 +1,5 @@
 {
-  "name": "@avati/pointer",
+  "name": "@avatijs/pointer",
   "version": "0.1.0",
   "description": "Pointer management package part of Avati project",
   "main": "./dist/index.js",
@@ -25,10 +25,10 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@avati/debounce": "^1.0.0",
-    "@avati/listener": "^1.0.0",
-    "@avati/memoize": "^1.0.0",
-    "@avati/throttle": "^1.0.0"
+    "@avatijs/debounce": "^1.0.0",
+    "@avatijs/listener": "^1.0.0",
+    "@avatijs/memoize": "^1.0.0",
+    "@avatijs/throttle": "^1.0.0"
   },
   "browserslist": [
     "last 1 version and not Explorer 10",

@@ -1,5 +1,5 @@
 {
-  "name": "@avati/animation",
+  "name": "@avatijs/animation",
   "version": "0.1.0",
   "description": "Animation package part of Avati project",
   "main": "./dist/index.js",

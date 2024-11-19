@@ -1,5 +1,5 @@
 {
-  "name": "@avati/batch-scheduler",
+  "name": "@avatijs/batch-scheduler",
   "version": "0.1.0",
   "description": "Batch scheduler package part of Avati project",
   "main": "dist/index.cjs.js",
@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/KhaledSMQ/avati",
+    "url": "git+https://github.com/KhaledSMQ/avati.git",
     "directory": "packages/batch-scheduler"
   },
   "license": "MIT",

@@ -42,7 +42,7 @@
 Since `EventListenerManager` is a utility class, you can include it directly in your project. If it's part of a package, you can install it via npm:
 
 ```bash
-npm install @avati/listener
+npm install @avatijs/listener
 ```
 
 ## Importing

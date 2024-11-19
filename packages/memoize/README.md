@@ -35,7 +35,7 @@ A robust and efficient TypeScript utility for memoizing functions with support f
 You can install this utility via npm:
 
 ```bash
-npm install @avati/memoize
+npm install @avatijs/memoize
 ```
 
 ---

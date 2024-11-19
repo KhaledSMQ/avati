@@ -1,5 +1,5 @@
 {
-  "name": "@avati/signal",
+  "name": "@avatijs/signal",
   "version": "0.1.0",
   "description": "Signal package part of Avati project",
   "main": "dist/index.cjs.js",

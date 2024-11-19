@@ -1,5 +1,5 @@
 {
-  "name": "@avati/scrollable",
+  "name": "@avatijs/scrollable",
   "version": "0.1.0",
   "description": "Scrollable package part of Avati project",
   "main": "./dist/index.js",

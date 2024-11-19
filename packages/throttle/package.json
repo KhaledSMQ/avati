@@ -1,5 +1,5 @@
 {
-  "name": "@avati/throttle",
+  "name": "@avatijs/throttle",
   "version": "0.1.0",
   "description": "Throttle package part of Avati project",
   "main": "dist/index.cjs.js",

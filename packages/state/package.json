@@ -1,5 +1,5 @@
 {
-  "name": "@avati/state",
+  "name": "@avatijs/state",
   "version": "0.1.0",
   "description": "State management part of Avati project",
   "main": "./dist/index.js",
@@ -40,7 +40,7 @@
     "lint": "eslint src --ext .ts,.tsx"
   },
   "peerDependencies": {
-    "@avati/logger": "^1.0.0",
+    "@avatijs/logger": "^1.0.0",
     "typescript": ">=4.5.0"
   }
 }

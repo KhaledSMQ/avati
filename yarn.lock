@@ -22,35 +22,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@avati/animation@workspace:packages/animation":
+"@avatijs/animation@workspace:packages/animation":
   version: 0.0.0-use.local
-  resolution: "@avati/animation@workspace:packages/animation"
+  resolution: "@avatijs/animation@workspace:packages/animation"
   languageName: unknown
   linkType: soft
 
-"@avati/batch-scheduler@workspace:packages/batch-scheduler":
+"@avatijs/batch-scheduler@workspace:packages/batch-scheduler":
   version: 0.0.0-use.local
-  resolution: "@avati/batch-scheduler@workspace:packages/batch-scheduler"
+  resolution: "@avatijs/batch-scheduler@workspace:packages/batch-scheduler"
   languageName: unknown
   linkType: soft
 
-"@avati/debounce@workspace:packages/debounce":
+"@avatijs/debounce@workspace:packages/debounce":
   version: 0.0.0-use.local
-  resolution: "@avati/debounce@workspace:packages/debounce"
+  resolution: "@avatijs/debounce@workspace:packages/debounce"
   languageName: unknown
   linkType: soft
 
-"@avati/element@workspace:packages/element":
+"@avatijs/element@workspace:packages/element":
   version: 0.0.0-use.local
-  resolution: "@avati/element@workspace:packages/element"
+  resolution: "@avatijs/element@workspace:packages/element"
   peerDependencies:
     typescript: ">=4.5.0"
   languageName: unknown
   linkType: soft
 
-"@avati/html@workspace:packages/html":
+"@avatijs/html@workspace:packages/html":
   version: 0.0.0-use.local
-  resolution: "@avati/html@workspace:packages/html"
+  resolution: "@avatijs/html@workspace:packages/html"
   dependencies:
     "@babel/core": ^7.23.7
     "@babel/plugin-transform-typescript": ^7.23.6
@@ -78,18 +78,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avati/listener@workspace:packages/listener":
+"@avatijs/listener@workspace:packages/listener":
   version: 0.0.0-use.local
-  resolution: "@avati/listener@workspace:packages/listener"
+  resolution: "@avatijs/listener@workspace:packages/listener"
   peerDependencies:
-    "@avati/debounce": ^1.0.0
-    "@avati/throttle": ^1.0.0
+    "@avatijs/debounce": ^1.0.0
+    "@avatijs/throttle": ^1.0.0
   languageName: unknown
   linkType: soft
 
-"@avati/logger@workspace:packages/logger":
+"@avatijs/logger@workspace:packages/logger":
   version: 0.0.0-use.local
-  resolution: "@avati/logger@workspace:packages/logger"
+  resolution: "@avatijs/logger@workspace:packages/logger"
   dependencies:
     "@testing-library/dom": 10.4.0
   peerDependencies:
@@ -97,26 +97,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avati/memoize@workspace:packages/memoize":
+"@avatijs/memoize@workspace:packages/memoize":
   version: 0.0.0-use.local
-  resolution: "@avati/memoize@workspace:packages/memoize"
+  resolution: "@avatijs/memoize@workspace:packages/memoize"
   languageName: unknown
   linkType: soft
 
-"@avati/pointer@workspace:packages/pointer":
+"@avatijs/pointer@workspace:packages/pointer":
   version: 0.0.0-use.local
-  resolution: "@avati/pointer@workspace:packages/pointer"
+  resolution: "@avatijs/pointer@workspace:packages/pointer"
   peerDependencies:
-    "@avati/debounce": ^1.0.0
-    "@avati/listener": ^1.0.0
-    "@avati/memoize": ^1.0.0
-    "@avati/throttle": ^1.0.0
+    "@avatijs/debounce": ^1.0.0
+    "@avatijs/listener": ^1.0.0
+    "@avatijs/memoize": ^1.0.0
+    "@avatijs/throttle": ^1.0.0
   languageName: unknown
   linkType: soft
 
-"@avati/scrollable@workspace:packages/scrollable":
+"@avatijs/scrollable@workspace:packages/scrollable":
   version: 0.0.0-use.local
-  resolution: "@avati/scrollable@workspace:packages/scrollable"
+  resolution: "@avatijs/scrollable@workspace:packages/scrollable"
   dependencies:
     rk-4th-spring: ^0.1.1
   peerDependencies:
@@ -124,24 +124,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avati/signal@workspace:packages/signal":
+"@avatijs/signal@workspace:packages/signal":
   version: 0.0.0-use.local
-  resolution: "@avati/signal@workspace:packages/signal"
+  resolution: "@avatijs/signal@workspace:packages/signal"
   languageName: unknown
   linkType: soft
 
-"@avati/state@workspace:packages/state":
+"@avatijs/state@workspace:packages/state":
   version: 0.0.0-use.local
-  resolution: "@avati/state@workspace:packages/state"
+  resolution: "@avatijs/state@workspace:packages/state"
   peerDependencies:
-    "@avati/logger": ^1.0.0
+    "@avatijs/logger": ^1.0.0
     typescript: ">=4.5.0"
   languageName: unknown
   linkType: soft
 
-"@avati/throttle@workspace:packages/throttle":
+"@avatijs/throttle@workspace:packages/throttle":
   version: 0.0.0-use.local
-  resolution: "@avati/throttle@workspace:packages/throttle"
+  resolution: "@avatijs/throttle@workspace:packages/throttle"
   languageName: unknown
   linkType: soft
 

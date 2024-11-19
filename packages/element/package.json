@@ -1,5 +1,5 @@
 {
-  "name": "@avati/element",
+  "name": "@avatijs/element",
   "version": "1.0.0",
   "description": "Element part of Avati project",
   "main": "./dist/index.js",

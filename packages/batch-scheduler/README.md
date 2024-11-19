@@ -22,13 +22,13 @@ BatchScheduler is an elegant and powerful task scheduling library for JavaScript
 You can install the package via npm:
 
 ```bash
-npm install @avati/batch-scheduler
+npm install @avatijs/batch-scheduler
 ```
 
 Or using yarn:
 
 ```bash
-yarn add @avati/batch-scheduler
+yarn add @avatijs/batch-scheduler
 ```
 
 ## Basic Usage

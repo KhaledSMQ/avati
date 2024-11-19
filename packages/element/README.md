@@ -15,7 +15,7 @@ ViewBoundaryCalculator is a TypeScript utility for calculating view boundaries i
 ## Installation
 
 ```bash
-npm install @avati/element
+npm install @avatijs/element
 ```
 
 ## Usage

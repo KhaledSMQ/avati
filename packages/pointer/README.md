@@ -48,7 +48,7 @@
 You can install **Pointer** via npm:
 
 ```bash
-npm install @avati/pointer
+npm install @avatijs/pointer
 ```
 
 Alternatively, you can include it directly in your project by downloading the compiled JavaScript files.

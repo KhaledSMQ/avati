@@ -1,5 +1,5 @@
 {
-  "name": "@avati/logger",
+  "name": "@avatijs/logger",
   "version": "0.1.0",
   "description": "A lightweight logger part of Avati project",
   "main": "./dist/index.js",

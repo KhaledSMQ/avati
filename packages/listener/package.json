@@ -1,5 +1,5 @@
 {
-  "name": "@avati/listener",
+  "name": "@avatijs/listener",
   "version": "0.1.0",
   "description": "Event listen manager package part of Avati project",
   "main": "dist/index.cjs.js",
@@ -26,8 +26,8 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@avati/debounce": "^1.0.0",
-    "@avati/throttle": "^1.0.0"
+    "@avatijs/debounce": "^1.0.0",
+    "@avatijs/throttle": "^1.0.0"
   },
   "browserslist": [
     "last 1 version and not Explorer 10",

@@ -16,7 +16,7 @@ A lightweight, TypeScript-based logging utility designed for browser environment
 ## Installation
 
 ```bash
-npm install @avati/logger
+npm install @avatijs/logger
 # or
 yarn add @avati/logger
 ```

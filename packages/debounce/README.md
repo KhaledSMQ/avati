@@ -17,7 +17,7 @@ A highly configurable debounce utility with TypeScript support, providing featur
 ## Installation
 
 ```bash
-npm install @avati/debounce
+npm install @avatijs/debounce
 ```
 
 ## Basic Usage
