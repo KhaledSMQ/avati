@@ -28,6 +28,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@avati/batch-scheduler@workspace:packages/batch-scheduler":
+  version: 0.0.0-use.local
+  resolution: "@avati/batch-scheduler@workspace:packages/batch-scheduler"
+  languageName: unknown
+  linkType: soft
+
 "@avati/debounce@workspace:packages/debounce":
   version: 0.0.0-use.local
   resolution: "@avati/debounce@workspace:packages/debounce"

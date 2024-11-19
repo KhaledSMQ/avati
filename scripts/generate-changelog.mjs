@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2024 Khaled Sameer <khaled.smq@hotmail.com>.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import { existsSync, readFileSync } from 'node:fs';
@@ -32,13 +39,13 @@ function getCommitsSinceTag(tag, packagePath) {
 
 function parseCommit(commitStr) {
     const [hash, subject, body] = commitStr.split('||||');
-    const typeMatch = subject.match(/^(feat|fix|docs|style|refactor|perf|test|chore)(\(([^)]+)\))?:/);
+    const typeMatch = subject.match(/^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\(([^)]+)\))?:/);
 
     if (!typeMatch) return null;
 
     const [, type, , scope] = typeMatch;
     const message = subject.slice(subject.indexOf(':') + 1).trim();
-    const isBreaking = subject.includes('BREAKING CHANGE') || body.includes('BREAKING CHANGE');
+    const isBreaking = subject.includes('!') || body.includes('BREAKING CHANGE');
 
     return {
         hash: hash.slice(0, 7),

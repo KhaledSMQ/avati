@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BatchScheduler Demos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js"
+            integrity="sha512-UOoJElONeUNzQbbKQbjldDf9MwOHqxNz49NNJJ1d90yp+X9edsHyJoAs6O4K19CZGaIdjI5ohK+O2y5lBTW6uQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-typescript.min.js"
+            integrity="sha512-Hb168WC7SiCJ1GlGPHBb5ol0ResC6n5wu+5V8FTT5inC5ajLgBSm2hpQBvDq1YG2KqXr7UanlfQqRy6VEb1/kQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism.min.css"
+          integrity="sha512-/mZ1FHPkg6EKcxo0fKXF51ak6Cr2ocgDi5ytaTBjsQZIH/RNs6GF6+oId/vPe3eJB836T36nXwVh/WBl/cWT4w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body class="bg-slate-50">
+<div class="max-w-4xl mx-auto p-8">
+    <header class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">BatchScheduler Demos</h1>
+        <p class="text-lg text-gray-600">Interactive examples showcasing BatchScheduler's capabilities</p>
+    </header>
+
+    <!-- Priority Queue Demo -->
+    <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Priority Queue</h2>
+        <p class="text-gray-600 mb-4">Demonstrates how tasks are executed based on their priority levels.</p>
+
+        <div class="flex gap-4 mb-4">
+            <button onclick="addPriorityTask(1)" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                Add Low Priority
+            </button>
+            <button onclick="addPriorityTask(5)" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                Add Medium Priority
+            </button>
+            <button onclick="addPriorityTask(10)" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                Add High Priority
+            </button>
+        </div>
+
+        <div class="bg-gray-100 p-4 rounded">
+            <h3 class="font-medium mb-2">Output:</h3>
+            <pre id="priorityOutput" class="whitespace-pre-wrap"></pre>
+        </div>
+
+        <div class="mt-4">
+                <pre><code class="language-typescript">
+// Example code
+const scheduler = BatchScheduler.getInstance();
+
+// High priority task
+scheduler.schedule(() => {
+    console.log('High priority task');
+}, { priority: 10 });
+
+// Medium priority task
+scheduler.schedule(() => {
+    console.log('Medium priority task');
+}, { priority: 5 });
+
+// Low priority task
+scheduler.schedule(() => {
+    console.log('Low priority task');
+}, { priority: 1 });
+                </code></pre>
+        </div>
+    </section>
+
+    <!-- Batch Operations Demo -->
+    <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Batch Operations</h2>
+        <p class="text-gray-600 mb-4">Shows how multiple tasks can be batched together.</p>
+
+        <div class="flex gap-4 mb-4">
+            <button onclick="startBatchDemo()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                Run Batch Demo
+            </button>
+        </div>
+
+        <div class="bg-gray-100 p-4 rounded">
+            <h3 class="font-medium mb-2">Output:</h3>
+            <pre id="batchOutput" class="whitespace-pre-wrap"></pre>
+        </div>
+
+        <div class="mt-4">
+                <pre><code class="language-typescript">
+// Batch operations example
+batchUpdates(() => {
+    scheduler.schedule(() => console.log('Task 1'));
+    scheduler.schedule(() => console.log('Task 2'));
+    scheduler.schedule(() => console.log('Task 3'));
+});
+                </code></pre>
+        </div>
+    </section>
+
+    <!-- Async Tasks Demo -->
+    <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Async Tasks</h2>
+        <p class="text-gray-600 mb-4">Demonstrates handling of asynchronous operations.</p>
+
+        <div class="flex gap-4 mb-4">
+            <button onclick="runAsyncDemo()" class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
+                Run Async Demo
+            </button>
+        </div>
+
+        <div class="bg-gray-100 p-4 rounded">
+            <h3 class="font-medium mb-2">Output:</h3>
+            <pre id="asyncOutput" class="whitespace-pre-wrap"></pre>
+        </div>
+
+        <div class="mt-4">
+                <pre><code class="language-typescript">
+// Async tasks example
+scheduler.schedule(async () => {
+    await sleep(1000);
+    console.log('Async task 1 completed');
+});
+
+scheduler.schedule(() => {
+    console.log('Sync task executed');
+});
+
+scheduler.schedule(async () => {
+    await sleep(500);
+    console.log('Async task 2 completed');
+});
+                </code></pre>
+        </div>
+    </section>
+
+    <!-- Task Cancellation Demo -->
+    <section class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-2xl font-semibold mb-4">Task Cancellation</h2>
+        <p class="text-gray-600 mb-4">Shows how tasks can be cancelled before execution.</p>
+
+        <div class="flex gap-4 mb-4">
+            <button onclick="runCancellationDemo()"
+                    class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600">
+                Run Cancellation Demo
+            </button>
+        </div>
+
+        <div class="bg-gray-100 p-4 rounded">
+            <h3 class="font-medium mb-2">Output:</h3>
+            <pre id="cancellationOutput" class="whitespace-pre-wrap"></pre>
+        </div>
+
+        <div class="mt-4">
+                <pre><code class="language-typescript">
+// Task cancellation example
+const token = scheduler.createCancellationToken();
+
+scheduler.schedule(() => {
+    console.log('This task will be cancelled');
+}, { cancellationToken: token });
+
+// Cancel the task
+token.cancel();
+                </code></pre>
+        </div>
+    </section>
+</div>
+
+<script src="../dist/index.umd.js"></script>
+<script>
+
+    const { BatchScheduler, batchUpdates } = window['@avati/batch-scheduler'];
+    const scheduler = BatchScheduler.getInstance();
+
+    // Helper function to append output
+    function appendOutput(elementId, text) {
+        const output = document.getElementById(elementId);
+        output.textContent += text + '\n';
+    }
+
+    // Helper function for sleeping
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // Priority Queue Demo
+    function addPriorityTask(priority) {
+        const priorityNames = {
+            1: 'Low',
+            5: 'Medium',
+            10: 'High',
+        };
+
+        scheduler.schedule(() => {
+            appendOutput('priorityOutput', `${priorityNames[priority]} priority task executed`);
+        }, { priority });
+    }
+
+    // Batch Operations Demo
+    function startBatchDemo() {
+        const output = document.getElementById('batchOutput');
+        output.textContent = '';
+
+        batchUpdates(() => {
+            scheduler.schedule(() => appendOutput('batchOutput', 'Batch task 1'));
+            scheduler.schedule(() => appendOutput('batchOutput', 'Batch task 2'));
+            scheduler.schedule(() => appendOutput('batchOutput', 'Batch task 3'));
+        });
+    }
+
+    // Async Tasks Demo
+    async function runAsyncDemo() {
+        const output = document.getElementById('asyncOutput');
+        output.textContent = '';
+
+        scheduler.schedule(async () => {
+            await sleep(1000);
+            appendOutput('asyncOutput', 'Async task 1 completed (1s delay)');
+        });
+
+        scheduler.schedule(() => {
+            appendOutput('asyncOutput', 'Sync task executed immediately');
+        });
+
+        scheduler.schedule(async () => {
+            await sleep(500);
+            appendOutput('asyncOutput', 'Async task 2 completed (0.5s delay)');
+        });
+    }
+
+    // Task Cancellation Demo
+    function runCancellationDemo() {
+        const output = document.getElementById('cancellationOutput');
+        output.textContent = '';
+
+        const token = scheduler.createCancellationToken();
+
+        scheduler.schedule(() => {
+            appendOutput('cancellationOutput', 'This task will be cancelled');
+        }, { cancellationToken: token });
+
+        scheduler.schedule(() => {
+            appendOutput('cancellationOutput', 'This task will run normally');
+        });
+
+        token.cancel();
+        appendOutput('cancellationOutput', 'First task cancelled');
+    }
+
+    // Initialize Prism.js
+    Prism.highlightAll();
+</script>
+</body>
+</html>
