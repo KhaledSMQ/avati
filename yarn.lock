@@ -201,7 +201,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@avatijs/state@workspace:packages/state"
   peerDependencies:
-    "@avatijs/logger": ^1.0.0
+    "@avatijs/logger": ^0.1.0
     typescript: ">=4.5.0"
   languageName: unknown
   linkType: soft

@@ -40,7 +40,7 @@
     "lint": "eslint src --ext .ts,.tsx"
   },
   "peerDependencies": {
-    "@avatijs/logger": "^1.0.0",
+    "@avatijs/logger": "^0.1.0",
     "typescript": ">=4.5.0"
   }
 }
