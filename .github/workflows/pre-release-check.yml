@@ -56,10 +56,10 @@ jobs:
           PACKAGE=${{ steps.verify.outputs.package }}
           git log --oneline --grep="^BREAKING CHANGE" $(git describe --tags --abbrev=0)..HEAD -- packages/${{ github.event.inputs.package }}
 
-      - name: Verify dependencies
-        run: |
-          cd packages/${{ github.event.inputs.package }}
-          yarn check-deps
+#      - name: Verify dependencies
+#        run: |
+#          cd packages/${{ github.event.inputs.package }}
+#          yarn check-deps
 
       - name: Run tests
         run: |

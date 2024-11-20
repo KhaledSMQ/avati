@@ -1,0 +1,100 @@
+{
+  "ignorePatterns": [
+    "dist",
+    "build",
+    "coverage",
+    ".next",
+    "node_modules"
+  ],
+  "ignoreMatches": [
+    "@types/*",
+    "typescript",
+    "tslib",
+    "webpack",
+    "webpack-cli",
+    "webpack-bundle-analyzer",
+    "ts-loader",
+    "ts-node",
+    "rimraf",
+    "husky",
+    "@commitlint/*",
+    "commitizen",
+    "cz-conventional-changelog",
+    "lint-staged",
+    "prettier",
+    "eslint*",
+    "@typescript-eslint/*"
+  ],
+  "skipMissing": false,
+  "ignore-dirs": [
+    "dist",
+    "build",
+    "coverage",
+    "node_modules",
+    "__tests__",
+    "__mocks__"
+  ],
+  "ignore-path": ".gitignore",
+  "parsers": {
+    "**/*.js": "es6",
+    "**/*.jsx": "jsx",
+    "**/*.ts": "typescript",
+    "**/*.tsx": "typescript"
+  },
+  "detectors": [
+    "requireCallExpression",
+    "importDeclaration",
+    "exportDeclaration",
+    "typescriptImportEqualsDeclaration"
+  ],
+  "specials": [
+    "babel",
+    "webpack",
+    "jest",
+    "eslint",
+    "prettier",
+    "typescript"
+  ],
+  "package-settings": {
+    "packages/*": {
+      "missing": true,
+      "unused": true,
+      "dependencies": true,
+      "devDependencies": true,
+      "optionalDependencies": true,
+      "peerDependencies": true
+    }
+  },
+  "module-extras": {
+    "include": [
+      "**/*.config.js",
+      "**/*.config.ts"
+    ]
+  },
+  "typescript-extras": {
+    "include": [
+      "**/*.ts",
+      "**/*.tsx"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist",
+      "build"
+    ],
+    "module-resolution": "node"
+  },
+  "ignores": {
+    "patterns": [
+      "*.test.*",
+      "*.spec.*",
+      "*.stories.*",
+      "*.config.*"
+    ],
+    "dependencies": [
+      "@testing-library/*",
+      "jest",
+      "@jest/*",
+      "@types/jest"
+    ]
+  }
+}
