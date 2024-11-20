@@ -1,5 +1,15 @@
 # Avati
 
+<div align="center">
+
+[![CI](https://github.com/KhaledSMQ/avati/actions/workflows/ci.yml/badge.svg)](https://github.com/KhaledSMQ/avati/actions/workflows/ci.yml)
+[![Release](https://github.com/KhaledSMQ/avati/actions/workflows/release.yml/badge.svg)](https://github.com/KhaledSMQ/avati/actions/workflows/release.yml)
+[![CodeQL](https://github.com/KhaledSMQ/avati/actions/workflows/codeql.yml/badge.svg)](https://github.com/KhaledSMQ/avati/actions/workflows/codeql.yml)
+[![codecov](https://codecov.io/gh/KhaledSMQ/avati/branch/master/graph/badge.svg)](https://codecov.io/gh/KhaledSMQ/avati)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
+</div>
+
 Welcome to **Avati** — a thoughtfully crafted toolkit designed to empower developers in building and shipping high-quality UI widgets and packages with ease. The mission is to provide tools and libraries that follow the best practices, ensuring a smooth development experience while maintaining top-tier code quality.
 
 ## ⚠️ Warning: Project in Development
@@ -48,6 +58,21 @@ Here’s what I am currently working on:
 - [ ] CSS utility helpers (`css`)
 - [ ] Accessibility enhancements for UI widgets (`a11y`)
 
+## 🚀 Features
+
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/KhaledSMQ/avati/graphs/commit-activity)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+[![Code Style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io/)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
+- 🔥 **High Performance**: Optimized for speed and efficiency
+- 📦 **Tree Shakeable**: Only import what you need
+- 🔒 **Type Safe**: Written in TypeScript with full type coverage
+- 📚 **Well Documented**: Comprehensive API documentation
+- ⚡️ **Lightweight**: Minimal bundle size impact
+- 🧪 **Well Tested**: Extensive test coverage
+- 🔄 **Framework Agnostic**: Use with any framework
+
 ## Contributing
 
 I welcome contributions from developers of all experience levels. If you have an idea, found a bug, or want to improve something, I encourage you to get involved!
@@ -56,9 +81,20 @@ I welcome contributions from developers of all experience levels. If you have an
 1. Read [Contributing Guide](./Contributing.md) for details on how to get started.
 2. Fork the repository and make your changes.
 3. Submit a pull request, and we’ll review it as soon as possible.
+ 
+## 📝 License
 
-## License
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Avati is open-source and distributed under the [MIT License](./LICENSE).
 
 ---
+
+
+<div align="center">
+
+[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/KhaledSMQ)
+[![Star on GitHub](https://img.shields.io/github/stars/KhaledSMQ/avati.svg?style=social)](https://github.com/KhaledSMQ/avati/stargazers)
+[![Follow on GitHub](https://img.shields.io/github/followers/KhaledSMQ.svg?style=social&label=Follow)](https://github.com/KhaledSMQ)
+
+</div>
