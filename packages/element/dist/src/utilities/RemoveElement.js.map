@@ -1,1 +1,0 @@
-{"version":3,"file":"RemoveElement.js","sourceRoot":"","sources":["../../../src/utilities/RemoveElement.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,UAAU,aAAa,CAAC,OAAgB;IAC1C,IAAI,OAAO,QAAQ,KAAK,WAAW,EAAE,CAAC;QAClC,OAAO;IACX,CAAC;IAED,IAAI,OAAO,CAAC,aAAa,EAAE,CAAC;QACxB,OAAO,CAAC,aAAa,CAAC,WAAW,CAAC,OAAO,CAAC,CAAC;IAC/C,CAAC;AACL,CAAC"}

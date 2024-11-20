@@ -1,0 +1,10 @@
+src/
+tests/
+examples/
+.github/
+.gitignore
+.eslintrc*
+jest.config.js
+tsconfig.json
+webpack.config.js
+*.tgz

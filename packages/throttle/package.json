@@ -61,7 +61,7 @@
     "analyze:why": "webpack --mode production --display-reasons",
     "analyze:tree": "webpack --mode production --display-used-exports",
     "analyze:modules": "webpack --mode production --display-modules",
-    "analyze:full": "webpack --mode production --stats detailed",
+    "analyze:full": "webpack --mode production --stats detailed"
   },
   "files": [
     "dist",
@@ -90,12 +90,26 @@
   },
   "keywords": [
     "avati",
-    "scheduler",
-    "batch",
-    "task-queue",
-    "priority-queue",
-    "async",
-    "typescript"
+    "typescript",
+    "debounce",
+    "debouncer",
+    "throttle",
+    "throttling",
+    "delay",
+    "function control",
+    "rate limit",
+    "rate limiting",
+    "utility",
+    "helper",
+    "JavaScript",
+    "timing",
+    "event handling",
+    "event control",
+    "performance",
+    "optimization",
+    "function delay",
+    "input control",
+    "API calls"
   ],
   "devDependencies": {
     "@types/jest": "^29.5.14",

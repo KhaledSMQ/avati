@@ -1,5 +1,3 @@
-// TweenManager to handle multiple tweens efficiently
-
 import { Tween } from './tween';
 
 export class TweenManager {

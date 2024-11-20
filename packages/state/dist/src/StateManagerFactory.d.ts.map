@@ -1,1 +1,0 @@
-{"version":3,"file":"StateManagerFactory.d.ts","sourceRoot":"","sources":["../../src/StateManagerFactory.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,mBAAmB,EAAE,MAAM,SAAS,CAAC;AAC9C,OAAO,EAAE,YAAY,EAAE,MAAM,gBAAgB,CAAC;AAI9C,qBAAa,mBAAmB;WACd,MAAM,CAAC,CAAC,SAAS,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,EAC9C,YAAY,EAAE,CAAC,EACf,OAAO,GAAE,mBAAwB,GAClC,YAAY,CAAC,CAAC,CAAC;CAMrB"}

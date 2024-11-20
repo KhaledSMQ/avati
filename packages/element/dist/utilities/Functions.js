@@ -1,1 +1,0 @@
-export function appendChildToElement(e,n){return"undefined"==typeof document||("string"==typeof n?e.appendChild(document.createTextNode(n)):e.appendChild(n)),e}export function insertElementBefore(e,n,t){"undefined"!=typeof document&&e.insertBefore(n,t)}export function clearElementChildren(e){if("undefined"!=typeof document)for(;e.firstChild;)e.removeChild(e.firstChild)}
