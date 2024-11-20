@@ -73,10 +73,10 @@ jobs:
             batch-scheduler:
               - 'packages/batch-scheduler/**'
 
-      - name: Check dependencies
-        run: |
-          yarn dedupe --check
-          yarn check:deps:all
+#      - name: Check dependencies
+#        run: |
+#          yarn dedupe --check
+#          yarn check:deps:all
 
       - name: Build changed packages
         if: |

@@ -63,8 +63,8 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install
-          yarn dedupe
-          yarn why # Log dependency tree for debugging
+#          yarn dedupe
+#          yarn why # Log dependency tree for debugging
 
       - name: Validate package.json files
         run: node -e "['package.json', ...require('glob').sync('packages/*/package.json')].forEach(f => JSON.parse(require('fs').readFileSync(f)))"
