@@ -1,5 +1,5 @@
 /*!
- * @avatijs/signal 0.1.1
+ * @avatijs/signal 0.2.1
  * Copyright (c) 2024 Khaled Sameer <khaled.smq@hotmail.com>
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://avati.io/ for details.

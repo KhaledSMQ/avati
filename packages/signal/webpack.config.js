@@ -141,7 +141,7 @@ const createFormatConfig = (format) => {
                 formatSpecificConfig.output = {
                     ...formatSpecificConfig.output,
                     library: {
-                        name: ['Avati', '[name]'],
+                        name: name === 'index' ? 'Avati' : ['Avati', name.replace('/index', '')],
                         type: 'umd',
                         umdNamedDefine: true,
                     },
