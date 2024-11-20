@@ -1,4 +1,4 @@
-interface MemoizeOptions {
+export interface MemoizeOptions {
     /** Maximum number of entries in the cache */
     maxCacheSize?: number;
     /** Time-to-live for cache entries in milliseconds */
