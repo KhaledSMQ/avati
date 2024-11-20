@@ -33,6 +33,8 @@
       "@avati/state": ["packages/state/src"],
       "@avati/throttle": ["packages/throttle/src"],
       "@avati/element": ["packages/element/src"],
+      "@avati/signal": ["packages/signal/src"],
+      "@avati/batch-scheduler": ["packages/batch-scheduler/src"],
     }
   },
   "exclude": ["**/dist", "**/node_modules"]
