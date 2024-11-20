@@ -1,6 +1,7 @@
 {
   "name": "@avatijs/state",
   "version": "0.1.0",
+  "private": false,
   "description": "State management part of Avati project",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

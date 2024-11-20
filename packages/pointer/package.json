@@ -1,6 +1,7 @@
 {
   "name": "@avatijs/pointer",
   "version": "0.1.0",
+  "private": false,
   "description": "Pointer management package part of Avati project",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

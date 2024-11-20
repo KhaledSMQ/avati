@@ -1,6 +1,7 @@
 {
   "name": "@avatijs/logger",
   "version": "0.1.0",
+  "private": false,
   "description": "A lightweight logger part of Avati project",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

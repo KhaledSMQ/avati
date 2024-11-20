@@ -1,6 +1,7 @@
 {
   "name": "@avatijs/animation",
   "version": "0.1.0",
+  "private": false,
   "description": "Animation package part of Avati project",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
