@@ -1,0 +1,104 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - '.editorconfig'
+      - 'docs/**'
+
+env:
+  NODE_VERSION: '20.14.0'
+  CACHE_KEY_PREFIX: avati-monorepo
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Verify commit messages
+        uses: wagoid/commitlint-github-action@v5
+
+      - name: Detect file changes
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            core:
+              - 'packages/core/**'
+            animation:
+              - 'packages/animation/**'
+            debounce:
+              - 'packages/debounce/**'
+            html:
+              - 'packages/html/**'
+            listener:
+              - 'packages/listener/**'
+            logger:
+              - 'packages/logger/**'
+            pointer:
+              - 'packages/pointer/**'
+            scrollable:
+              - 'packages/scrollable/**'
+            state:
+              - 'packages/state/**'
+            throttle:
+              - 'packages/throttle/**'
+            signal:
+              - 'packages/signal/**'
+            batch-scheduler:
+              - 'packages/batch-scheduler/**'
+
+      - name: Check dependencies
+        run: |
+          yarn dedupe --check
+          yarn check:deps:all
+
+      - name: Build changed packages
+        if: |
+          steps.changes.outputs.core == 'true' ||
+          steps.changes.outputs.animation == 'true' ||
+          steps.changes.outputs.debounce == 'true' ||
+          steps.changes.outputs.html == 'true' ||
+          steps.changes.outputs.listener == 'true' ||
+          steps.changes.outputs.logger == 'true' ||
+          steps.changes.outputs.pointer == 'true' ||
+          steps.changes.outputs.scrollable == 'true' ||
+          steps.changes.outputs.state == 'true' ||
+          steps.changes.outputs.signal == 'true' ||
+          steps.changes.outputs['batch-scheduler'] == 'true' ||
+          steps.changes.outputs.throttle == 'true'
+        run: yarn build
+
+      - name: Size impact
+        uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: "./packages/*/dist/**/*.{js,css,html,json}"
+          strip-hash: "\\b\\w{8}\\."
+          minimum-change-threshold: 100
+          compression: none
