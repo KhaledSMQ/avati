@@ -41,7 +41,7 @@ jobs:
         run: yarn install
 
       - name: Verify commit messages
-        uses: wagoid/commitlint-github-action@v5
+        uses: wagoid/commitlint-github-action@v6
 
       - name: Detect file changes
         uses: dorny/paths-filter@v3
