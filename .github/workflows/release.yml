@@ -23,7 +23,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: |
+          yarn install
+          yarn add -D lerna
 
       - name: Extract package info
         id: package-info

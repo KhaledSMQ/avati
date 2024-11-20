@@ -122,7 +122,9 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: |
+          yarn install
+          yarn add -D lerna
 
       - name: Check version bumps
         run: |
