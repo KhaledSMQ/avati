@@ -16,8 +16,6 @@
     "**/*.test.ts"
   ],
   "references": [
-    {
-      "path": "../logger"
-    }
+    {"path": "../logger"}
   ]
 }

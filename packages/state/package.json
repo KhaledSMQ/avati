@@ -39,7 +39,7 @@
     "test": "jest",
     "lint": "eslint src --ext .ts,.tsx"
   },
-  "peerDependencies": {
+  "dependencies": {
     "@avatijs/logger": "^0.1.0"
   },
   "devDependencies": {

@@ -1,2 +1,2 @@
-export * from './Logger';
-export * from './types';
+export {ConsoleLogger} from './Logger';
+export type * from './types';

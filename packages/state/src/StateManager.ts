@@ -8,10 +8,10 @@ import {
     Reducer,
     StateManagerOptions,
 } from './types';
-import { ConsoleLogger } from '@avatijs/logger';
 import { StateOperations } from './StateOperations';
 import { StateValidator } from './StateValidator';
 import { StateUtils } from './utils/StateUtils';
+import { ConsoleLogger } from '@avatijs/logger';
 
 export class StateManager<T extends Record<string, any>> implements IStateManager<T> {
     private state: T;

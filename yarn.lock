@@ -160,7 +160,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/logger@workspace:packages/logger":
+"@avatijs/logger@^0.1.0, @avatijs/logger@workspace:packages/logger":
   version: 0.0.0-use.local
   resolution: "@avatijs/logger@workspace:packages/logger"
   dependencies:
@@ -305,6 +305,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@avatijs/state@workspace:packages/state"
   dependencies:
+    "@avatijs/logger": ^0.1.0
     "@types/jest": ^29.5.14
     "@types/node": ^22.9.1
     "@typescript-eslint/eslint-plugin": ^8.15.0
@@ -325,8 +326,6 @@ __metadata:
     webpack: ^5.96.1
     webpack-bundle-analyzer: ^4.10.2
     webpack-cli: ^5.1.4
-  peerDependencies:
-    "@avatijs/logger": ^0.1.0
   languageName: unknown
   linkType: soft
 
