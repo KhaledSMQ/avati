@@ -201,7 +201,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KhaledSMQ/avati.git",
-    "directory": "packages/batch-scheduler"
+    "directory": "packages/signal"
   },
   "license": "MIT",
   "publishConfig": {
