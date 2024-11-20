@@ -17,6 +17,10 @@ on:
       - 'docs/**'
   workflow_dispatch:
 
+env:
+  NODE_VERSION: '20.14.0'
+  CACHE_KEY_PREFIX: avati-monorepo
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -25,48 +29,60 @@ jobs:
   setup:
     name: Setup
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     outputs:
       cache-hit: ${{ steps.cache.outputs.cache-hit }}
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'yarn'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-      - name: Cache dependencies
-        uses: actions/cache@v4
+      - name: Cache yarn dependencies
         id: cache
+        uses: actions/cache@v4
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             node_modules
             packages/*/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            .yarn/cache
+            .yarn/install-state.gz
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'package.json', 'packages/*/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --prefer-offline
+        run: |
+          yarn install
+          yarn dedupe
+          yarn why # Log dependency tree for debugging
+
+      - name: Validate package.json files
+        run: node -e "['package.json', ...require('glob').sync('packages/*/package.json')].forEach(f => JSON.parse(require('fs').readFileSync(f)))"
 
   lint:
+    name: Lint
     needs: setup
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'yarn'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -74,68 +90,37 @@ jobs:
           path: |
             node_modules
             packages/*/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            .yarn/cache
+            .yarn/install-state.gz
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'package.json', 'packages/*/package.json') }}
 
       - name: Install dependencies
         if: needs.setup.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --prefer-offline
+        run: yarn install
 
-      - name: Lint
+      - name: ESLint
         run: yarn lint
 
       - name: Type check
         run: yarn type-check
 
   test:
+    name: Test
     needs: setup
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       matrix:
-        node-version: [ 18.x, 20.x ]
+        node: [18, 20]
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
-
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            packages/*/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Install dependencies
-        if: needs.setup.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --prefer-offline
-
-      - name: Run tests
-        run: yarn test --ci --coverage
-
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage/lcov.info
-          flags: unittests
-          fail_ci_if_error: true
-
-  build:
-    needs: [ lint, test ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'yarn'
+          node-version: ${{ matrix.node }}
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -143,21 +128,57 @@ jobs:
           path: |
             node_modules
             packages/*/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            .yarn/cache
+            .yarn/install-state.gz
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'package.json', 'packages/*/package.json') }}
 
       - name: Install dependencies
         if: needs.setup.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --prefer-offline
+        run: yarn install
 
-      - name: Build packages
-        run: yarn build
+      - name: Run tests
+        run: yarn test --ci --coverage --runInBand
 
-      - name: Cache build artifacts
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  build:
+    name: Build
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore cache
         uses: actions/cache@v4
         with:
           path: |
-            packages/*/dist
-          key: ${{ runner.os }}-build-${{ github.sha }}
+            node_modules
+            packages/*/node_modules
+            .yarn/cache
+            .yarn/install-state.gz
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'package.json', 'packages/*/package.json') }}
+
+      - name: Install dependencies
+        if: needs.setup.outputs.cache-hit != 'true'
+        run: yarn install
+
+      - name: Build packages
+        run: yarn build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
