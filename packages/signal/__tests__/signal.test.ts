@@ -1,10 +1,10 @@
-import { batch, computed, createSignal, effect, SignalContext, SignalDisposedError } from '../src';
+import { batch, computed, createSignal, effect, Context, SignalDisposedError } from '../src';
 
 
 describe('Signal System', () => {
     beforeEach(() => {
         // Reset any static state between tests
-        SignalContext['instance'] = null;
+        Context['instance'] = null;
     });
 
     describe('Basic Signal', () => {

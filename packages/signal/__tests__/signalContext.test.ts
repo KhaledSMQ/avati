@@ -1,4 +1,4 @@
-import { Computation as ComputationAbstract, EffectImpl, resetSignalSystem, Signal, SignalContext } from '../src';
+import { Computation as ComputationAbstract, EffectImpl, resetSignalSystem, Signal, Context } from '../src';
 
 
 class Computation extends ComputationAbstract {
@@ -8,18 +8,18 @@ class Computation extends ComputationAbstract {
 }
 
 describe('SignalContext', () => {
-    let context: SignalContext;
+    let context: Context;
 
     beforeEach(() => {
         // Reset the singleton instance before each test
         resetSignalSystem();
-        context = SignalContext.getInstance();
+        context = Context.getInstance();
     });
 
     describe('Singleton Pattern', () => {
         test('should create only one instance', () => {
-            const instance1 = SignalContext.getInstance();
-            const instance2 = SignalContext.getInstance();
+            const instance1 = Context.getInstance();
+            const instance2 = Context.getInstance();
             expect(instance1).toBe(instance2);
         });
     });

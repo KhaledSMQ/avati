@@ -37,6 +37,7 @@
     "prepublishOnly": "npm run build",
     "lint": "eslint . --ext .ts",
     "test": "jest",
+    "size": "webpack --json > stats.json && webpack-bundle-analyzer stats.json",
     "typecheck": "tsc --noEmit"
   },
   "files": [

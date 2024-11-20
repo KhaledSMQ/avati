@@ -58,6 +58,9 @@ describe('combine function', () => {
                 if (prev == next) return true;
                 if (!prev || !next) return false;
 
+                if(!Array.isArray(prev) || !Array.isArray(next)) return false;
+
+
                 // Custom equality: only care about array lengths
                 return prev.every((arr, idx) => arr.length === next[idx].length);
             },

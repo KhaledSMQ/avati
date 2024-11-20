@@ -1,10 +1,10 @@
-import { computed, effect, peek, Signal, SignalContext } from '../src';
+import { computed, effect, peek, Signal, Context } from '../src';
 
 describe('peek', () => {
     // Reset signal context between tests
     beforeEach(() => {
         // @ts-ignore - accessing private property for testing
-        SignalContext.instance = new SignalContext();
+        Context.instance = new Context();
     });
 
     it('should return the current value of a signal', () => {
@@ -154,7 +154,7 @@ describe('peek', () => {
         expect(derived.value).toBe(3);
         expect(computationCount).toBe(1);
 
-        const context = SignalContext.getInstance();
+        const context = Context.getInstance();
         context.beginBatch();
         signal1.value = 10;
         signal2.value = 20;
