@@ -19,7 +19,6 @@ module.exports = {
             ],
         ],
         'scope-empty': [2, 'never'],
-        'scope-case': ['lowerCase'],
         'subject-case': [0],
     },
 };
