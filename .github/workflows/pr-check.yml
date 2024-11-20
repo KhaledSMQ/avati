@@ -37,8 +37,7 @@ jobs:
       - name: Check dependencies
         run: |
           yarn check:deps:all
-          yarn check:deps:duplicates
-          yarn check:deps:unused
+          yarn list --pattern "*" --depth=0 > deps-list.txt.
 
       - name: Detect package changes
         id: changes
