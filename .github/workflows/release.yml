@@ -5,36 +5,43 @@ on:
     tags:
       - 'v*'
 
+env:
+  NODE_VERSION: '20.14.0'
+  CACHE_KEY_PREFIX: avati-monorepo
+
 concurrency:
   group: release
   cancel-in-progress: false
 
 jobs:
   release:
+    name: Release
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write
       id-token: write
+      packages: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'yarn'
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
-      - name: Build
+      - name: Build packages
         run: yarn build
 
-      - name: Configure Git
+      - name: Configure Git user
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -62,7 +69,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
-        run: yarn lerna:publish from-git --yes --no-verify-access
+        run: |
+          yarn lerna:publish from-git --yes --no-verify-access
 
       - name: Cleanup NPM Authentication
         if: always()
