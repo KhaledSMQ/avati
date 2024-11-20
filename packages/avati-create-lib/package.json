@@ -1,7 +1,6 @@
 {
   "name": "create-avati-lib",
   "version": "0.1.0",
-  "private": false,
   "description": "CLI tool for creating Avati libraries and applications",
   "main": "index.js",
   "bin": "./dist/index.js",

@@ -1,7 +1,6 @@
 {
   "name": "@avatijs/debounce",
   "version": "0.1.0",
-  "private": false,
   "description": "Debounce package part of Avati project",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
