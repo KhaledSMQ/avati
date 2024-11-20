@@ -1,0 +1,59 @@
+{
+  "ignoreMatches": [
+    "webpack",
+    "webpack-cli",
+    "webpack-bundle-analyzer",
+    "ts-loader",
+    "terser-webpack-plugin",
+    "typescript",
+    "tslib",
+    "@types/*",
+    "rimraf",
+    "jest",
+    "@jest/*",
+    "@types/jest",
+    "ts-jest",
+    "eslint",
+    "@typescript-eslint/*",
+    "prettier",
+    "bundlesize",
+    "@types/jest",
+    "@types/node",
+    "@typescript-eslint/eslint-plugin",
+    "@typescript-eslint/parser",
+    "dependency-cruiser",
+    "eslint",
+    "jest",
+    "madge",
+    "rimraf",
+    "source-map-explorer",
+    "terser-webpack-plugin",
+    "ts-jest",
+    "ts-loader",
+    "typescript",
+    "webpack",
+    "webpack-bundle-analyzer",
+    "webpack-cli"
+  ],
+  "ignorePatterns": [
+    "dist",
+    "coverage",
+    "node_modules",
+    "*.test.ts",
+    "*.spec.ts"
+  ],
+  "skipMissing": false,
+  "parsers": {
+    "**/*.ts": "typescript"
+  },
+  "detectors": [
+    "requireCallExpression",
+    "importDeclaration",
+    "exportDeclaration"
+  ],
+  "specials": [
+    "webpack",
+    "jest",
+    "typescript"
+  ]
+}

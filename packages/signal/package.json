@@ -172,6 +172,7 @@
     "size:check": "bundlesize",
     "size:watch": "bundlesize --watch",
     "size:compression": "bundlesize --compression",
+    "check-deps": "depcheck --config .depcheckrc",
     "analyze": "npm run analyze:size && npm run analyze:deps && npm run analyze:duplicates",
     "analyze:size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
     "analyze:detailed": "webpack --config webpack.analysis.config.js",
@@ -179,8 +180,7 @@
     "analyze:why": "webpack --mode production --display-reasons",
     "analyze:tree": "webpack --mode production --display-used-exports",
     "analyze:modules": "webpack --mode production --display-modules",
-    "analyze:full": "webpack --mode production --stats detailed",
-    "why": "npm why"
+    "analyze:full": "webpack --mode production --stats detailed"
   },
   "files": [
     "dist",
@@ -222,6 +222,7 @@
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
     "bundlesize": "^0.18.2",
+    "depcheck": "^1.4.7",
     "dependency-cruiser": "^16.6.0",
     "eslint": "^9.15.0",
     "jest": "^29.7.0",
