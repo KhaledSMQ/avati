@@ -1,0 +1,85 @@
+name: Pre-release Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to check (e.g., signal)'
+        required: true
+      version:
+        description: 'Version to check against (e.g., 1.0.0)'
+        required: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Verify package
+        id: verify
+        run: |
+          PACKAGE="@avatijs/${{ github.event.inputs.package }}"
+          VERSION="${{ github.event.inputs.version }}"
+          
+          # Check if package exists
+          if [ ! -d "packages/${{ github.event.inputs.package }}" ]; then
+            echo "::error::Package $PACKAGE does not exist"
+            exit 1
+          fi
+          
+          # Check version format
+          if ! echo $VERSION | grep -qE "^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$"; then
+            echo "::error::Invalid version format: $VERSION"
+            exit 1
+          fi
+          
+          # Store package info
+          echo "package=$PACKAGE" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check for breaking changes
+        run: |
+          PACKAGE=${{ steps.verify.outputs.package }}
+          git log --oneline --grep="^BREAKING CHANGE" $(git describe --tags --abbrev=0)..HEAD -- packages/${{ github.event.inputs.package }}
+
+      - name: Verify dependencies
+        run: |
+          cd packages/${{ github.event.inputs.package }}
+          yarn check-deps
+
+      - name: Run tests
+        run: |
+          cd packages/${{ github.event.inputs.package }}
+          yarn test
+
+      - name: Build package
+        run: |
+          cd packages/${{ github.event.inputs.package }}
+          yarn build
+
+      - name: Check bundle size
+        run: |
+          cd packages/${{ github.event.inputs.package }}
+          yarn size:check
+
+      - name: Generate preview changelog
+        run: |
+          PACKAGE=${{ steps.verify.outputs.package }}
+          VERSION=${{ steps.verify.outputs.version }}
+          
+          # Generate temporary changelog
+          yarn workspace $PACKAGE generate-changelog --next-version $VERSION --dry-run

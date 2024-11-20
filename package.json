@@ -39,7 +39,15 @@
     "verify-commit": "node scripts/verify-commit.mjs",
     "pre-commit": "node scripts/pre-commit.mjs",
     "copy-to-modules": "node scripts/copy-to-node-modules.mjs",
-    "build-and-copy": "npm run build && npm run copy-to-modules"
+    "build-and-copy": "npm run build && npm run copy-to-modules",
+    "lerna:version": "lerna version --no-push --conventional-commits",
+    "lerna:publish": "lerna publish from-git --yes",
+    "lerna:changed": "lerna changed",
+    "lerna:diff": "lerna diff",
+    "lerna:list": "lerna list",
+    "update:versions": "lerna version --no-push --no-git-tag-version",
+    "check:updates": "lerna updated",
+    "release": "yarn build && yarn lerna:version && yarn lerna:publish"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "devDependencies": {
@@ -73,7 +81,7 @@
     "husky": "^9.1.6",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "lerna": "^8.x.x",
+    "lerna": "^8.1.9",
     "lint-staged": "^15.2.10",
     "mini-css-extract-plugin": "^2.9.2",
     "postcss": "^8.4.47",

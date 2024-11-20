@@ -1,0 +1,147 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/**'
+      - '.github/workflows/build-and-release.yml'
+      - 'package.json'
+  pull_request:
+    paths:
+      - 'packages/**'
+      - '.github/workflows/build-and-release.yml'
+      - 'package.json'
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed_packages: ${{ steps.get-changes.outputs.changed_packages }}
+      has_changes: ${{ steps.get-changes.outputs.has_changes }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Get changed packages
+        id: get-changes
+        run: |
+          # Use lerna to detect changed packages
+          CHANGED=$(yarn lerna list --since HEAD^ --json)
+          echo "Changed packages: $CHANGED"
+          
+          # Check if there are any changes
+          if [ "$(echo $CHANGED | jq 'length')" -gt 0 ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "changed_packages=$CHANGED" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "changed_packages=[]" >> $GITHUB_OUTPUT
+          fi
+
+  build:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build changed packages
+        run: |
+          # Parse the changed packages and build only those
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          echo "Building changed packages: $PACKAGES"
+          
+          # Build each changed package
+          echo "$PACKAGES" | jq -r '.[] | .name' | while read package; do
+            echo "Building $package"
+            yarn workspace $package build
+          done
+
+      - name: Generate changelogs for changed packages
+        run: |
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          
+          echo "$PACKAGES" | jq -r '.[] | .name' | while read package; do
+            echo "Generating changelog for $package"
+            yarn workspace $package generate-changelog
+          done
+
+      - name: Commit and push if changes exist
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Get list of changed packages for commit message
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          PACKAGE_NAMES=$(echo "$PACKAGES" | jq -r '.[] | .name' | tr '\n' ' ')
+          
+          # Stage changes for each package
+          echo "$PACKAGES" | jq -r '.[] | .name' | while read package; do
+            package_path="packages/${package#@avatijs/}"
+          
+            # Add dist files if they exist
+            if [ -d "$package_path/dist" ]; then
+              git add "$package_path/dist"
+            fi
+          
+            # Add changelog if it exists
+            if [ -f "$package_path/CHANGELOG.md" ]; then
+              git add "$package_path/CHANGELOG.md"
+            fi
+          done
+          
+          # Check if there are changes to commit
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "chore(release): update dist files and changelog for ${PACKAGE_NAMES} [skip ci]"
+          
+            # Remove any existing 'origin' remote
+            git remote rm origin || true
+          
+            # Add the new origin with token
+            git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          
+            # Push changes
+            git push origin HEAD:${{ github.ref }}
+          fi
+
+  notify:
+    needs: [detect-changes, build]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notify build status
+        if: needs.detect-changes.outputs.has_changes == 'true'
+        run: |
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          PACKAGE_NAMES=$(echo "$PACKAGES" | jq -r '.[] | .name' | tr '\n' ', ')
+          
+          echo "Build completed for packages: $PACKAGE_NAMES"
+          echo "Build status: ${{ needs.build.result }}"

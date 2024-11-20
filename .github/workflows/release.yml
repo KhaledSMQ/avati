@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*@*' # Will match package-specific version tags like @avatijs/signal@1.0.0
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Extract package info
+        id: package-info
+        run: |
+          TAG=${{ github.ref_name }}
+          PACKAGE_NAME=$(echo $TAG | cut -d@ -f1-2)
+          VERSION=$(echo $TAG | cut -d@ -f3)
+          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build package
+        run: |
+          PACKAGE=${{ steps.package-info.outputs.package_name }}
+          yarn workspace $PACKAGE build
+
+      - name: Generate changelog
+        run: |
+          PACKAGE=${{ steps.package-info.outputs.package_name }}
+          yarn workspace $PACKAGE generate-changelog
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "${{ steps.package-info.outputs.package_name }} v${{ steps.package-info.outputs.version }}"
+          body_path: packages/${{ steps.package-info.outputs.package_name }}/CHANGELOG.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm
+        run: |
+          PACKAGE=${{ steps.package-info.outputs.package_name }}
+          cd packages/${PACKAGE#@avatijs/}
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  notify:
+    needs: release
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notify release status
+        run: |
+          if [ "${{ needs.release.result }}" = "success" ]; then
+            echo "Successfully released ${{ steps.package-info.outputs.package_name }} v${{ steps.package-info.outputs.version }}"
+          else
+            echo "Failed to release ${{ steps.package-info.outputs.package_name }}"
+          fi

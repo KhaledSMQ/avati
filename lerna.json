@@ -1,0 +1,76 @@
+{
+  "version": "independent",
+  "npmClient": "yarn",
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
+    "version": {
+      "conventionalCommits": true,
+      "changelogPreset": "conventional-changelog-conventionalcommits",
+      "message": "chore(release): publish packages",
+      "private": false,
+      "push": false,
+      "gitTagVersion": true,
+      "allowBranch": ["master"],
+      "exact": true,
+      "changelog": true,
+      "ignoreChanges": [
+        "**/*.md",
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/test/**",
+        "**/__tests__/**",
+        "**/dist/**",
+        "**/*.map"
+      ]
+    },
+    "publish": {
+      "conventionalCommits": true,
+      "ignoreChanges": [
+        "**/*.md",
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/test/**",
+        "**/__tests__/**",
+        "**/dist/**",
+        "**/*.map"
+      ],
+      "message": "chore(release): publish packages",
+      "registry": "https://registry.npmjs.org/",
+      "allowBranch": ["master"],
+      "exact": true
+    },
+    "bootstrap": {
+      "hoist": true,
+      "npmClientArgs": ["--no-package-lock"]
+    },
+    "run": {
+      "stream": true
+    },
+    "clean": {
+      "yes": true
+    }
+  },
+  "changelogPreset": {
+    "name": "conventional-changelog-conventionalcommits",
+    "types": [
+      { "type": "feat", "section": "Features" },
+      { "type": "fix", "section": "Bug Fixes" },
+      { "type": "perf", "section": "Performance Improvements" },
+      { "type": "revert", "section": "Reverts" },
+      { "type": "docs", "section": "Documentation" },
+      { "type": "style", "section": "Styles" },
+      { "type": "chore", "section": "Miscellaneous Chores", "hidden": true },
+      { "type": "refactor", "section": "Code Refactoring" },
+      { "type": "test", "section": "Tests", "hidden": true },
+      { "type": "build", "section": "Build System", "hidden": true },
+      { "type": "ci", "section": "Continuous Integration", "hidden": true }
+    ],
+    "issuePrefixes": ["#"],
+    "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
+    "commitUrlFormat": "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
+    "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
+    "userUrlFormat": "{{host}}/{{user}}"
+  }
+}

@@ -1,0 +1,143 @@
+name: PR Check
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - '.github/workflows/**'
+      - 'package.json'
+      - 'lerna.json'
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed_packages: ${{ steps.get-changes.outputs.changed_packages }}
+      has_changes: ${{ steps.get-changes.outputs.has_changes }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Get changed packages
+        id: get-changes
+        run: |
+          # Use lerna to detect changed packages
+          CHANGED=$(yarn lerna list --since origin/${{ github.base_ref }} --json)
+          echo "Changed packages: $CHANGED"
+          
+          # Check if there are any changes
+          if [ "$(echo $CHANGED | jq 'length')" -gt 0 ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "changed_packages=$CHANGED" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "changed_packages=[]" >> $GITHUB_OUTPUT
+          fi
+
+  validate:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Type check changed packages
+        run: |
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          echo "$PACKAGES" | jq -r '.[] | .name' | while read package; do
+            echo "Type checking $package"
+            yarn workspace $package type-check
+          done
+
+      - name: Lint changed packages
+        run: |
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          echo "$PACKAGES" | jq -r '.[] | .name' | while read package; do
+            echo "Linting $package"
+            yarn workspace $package lint
+          done
+
+      - name: Build changed packages
+        run: |
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          echo "$PACKAGES" | jq -r '.[] | .name' | while read package; do
+            echo "Building $package"
+            yarn workspace $package build
+          done
+
+      - name: Test changed packages
+        run: |
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          echo "$PACKAGES" | jq -r '.[] | .name' | while read package; do
+            echo "Testing $package"
+            yarn workspace $package test
+          done
+
+      - name: Check bundle size
+        run: |
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          echo "$PACKAGES" | jq -r '.[] | .name' | while read package; do
+            echo "Checking bundle size for $package"
+            yarn workspace $package size:check
+          done
+
+  verify-version:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Check version bumps
+        run: |
+          PACKAGES=${{ needs.detect-changes.outputs.changed_packages }}
+          
+          # Check if each changed package has a version bump
+          ERRORS=0
+          echo "$PACKAGES" | jq -r '.[] | .name' | while read package; do
+            echo "Checking version for $package"
+            if ! yarn lerna diff --since origin/${{ github.base_ref }} $package | grep -q "version"; then
+              echo "::error::No version bump found for $package"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+          
+          if [ $ERRORS -gt 0 ]; then
+            exit 1
+          fi
