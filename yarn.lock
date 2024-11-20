@@ -92,8 +92,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@avatijs/listener@workspace:packages/listener"
   peerDependencies:
-    "@avatijs/debounce": ^1.0.0
-    "@avatijs/throttle": ^1.0.0
+    "@avatijs/debounce": ^0.1.0
+    "@avatijs/throttle": ^0.1.0
   languageName: unknown
   linkType: soft
 
@@ -153,10 +153,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@avatijs/pointer@workspace:packages/pointer"
   peerDependencies:
-    "@avatijs/debounce": ^1.0.0
-    "@avatijs/listener": ^1.0.0
-    "@avatijs/memoize": ^1.0.0
-    "@avatijs/throttle": ^1.0.0
+    "@avatijs/debounce": ^0.1.0
+    "@avatijs/listener": ^0.1.0
+    "@avatijs/memoize": ^0.1.0
+    "@avatijs/throttle": ^0.1.0
   languageName: unknown
   linkType: soft
 
