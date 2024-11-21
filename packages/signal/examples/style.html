@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleSignal Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 2rem;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-section h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .control-panel {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .demo-box {
+            width: 100px;
+            height: 100px;
+            background: #3b82f6;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .value-display {
+            font-family: monospace;
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .grid-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .theme-demo {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 style="margin-bottom: 2rem;">StyleSignal Showcase</h1>
+
+    <!-- Basic Transformations -->
+    <section class="demo-section">
+        <h2>Basic Transformations</h2>
+        <div id="basicDemo" class="demo-box">Transform Me</div>
+        <div class="control-panel">
+            <button onclick="basicDemo.rotate()">Rotate</button>
+            <button onclick="basicDemo.scale()">Scale</button>
+            <button onclick="basicDemo.move()">Move</button>
+            <button onclick="basicDemo.reset()">Reset</button>
+        </div>
+        <div id="basicDemoValues" class="value-display"></div>
+    </section>
+
+    <!-- Color and Opacity -->
+    <section class="demo-section">
+        <h2>Color and Opacity</h2>
+        <div id="colorDemo" class="demo-box">Color Me</div>
+        <div class="control-panel">
+            <button onclick="colorDemo.changeColor()">Change Color</button>
+            <button onclick="colorDemo.fadeToggle()">Toggle Fade</button>
+            <button onclick="colorDemo.pulse()">Pulse</button>
+        </div>
+        <div id="colorDemoValues" class="value-display"></div>
+    </section>
+
+    <!-- Size and Position -->
+    <section class="demo-section">
+        <h2>Size and Position</h2>
+        <div id="sizeDemo" class="demo-box">Resize Me</div>
+        <div class="control-panel">
+            <button onclick="sizeDemo.grow()">Grow</button>
+            <button onclick="sizeDemo.shrink()">Shrink</button>
+            <button onclick="sizeDemo.moveAround()">Move Around</button>
+        </div>
+        <div id="sizeDemoValues" class="value-display"></div>
+    </section>
+
+    <!-- Animation Sequence -->
+    <section class="demo-section">
+        <h2>Animation Sequence</h2>
+        <div id="animationDemo" class="demo-box">Animate Me</div>
+        <div class="control-panel">
+            <button onclick="animationDemo.playSequence()">Play Sequence</button>
+            <button onclick="animationDemo.bounce()">Bounce</button>
+            <button onclick="animationDemo.spin()">Spin</button>
+        </div>
+        <div id="animationDemoValues" class="value-display"></div>
+    </section>
+</div>
+<script src="../dist/umd/index.js"></script>
+
+<script>
+    const { StyleSignal } = Avati;
+
+    class DemoController {
+        constructor(elementId, valuesId) {
+            this.element = document.getElementById(elementId);
+            this.valuesDisplay = document.getElementById(valuesId);
+            this.styleSignal = new StyleSignal(this.getInitialStyles());
+
+            // Subscribe to style changes
+            this.styleSignal.subscribe(styles => {
+                Object.assign(this.element.style, styles);
+                this.updateValueDisplay(styles);
+            });
+        }
+
+        updateValueDisplay(styles) {
+            this.valuesDisplay.textContent = JSON.stringify(styles, null, 2);
+        }
+
+        getInitialStyles() {
+            const computedStyle = window.getComputedStyle(this.element);
+            return {
+                transform: computedStyle.transform,
+                transition: 'all 0.3s ease-in-out',
+                backgroundColor: computedStyle.backgroundColor,
+                opacity: computedStyle.opacity,
+                width: computedStyle.width,
+                height: computedStyle.height,
+            };
+        }
+    }
+
+    // Basic Transformations Demo
+    class BasicTransformationsDemo extends DemoController {
+        constructor() {
+            super('basicDemo', 'basicDemoValues');
+            this.rotation = 0;
+        }
+
+        rotate() {
+            this.rotation += 45;
+            this.styleSignal.set('transform', `rotate(${this.rotation}deg)`);
+        }
+
+        scale() {
+            const currentTransform = this.styleSignal.value.transform;
+            const isScaled = currentTransform.includes('scale(1.5)');
+            this.styleSignal.set('transform', isScaled ? 'scale(1)' : 'scale(1.5)');
+        }
+
+        move() {
+            const currentTransform = this.styleSignal.value.transform;
+            const isMoved = currentTransform.includes('translateX(50px)');
+            this.styleSignal.set('transform', isMoved ? 'translateX(0)' : 'translateX(50px)');
+        }
+
+        reset() {
+            this.rotation = 0;
+            this.styleSignal.setMultiple({
+                transform: 'none',
+                transition: 'all 0.3s ease-in-out',
+            });
+        }
+    }
+
+    // Color Demo
+    class ColorDemo extends DemoController {
+        constructor() {
+            super('colorDemo', 'colorDemoValues');
+            this.colors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b'];
+            this.currentColorIndex = 0;
+        }
+
+        changeColor() {
+            this.currentColorIndex = (this.currentColorIndex + 1) % this.colors.length;
+            this.styleSignal.set('backgroundColor', this.colors[this.currentColorIndex]);
+        }
+
+        fadeToggle() {
+            const currentOpacity = this.styleSignal.value.opacity;
+            this.styleSignal.set('opacity', currentOpacity === '1' ? '0.5' : '1');
+        }
+
+        async pulse() {
+            const keyframes = [
+                { transform: 'scale(1)', opacity: '1' },
+                { transform: 'scale(1.1)', opacity: '0.8' },
+                { transform: 'scale(1)', opacity: '1' },
+            ];
+            await this.styleSignal.animate(keyframes, { duration: 500 });
+        }
+    }
+
+    // Size Demo
+    class SizeDemo extends DemoController {
+        constructor() {
+            super('sizeDemo', 'sizeDemoValues');
+            this.size = 100;
+        }
+
+        grow() {
+            this.size += 20;
+            this.styleSignal.setMultiple({
+                width: `${this.size}px`,
+                height: `${this.size}px`,
+            });
+        }
+
+        shrink() {
+            this.size = Math.max(50, this.size - 20);
+            this.styleSignal.setMultiple({
+                width: `${this.size}px`,
+                height: `${this.size}px`,
+            });
+        }
+
+        async moveAround() {
+            const positions = [
+                { transform: 'translate(0, 0)' },
+                { transform: 'translate(100px, 0)' },
+                { transform: 'translate(100px, 100px)' },
+                { transform: 'translate(0, 100px)' },
+                { transform: 'translate(0, 0)' },
+            ];
+            await this.styleSignal.animate(positions, { duration: 2000 });
+        }
+    }
+
+    // Animation Demo
+    class AnimationDemo extends DemoController {
+        constructor() {
+            super('animationDemo', 'animationDemoValues');
+        }
+
+        async playSequence() {
+            const sequence = [
+                { transform: 'scale(1) rotate(0deg)', backgroundColor: '#3b82f6' },
+                { transform: 'scale(1.2) rotate(180deg)', backgroundColor: '#ef4444' },
+                { transform: 'scale(0.8) rotate(360deg)', backgroundColor: '#10b981' },
+                { transform: 'scale(1) rotate(0deg)', backgroundColor: '#3b82f6' },
+            ];
+            await this.styleSignal.animate(sequence, { duration: 2000 });
+        }
+
+        async bounce() {
+            const sequence = [
+                { transform: 'translateY(0)' },
+                { transform: 'translateY(-50px)' },
+                { transform: 'translateY(0)' },
+            ];
+            await this.styleSignal.animate(sequence, { duration: 1000 });
+        }
+
+        async spin() {
+            this.styleSignal.set('transition', 'all 1s cubic-bezier(0.4, 0, 0.2, 1)');
+            const currentTransform = this.styleSignal.value.transform;
+            const rotation = currentTransform.includes('rotate') ? 0 : 360;
+            this.styleSignal.set('transform', `rotate(${rotation}deg)`);
+        }
+    }
+
+    // Initialize demos
+    const basicDemo = new BasicTransformationsDemo();
+    const colorDemo = new ColorDemo();
+    const sizeDemo = new SizeDemo();
+    const animationDemo = new AnimationDemo();
+</script>
+</body>
+</html>

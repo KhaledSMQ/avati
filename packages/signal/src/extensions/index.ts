@@ -15,3 +15,4 @@ export { createQueueSignal } from './queue';
 export { throttled } from './throttled';
 export { threshold } from './threshold';
 export { validated } from './validated';
+export { StyleSignal } from './style';
