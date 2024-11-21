@@ -141,8 +141,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@avatijs/debounce": "workspace:^",
-    "@avatijs/memoize": "workspace:^",
-    "@avatijs/throttle": "workspace:^"
+    "@avatijs/debounce": "^0.1.0",
+    "@avatijs/memoize": "^0.1.0",
+    "@avatijs/throttle": "^0.1.0"
   }
 }
