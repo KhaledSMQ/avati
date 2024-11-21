@@ -56,7 +56,6 @@
     "check:deps:duplicates": "yarn list --pattern \"*\" --depth=0",
     "deps:clean": "yarn check:deps:unused && yarn dedupe && yarn install"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
@@ -114,8 +113,5 @@
     "webpack": "^5.96.1",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4"
-  },
-  "dependencies": {
-    "@avatijs/throttle": "^0.1.0"
   }
 }

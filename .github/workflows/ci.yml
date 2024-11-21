@@ -19,7 +19,6 @@ on:
 
 env:
   NODE_VERSION: '20.14.0'
-  CACHE_KEY_PREFIX: avati-monorepo
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -30,8 +29,6 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    outputs:
-      cache-hit: ${{ steps.cache.outputs.cache-hit }}
 
     steps:
       - name: Checkout repository
@@ -42,29 +39,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      - name: Cache yarn dependencies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            node_modules
-            packages/*/node_modules
-            .yarn/cache
-            .yarn/install-state.gz
-          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'package.json', 'packages/*/package.json') }}
-          restore-keys: |
-            ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-
-
       - name: Install dependencies
         run: |
           yarn install
-#          yarn dedupe
-#          yarn why # Log dependency tree for debugging
 
       - name: Validate package.json files
         run: node -e "['package.json', ...require('glob').sync('packages/*/package.json')].forEach(f => JSON.parse(require('fs').readFileSync(f)))"
@@ -84,18 +61,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            packages/*/node_modules
-            .yarn/cache
-            .yarn/install-state.gz
-          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'package.json', 'packages/*/package.json') }}
-
       - name: Install dependencies
-        if: needs.setup.outputs.cache-hit != 'true'
         run: yarn install
 
       - name: ESLint
@@ -122,18 +88,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            packages/*/node_modules
-            .yarn/cache
-            .yarn/install-state.gz
-          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'package.json', 'packages/*/package.json') }}
-
       - name: Install dependencies
-        if: needs.setup.outputs.cache-hit != 'true'
         run: yarn install
 
       - name: Run tests
@@ -162,27 +117,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-#
-#      - name: Restore cache
-#        uses: actions/cache@v4
-#        with:
-#          path: |
-#            node_modules
-#            packages/*/node_modules
-#            .yarn/cache
-#            .yarn/install-state.gz
-#          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'package.json', 'packages/*/package.json') }}
 
-      - name: Run install
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # if needed
-#
-#      - name: Install dependencies
-#        if: needs.setup.outputs.cache-hit != 'true'
-#        run: yarn install
+      - name: Install dependencies
+        run: yarn install
 
       - name: Build packages
         run: yarn build
