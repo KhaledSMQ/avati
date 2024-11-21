@@ -55,7 +55,7 @@
   },
   "sideEffects": false,
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=18.20.5"
   },
   "typesVersions": {
     "*": {
