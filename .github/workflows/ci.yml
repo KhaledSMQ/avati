@@ -89,7 +89,7 @@ jobs:
 
       - name: Install dependencies
         if: needs.setup.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn install 
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -137,7 +137,7 @@ jobs:
 
       - name: Install dependencies
         if: needs.setup.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn install 
 
 
       - name: Run tests
@@ -179,7 +179,7 @@ jobs:
 
       - name: Install dependencies
         if: needs.setup.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn install 
 
       - name: Build packages
         run: |
