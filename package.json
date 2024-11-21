@@ -14,11 +14,13 @@
   "bugs": {
     "url": "https://github.com/khaledsmq/avati"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": ["packages/*"],
+    "nohoist": []
+  },
   "scripts": {
-    "build": "npm run build --workspaces --recursive",
+    "prebuild": "npm run clean",
+    "build": "lerna run build --stream --sort",
     "dev": "npm run dev --workspaces --recursive",
     "type-check": "tsc --noEmit",
     "clean": "npm run clean:dist && npm run clean:types && npm run clean:maps && npm run clean:jsmap",

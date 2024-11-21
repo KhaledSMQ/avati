@@ -1,6 +1,7 @@
 {
   "version": "independent",
   "npmClient": "yarn",
+  "useWorkspaces": true,
   "packages": [
     "packages/*"
   ],
@@ -39,6 +40,7 @@
       "message": "chore(release): publish packages",
       "registry": "https://registry.npmjs.org/",
       "allowBranch": ["master"],
+      "yes": true,
       "exact": true
     },
     "bootstrap": {
