@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "es2021"
+    ],
     "moduleResolution": "node",
     "strict": false,
     "allowJs": true,
@@ -21,18 +23,47 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@avatijs/animation": ["./packages/animation/src"],
-      "@avatijs/debounce": ["./packages/debounce/src"],
-      "@avatijs/listener": ["./packages/listener/src"],
-      "@avatijs/logger": ["./packages/logger/src"],
-      "@avatijs/memoize": ["./packages/memoize/src"],
-      "@avatijs/pointer": ["./packages/pointer/src"],
-      "@avatijs/scrollable": ["./packages/scrollable/src"],
-      "@avatijs/state": ["./packages/state/src"],
-      "@avatijs/throttle": ["./packages/throttle/src"],
-      "@avatijs/signal": ["./packages/signal/src"],
-      "@avatijs/batch-scheduler": ["./packages/batch-scheduler/src"],
+      "@avatijs/animation": [
+        "./packages/animation/src"
+      ],
+      "@avatijs/debounce": [
+        "./packages/debounce/src"
+      ],
+      "@avatijs/listener": [
+        "./packages/listener/src"
+      ],
+      "@avatijs/logger": [
+        "./packages/logger/src"
+      ],
+      "@avatijs/memoize": [
+        "./packages/memoize/src"
+      ],
+      "@avatijs/pointer": [
+        "./packages/pointer/src"
+      ],
+      "@avatijs/scrollable": [
+        "./packages/scrollable/src"
+      ],
+      "@avatijs/state": [
+        "./packages/state/src"
+      ],
+      "@avatijs/throttle": [
+        "./packages/throttle/src"
+      ],
+      "@avatijs/signal": [
+        "./packages/signal/src"
+      ],
+      "@avatijs/batch-scheduler": [
+        "./packages/batch-scheduler/src"
+      ]
     }
   },
-  "exclude": ["**/dist", "**/node_modules"]
+  "exclude": [
+    "**/dist",
+    "**/node_modules",
+    "**/jest.config.js",
+    "**/jest.config.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }

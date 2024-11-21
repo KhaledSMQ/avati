@@ -136,7 +136,7 @@ export class AdvancedPointerEventManager {
 
             // @ts-ignore // TODO - Add pointerup event listener to the window
             eventManager.addWithCleanup(
-                window,
+                window as any,
                 'pointerup',
                 this.handlePointerUp,
                 this.listenerOptions,
