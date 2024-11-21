@@ -259,6 +259,7 @@ describe('StyleSignal', () => {
                 updateCount++;
             }, { skipInitial: true });
 
+            unsubscribe()
             styleSignal.dispose();
             expect(() => styleSignal.set('backgroundColor', 'red')).toThrow(SignalDisposedError);
             expect(updateCount).toBe(0);
