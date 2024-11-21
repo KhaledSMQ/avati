@@ -140,7 +140,7 @@
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4"
   },
-  "perDependencies": {
+  "dependencies": {
     "@avatijs/debounce": "^0.1.2",
     "@avatijs/memoize": "^0.1.2",
     "@avatijs/throttle": "^0.1.2"

@@ -16,6 +16,7 @@
   ],
     "references": [
         { "path": "../throttle" },
-        { "path": "../debounce" }
+        { "path": "../debounce" },
+        { "path": "../memoize" }
     ]
 }
