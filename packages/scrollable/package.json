@@ -41,7 +41,7 @@
   "scripts": {
     "build": "npm run clean && npm run build:types && npm run build:prod",
     "build:dev": "webpack --mode development --progress",
-    "build:prod": "webpack --mode production --progress",
+    "build:prod": "webpack --mode production",
     "build:types": "tsc --emitDeclarationOnly",
     "build:deps": "npm run build -w @avatijs/debounce && npm run build -w @avatijs/throttle && npm run build -w @avatijs/memoize",
     "watch": "webpack --mode=development --watch",
