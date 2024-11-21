@@ -116,6 +116,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@avatijs/throttle": "workspace:^"
+    "@avatijs/throttle": "^0.1.0"
   }
 }

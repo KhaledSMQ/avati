@@ -76,7 +76,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/debounce@workspace:^, @avatijs/debounce@workspace:packages/debounce":
+"@avatijs/debounce@^0.1.0, @avatijs/debounce@workspace:packages/debounce":
   version: 0.0.0-use.local
   resolution: "@avatijs/debounce@workspace:packages/debounce"
   dependencies:
@@ -130,13 +130,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/listener@workspace:^, @avatijs/listener@workspace:packages/listener":
+"@avatijs/listener@^0.1.0, @avatijs/listener@workspace:packages/listener":
   version: 0.0.0-use.local
   resolution: "@avatijs/listener@workspace:packages/listener"
   dependencies:
-    "@avatijs/debounce": "workspace:^"
-    "@avatijs/memoize": "workspace:^"
-    "@avatijs/throttle": "workspace:^"
+    "@avatijs/debounce": ^0.1.0
+    "@avatijs/memoize": ^0.1.0
+    "@avatijs/throttle": ^0.1.0
     "@types/jest": ^29.5.14
     "@types/node": ^22.9.1
     "@typescript-eslint/eslint-plugin": ^8.15.0
@@ -187,7 +187,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/memoize@workspace:^, @avatijs/memoize@workspace:packages/memoize":
+"@avatijs/memoize@^0.1.0, @avatijs/memoize@workspace:packages/memoize":
   version: 0.0.0-use.local
   resolution: "@avatijs/memoize@workspace:packages/memoize"
   dependencies:
@@ -218,10 +218,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@avatijs/pointer@workspace:packages/pointer"
   dependencies:
-    "@avatijs/debounce": "workspace:^"
-    "@avatijs/listener": "workspace:^"
-    "@avatijs/memoize": "workspace:^"
-    "@avatijs/throttle": "workspace:^"
+    "@avatijs/debounce": ^0.1.0
+    "@avatijs/listener": ^0.1.0
+    "@avatijs/memoize": ^0.1.0
+    "@avatijs/throttle": ^0.1.0
     "@types/jest": ^29.5.14
     "@types/node": ^22.9.1
     "@typescript-eslint/eslint-plugin": ^8.15.0
@@ -328,7 +328,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/throttle@workspace:^, @avatijs/throttle@workspace:packages/throttle":
+"@avatijs/throttle@^0.1.0, @avatijs/throttle@workspace:packages/throttle":
   version: 0.0.0-use.local
   resolution: "@avatijs/throttle@workspace:packages/throttle"
   dependencies:
@@ -4451,7 +4451,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "avati@workspace:."
   dependencies:
-    "@avatijs/throttle": "workspace:^"
+    "@avatijs/throttle": ^0.1.0
     "@babel/core": ^7.26.0
     "@babel/preset-env": ^7.26.0
     "@babel/preset-typescript": ^7.26.0
