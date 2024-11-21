@@ -19,7 +19,7 @@
   },
   "sideEffects": false,
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "bundlesize": [
     {
@@ -141,9 +141,9 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@avatijs/debounce": "^0.1.0",
+    "@avatijs/debounce": "^0.1.2",
     "@avatijs/listener": "^0.1.0",
-    "@avatijs/memoize": "^0.1.0",
-    "@avatijs/throttle": "^0.1.0"
+    "@avatijs/memoize": "^0.1.2",
+    "@avatijs/throttle": "^0.1.2"
   }
 }

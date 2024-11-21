@@ -1,6 +1,6 @@
 {
   "name": "@avatijs/memoize",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Memoize package part of Avati project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -19,7 +19,7 @@
   },
   "sideEffects": false,
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "bundlesize": [
     {
