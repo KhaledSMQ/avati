@@ -142,7 +142,7 @@ export type PersistedSignalStorage<T> = {
 export type PersistedSignalSignalOptions<T> = SignalOptions<T> & PersistedSignalStorage<T>;
 
 export class Persisted<T> extends Signal<T> {
-    disposed = false;
+    override disposed = false;
     private readonly storage: StorageProvider<T>;
     private readonly key: string;
 
@@ -164,28 +164,28 @@ export class Persisted<T> extends Signal<T> {
         }, `persist-${key}`);
     }
 
-    get value(): T {
+    override get value(): T {
         if (this.disposed) {
             throw new SignalDisposedError('Cannot read from disposed signal');
         }
         return super.value;
     }
 
-    set value(newValue: T) {
+    override set value(newValue: T) {
         if (this.disposed) {
             throw new SignalDisposedError('Cannot write to disposed signal');
         }
         super.value = newValue;
     }
 
-    update(fn: (current: T) => T): void {
+    override update(fn: (current: T) => T): void {
         if (this.disposed) {
             throw new SignalDisposedError('Cannot update disposed signal');
         }
         this.value = fn(this.value);
     }
 
-    dispose(): void {
+    override dispose(): void {
         if (this.disposed) return;
         this.disposed = true;
         this.storage.removeItem(this.key);
@@ -209,7 +209,7 @@ export class Persisted<T> extends Signal<T> {
         this.storage.removeItem(this.key);
     }
 
-    isDisposed(): boolean {
+    override  isDisposed(): boolean {
         return this.disposed;
     }
 }

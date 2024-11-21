@@ -1,5 +1,3 @@
-// src/pubsub.ts
-
 /**
  * Type representing the different event types.
  */

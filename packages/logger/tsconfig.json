@@ -1,32 +1,17 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    // Modern module settings
-    "moduleResolution": "bundler",
-    "module": "esnext",
-    "target": "es2018",
-
-    // Common TypeScript settings
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-
-    // Source map and declaration settings
-    "sourceMap": true,
-    "declaration": true,
-
-    // Library includes
-    "lib": ["es2018", "dom", "dom.iterable", "esnext"],
-
-    // Path settings
-    "baseUrl": ".",
+    "composite": true,
+    "rootDir": "./src",
+    "declarationDir": "./dist/types",
     "outDir": "./dist",
-
-    // Additional recommended settings
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "jest.config.js"
+  ]
 }

@@ -34,13 +34,48 @@
     "dist"
   ],
   "scripts": {
-    "build": "webpack --mode production --config-name umd --config-name esm --config-name cjs",
-    "dev": "webpack --mode development --watch --config-name umd --config-name esm --config-name cjs",
-    "test": "jest",
-    "lint": "eslint src --ext .ts,.tsx"
+    "build": "npm run clean && npm run build:types && npm run build:prod",
+    "build:dev": "webpack --mode development --progress",
+    "build:prod": "webpack --mode production --progress",
+    "build:types": "tsc --emitDeclarationOnly",
+    "watch": "webpack --mode=development --watch",
+    "watch:silent": "webpack --mode=development --watch --silent",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run build",
+    "test": "jest --config jest.config.js --project tsconfig.test.json",
+    "typecheck": "tsc --noEmit",
+    "size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
+    "analyze:deps": "madge --circular --extensions ts ./src/index.ts",
+    "size:check": "bundlesize",
+    "size:watch": "bundlesize --watch",
+    "size:compression": "bundlesize --compression",
+    "check-deps": "depcheck --config .depcheckrc",
+    "analyze": "npm run analyze:size && npm run analyze:deps && npm run analyze:duplicates",
+    "analyze:size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
+    "analyze:detailed": "webpack --config webpack.analysis.config.js",
+    "analyze:duplicates": "jscpd src",
+    "analyze:why": "webpack --mode production --display-reasons",
+    "analyze:tree": "webpack --mode production --display-used-exports",
+    "analyze:modules": "webpack --mode production --display-modules",
+    "analyze:full": "webpack --mode production --stats detailed"
   },
+  "keywords": [
+    "avati",
+    "avatijs",
+    "typescript",
+    "state",
+    "state-management",
+    "store",
+    "redux",
+    "flux",
+    "mobx",
+    "observable",
+    "reactive",
+    "global-state",
+    "vuex"
+  ],
   "dependencies": {
-    "@avatijs/logger": "^0.1.0"
+    "@avatijs/logger": "workspace:^"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

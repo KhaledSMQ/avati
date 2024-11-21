@@ -1,3 +1,1 @@
-import eventManager from './EventListenerManager';
-
-export { eventManager };
+export * from './EventListenerManager';

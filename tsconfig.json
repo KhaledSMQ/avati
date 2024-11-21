@@ -1,69 +1,21 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "lib": [
-      "es2021"
-    ],
-    "moduleResolution": "node",
-    "strict": false,
-    "allowJs": true,
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true,
-    "composite": true,
-    "incremental": true,
-    "baseUrl": ".",
-    "paths": {
-      "@avatijs/animation": [
-        "./packages/animation/src"
-      ],
-      "@avatijs/debounce": [
-        "./packages/debounce/src"
-      ],
-      "@avatijs/listener": [
-        "./packages/listener/src"
-      ],
-      "@avatijs/logger": [
-        "./packages/logger/src"
-      ],
-      "@avatijs/memoize": [
-        "./packages/memoize/src"
-      ],
-      "@avatijs/pointer": [
-        "./packages/pointer/src"
-      ],
-      "@avatijs/scrollable": [
-        "./packages/scrollable/src"
-      ],
-      "@avatijs/state": [
-        "./packages/state/src"
-      ],
-      "@avatijs/throttle": [
-        "./packages/throttle/src"
-      ],
-      "@avatijs/signal": [
-        "./packages/signal/src"
-      ],
-      "@avatijs/batch-scheduler": [
-        "./packages/batch-scheduler/src"
-      ]
-    }
-  },
-  "exclude": [
-    "**/dist",
-    "**/node_modules",
-    "**/jest.config.js",
-    "**/jest.config.ts",
-    "**/*.test.ts",
-    "**/*.spec.ts"
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "references": [
+    // Core utilities that others depend on should come first
+    { "path": "packages/logger" },
+    { "path": "packages/throttle" },
+    { "path": "packages/debounce" },
+    { "path": "packages/memoize" },
+    // Then the packages that depend on them
+    { "path": "packages/listener" },
+    { "path": "packages/pointer" },
+    // Then the rest
+    { "path": "packages/animation" },
+    { "path": "packages/batch-scheduler" },
+    { "path": "packages/element" },
+    { "path": "packages/scrollable" },
+    { "path": "packages/signal" },
+    { "path": "packages/state" }
   ]
 }

@@ -18,8 +18,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
-    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces --recursive",
+    "dev": "npm run dev --workspaces --recursive",
     "type-check": "tsc --noEmit",
     "clean": "npm run clean:dist && npm run clean:types && npm run clean:maps && npm run clean:jsmap",
     "clean:dist": "rimraf packages/*/dist",
@@ -28,7 +28,7 @@
     "clean:jsmap": "rimraf packages/**/*.js.map -g",
     "prepare-packages": "node scripts/prepare-packages.mjs",
     "publish-packages": "npm run build && npm run prepare-packages && node scripts/publish-packages.mjs",
-    "test": "jest",
+    "test": "jest --config jest.config.js --project tsconfig.test.json",
     "prepare": "husky",
     "lint": "eslint packages/*/src/*.ts --fix",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
@@ -114,5 +114,8 @@
     "webpack": "^5.96.1",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@avatijs/throttle": "workspace:^"
   }
 }

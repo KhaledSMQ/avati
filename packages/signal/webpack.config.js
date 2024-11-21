@@ -82,7 +82,7 @@ const createBaseConfig = (format) => ({
         minimize: isProduction,
         minimizer: [new TerserPlugin(terserOptions)],
         moduleIds: 'deterministic',
-        sideEffects: true,
+        sideEffects: false,
         usedExports: true,
         concatenateModules: true
     },

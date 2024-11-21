@@ -1,6 +1,7 @@
-import eventManager from '../src/EventListenerManager';
+import { EventListenerManager } from '../src';
 
 jest.useFakeTimers();
+const eventManager = new EventListenerManager();
 
 describe('EventListenerManager', () => {
     let element: HTMLElement;

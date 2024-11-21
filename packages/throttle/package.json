@@ -19,7 +19,7 @@
   },
   "sideEffects": false,
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "bundlesize": [
     {
@@ -42,18 +42,19 @@
     "build": "npm run clean && npm run build:types && npm run build:prod",
     "build:dev": "webpack --mode development --progress",
     "build:prod": "webpack --mode production --progress",
-    "build:types": "tsc --emitDeclarationOnly --outDir dist/types",
+    "build:types": "tsc --emitDeclarationOnly",
     "watch": "webpack --mode=development --watch",
     "watch:silent": "webpack --mode=development --watch --silent",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run build",
-    "test": "jest",
+    "test": "jest --config jest.config.js --project tsconfig.test.json",
     "typecheck": "tsc --noEmit",
     "size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
     "analyze:deps": "madge --circular --extensions ts ./src/index.ts",
     "size:check": "bundlesize",
     "size:watch": "bundlesize --watch",
     "size:compression": "bundlesize --compression",
+    "check-deps": "depcheck --config .depcheckrc",
     "analyze": "npm run analyze:size && npm run analyze:deps && npm run analyze:duplicates",
     "analyze:size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
     "analyze:detailed": "webpack --config webpack.analysis.config.js",
@@ -90,6 +91,11 @@
   },
   "keywords": [
     "avati",
+    "scheduler",
+    "batch",
+    "task-queue",
+    "priority-queue",
+    "async",
     "typescript",
     "debounce",
     "debouncer",

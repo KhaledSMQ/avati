@@ -75,7 +75,7 @@ const config = {
         '__BROWSER__': false,
         'ts-jest': {
             '__DEV__': true,
-            //         tsConfig: 'tsconfig.test.json',
+               // tsConfig: 'tsconfig.test.json',
         },
     },
     // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.

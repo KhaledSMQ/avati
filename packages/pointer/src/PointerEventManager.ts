@@ -1,7 +1,9 @@
 import { EventHandler } from './eventHandler';
 import { PubSub, PubSubEventType, PubSubHandlers } from './pubsub';
 import { PointerState, SinglePointerState } from './types';
-import { eventManager } from '@avatijs/listener';
+import { EventListenerManager } from '@avatijs/listener';
+
+const eventManager = new EventListenerManager();
 
 /**
  * Supported pointer and mouse event types.

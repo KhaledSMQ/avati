@@ -1,6 +1,8 @@
-import eventManager from '../src/EventListenerManager';
+import { EventListenerManager } from '../src';
 
 jest.useFakeTimers();
+
+const eventManager = new EventListenerManager();
 
 describe('EventListenerManager - Debounce and Throttle', () => {
     let element: HTMLElement;

@@ -27,7 +27,7 @@ export class BoundedAnimation extends Rk4thSpring {
      * @param deltaTime - The time elapsed since the last update.
      * @returns Whether the animation should stop.
      */
-    update(deltaTime: number): boolean {
+    override update(deltaTime: number): boolean {
         const shouldStop = super.update(deltaTime);
 
         // Apply position clamping and elastic collision

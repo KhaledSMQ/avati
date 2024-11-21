@@ -100,7 +100,8 @@ export class StateManager<T extends Record<string, any>> implements IStateManage
             throw new Error(`Reducer already exists for slice: ${String(slice)}`);
         }
         this.logger.debug('Adding reducer for slice', slice);
-        this.reducers.set(slice, reducer as Reducer<T[keyof T]>);
+        // @ts-ignore - we know this is safe
+        this.reducers.set(slice, reducer);
     }
 
     public dispatch<P>(action: Action<P>): Action<P> {

@@ -2,17 +2,28 @@ const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 const pkg = require('./package.json');
-const banner = require('../../banner.js');
-
+const banner = require('../../banner');
 const isProduction = process.argv[process.argv.indexOf('--mode') + 1] === 'production';
 
-// Define entry points
+const NAMESPACE = 'Avati';
+
 const entries = {
-    // Full bundle
     'index': './src/index.ts',
 };
+const createModuleName = (name) => {
+    const val = name.split('/').pop();
+    return String(val.replace('-', '')).charAt(0).toUpperCase() + String(val).slice(1);
+};
 
-// Terser configuration for production builds
+const createAvatiDependency = (deps) => {
+    const onlyAvatiDeps = Object.keys(deps).filter((dep) => dep.startsWith('@avati'));
+    return onlyAvatiDeps.reduce((acc, dep) => {
+        const name = dep.split('/').pop();
+        acc[dep] = path.resolve(__dirname, '../', `${name}`);
+        return acc;
+    }, {});
+
+};
 const terserOptions = {
     terserOptions: {
         format: {
@@ -25,22 +36,17 @@ const terserOptions = {
             passes: 3,
             drop_console: isProduction,
             drop_debugger: isProduction,
-            pure_funcs: ['console.log', 'console.info', 'console.debug'],
-            global_defs: {
-                __DEV__: false
-            }
         },
         mangle: {
             properties: {
-                regex: /^_/  // Mangle private properties starting with underscore
-            }
-        }
+                regex: /^_/,
+            },
+        },
     },
     extractComments: false,
 };
 
-// Common webpack configuration
-const createBaseConfig = (format) => ({
+const createBaseConfig = (format, isBrowser = false) => ({
     module: {
         rules: [
             {
@@ -61,41 +67,39 @@ const createBaseConfig = (format) => ({
     },
     resolve: {
         extensions: ['.ts', '.js'],
-        alias: {}
+        alias: {
+            ...createAvatiDependency(pkg.dependencies || {}),
+        },
     },
     optimization: {
         minimize: isProduction,
         minimizer: [new TerserPlugin(terserOptions)],
         moduleIds: 'deterministic',
-        sideEffects: true,
+        sideEffects: false,
         usedExports: true,
-        concatenateModules: true
+        concatenateModules: true,
     },
     plugins: [
         new webpack.BannerPlugin({
             banner: banner({ pkg: pkg.name, version: pkg.version, homepage: pkg.homepage }),
             raw: true,
             entryOnly: true,
-        })
+        }),
+        new webpack.DefinePlugin({
+            __DEV__: !isProduction,
+            __SILENT__: process.argv.includes('--silent'),
+            __VERSION__: JSON.stringify(pkg.version),
+            __PACKAGE_NAME__: JSON.stringify(pkg.name),
+            __TEST__: JSON.stringify(process.env.NODE_ENV === 'test'),
+            __BROWSER__: isBrowser,
+        }),
     ],
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? 'source-map' : 'eval-source-map',
-    stats: {
-        colors: true,
-        modules: true,
-        reasons: true,
-        errorDetails: true
-    },
-    performance: {
-        hints: isProduction ? 'warning' : false,
-        maxEntrypointSize: 512000,
-        maxAssetSize: 512000
-    }
 });
 
-// Create specific configuration for each format
 const createFormatConfig = (format) => {
-    const baseConfig = createBaseConfig(format);
+    const baseConfig = createBaseConfig(format, format === 'umd');
     const configs = [];
 
     Object.entries(entries).forEach(([name, entry]) => {
@@ -105,18 +109,18 @@ const createFormatConfig = (format) => {
             entry: { [name]: entry },
             output: {
                 path: path.resolve(__dirname, `dist/${format}`),
-                filename: '[name].js', // This will preserve directory structure
+                filename: isProduction ? '[name].min.js' : '[name].js',
+                sourceMapFilename: isProduction ? '[name].min.js.map' : '[name].js.map',
                 globalObject: 'typeof self !== \'undefined\' ? self : this',
             },
         };
 
-        // Format-specific configurations
         switch (format) {
             case 'umd':
                 formatSpecificConfig.output = {
                     ...formatSpecificConfig.output,
                     library: {
-                        name: name === 'index' ? 'Avati' : ['Avati', name.replace('/index', '')],
+                        name: [NAMESPACE, createModuleName(pkg.name)],
                         type: 'umd',
                         umdNamedDefine: true,
                     },
@@ -145,23 +149,37 @@ const createFormatConfig = (format) => {
                     library: {
                         type: 'commonjs2',
                     },
-                    environment: {
-                        module: false,
-                    },
                 };
                 break;
         }
 
         configs.push(formatSpecificConfig);
+
+        // Create non-minified version for production
+        if (isProduction) {
+            const nonMinifiedConfig = {
+                ...formatSpecificConfig,
+                optimization: {
+                    ...formatSpecificConfig.optimization,
+                    minimize: false,
+                },
+                output: {
+                    ...formatSpecificConfig.output,
+                    filename: '[name].js',
+                    sourceMapFilename: '[name].js.map',
+                },
+            };
+            configs.push(nonMinifiedConfig);
+        }
     });
 
     return configs;
 };
-// Export configurations for all formats
+
 module.exports = () => {
     return [
         ...createFormatConfig('umd'),
         ...createFormatConfig('esm'),
-        ...createFormatConfig('cjs')
+        ...createFormatConfig('cjs'),
     ];
 };

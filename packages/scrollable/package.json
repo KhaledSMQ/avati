@@ -1,10 +1,76 @@
 {
   "name": "@avatijs/scrollable",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scrollable package part of Avati project",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "browser": "./dist/umd/index.js",
+  "unpkg": "./dist/umd/index.min.js",
+  "jsdelivr": "./dist/umd/index.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/umd/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/esm/index.js",
+      "maxSize": "3 kB",
+      "compression": "brotli"
+    },
+    {
+      "path": "./dist/cjs/index.js",
+      "maxSize": "3 kB",
+      "compression": "brotli"
+    },
+    {
+      "path": "./dist/umd/*.js",
+      "maxSize": "3 kB",
+      "compression": "brotli"
+    }
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run build:types && npm run build:prod",
+    "build:dev": "webpack --mode development --progress",
+    "build:prod": "webpack --mode production --progress",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:deps": "npm run build -w @avatijs/debounce && npm run build -w @avatijs/throttle && npm run build -w @avatijs/memoize",
+    "watch": "webpack --mode=development --watch",
+    "watch:silent": "webpack --mode=development --watch --silent",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run build",
+    "test": "jest --config jest.config.js --project tsconfig.test.json",
+    "typecheck": "tsc --noEmit",
+    "size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
+    "analyze:deps": "madge --circular --extensions ts ./src/index.ts",
+    "size:check": "bundlesize",
+    "size:watch": "bundlesize --watch",
+    "size:compression": "bundlesize --compression",
+    "check-deps": "depcheck --config .depcheckrc",
+    "analyze": "npm run analyze:size && npm run analyze:deps && npm run analyze:duplicates",
+    "analyze:size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
+    "analyze:detailed": "webpack --config webpack.analysis.config.js",
+    "analyze:duplicates": "jscpd src",
+    "analyze:why": "webpack --mode production --display-reasons",
+    "analyze:tree": "webpack --mode production --display-used-exports",
+    "analyze:modules": "webpack --mode production --display-modules",
+    "analyze:full": "webpack --mode production --stats detailed"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "author": {
     "name": "Khaled Sameer",
     "email": "khaled.smq@hotmail.com",
@@ -17,31 +83,28 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/KhaledSMQ/avati",
+    "url": "git+https://github.com/KhaledSMQ/avati.git",
     "directory": "packages/scrollable"
   },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "browserslist": [
-    "last 1 version and not Explorer 10",
-    "Explorer 11",
-    "iOS >= 9",
-    "Android >= 4.4"
+  "keywords": [
+    "avati",
+    "scroll",
+    "scrolling",
+    "infinite-scroll",
+    "lazy-load",
+    "smooth-scroll",
+    "virtual-scroll",
+    "scrollable",
+    "scrollbar",
+    "custom-scroll",
+    "scroll-events",
+    "typescript",
+    "javascript"
   ],
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "webpack --mode production --config-name umd --config-name esm --config-name cjs",
-    "dev": "webpack --mode development --watch --config-name umd --config-name esm --config-name cjs",
-    "test": "jest",
-    "lint": "eslint src --ext .ts,.tsx"
-  },
-  "dependencies": {
-    "rk-4th-spring": "^0.1.1"
-  },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "^22.9.1",
@@ -63,5 +126,8 @@
     "webpack": "^5.96.1",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "rk-4th-spring": "^0.1.1"
   }
 }

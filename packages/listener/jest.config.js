@@ -2,6 +2,7 @@
 const sharedConfig = require('../../jest.config.js');
 module.exports = {
     ...sharedConfig,
+
     'displayName': 'listener',
     'rootDir': '../../',
 }

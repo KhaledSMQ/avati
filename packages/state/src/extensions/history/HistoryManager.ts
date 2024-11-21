@@ -110,7 +110,7 @@ export class HistoryManager<T extends Record<string, any>> implements IHistoryMa
         this.isHistoryAction = true;
         try {
             const pastStates = [...this.historyState.past];
-            const targetState = pastStates[index];
+            const targetState = pastStates[index] as T;
             const newPast = pastStates.slice(0, index);
             const newFuture = [
                 ...pastStates.slice(index + 1),
@@ -120,7 +120,7 @@ export class HistoryManager<T extends Record<string, any>> implements IHistoryMa
 
             const newState: HistoryState<T> = {
                 past: newPast,
-                present: this.stateOps.deepCopy(targetState),
+                present: Object.freeze(this.stateOps.deepCopy(targetState)),
                 future: newFuture,
             };
 

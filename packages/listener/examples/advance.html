@@ -8,9 +8,9 @@
 <input type="text" id="searchInput" placeholder="Type to search..." />
 <div id="results"></div>
 
-<script src="../dist/index.umd.js"></script>
+<script src="../dist/umd/index.min.js"></script>
 <script>
-    const { eventManager } = window['@avati/listener'];
+    const { eventManager } = Avati.Listener;
     document.addEventListener('DOMContentLoaded', () => {
         const input = document.getElementById('searchInput');
         const results = document.getElementById('results');

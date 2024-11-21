@@ -5,8 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  **/
 
-import { Signal, SignalOptions } from '../core';
-import { computed } from '../core/computed';
+import { computed, Signal, SignalOptions } from '../core';
 
 /**
  * Combines multiple signals into a single signal containing an array of their values.

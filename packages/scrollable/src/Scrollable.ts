@@ -677,7 +677,7 @@ export class Scrollable {
         const targetY = this.clamp(this.currentPos.y, this.bounds.minY, this.bounds.maxY);
         if (Math.abs(targetY - this.currentPos.y) > this.options.precision) {
             this.verticalSpring.stop();
-            this.horizontalSpring.setValue(this.currentPos.y);
+            this.horizontalSpring?.setValue(this.currentPos.y);
             this.verticalSpring.start(targetY);
         }
     }
@@ -689,8 +689,8 @@ export class Scrollable {
 
         if (event.touches.length > 0) {
             return {
-                x: event.touches[0].clientX,
-                y: event.touches[0].clientY,
+                x: event.touches[0]?.clientX ?? 0,
+                y: event.touches[0]?.clientY ?? 0,
             };
         }
 

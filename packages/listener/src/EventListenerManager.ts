@@ -1,10 +1,11 @@
 import { debounce } from '@avatijs/debounce';
 import { throttle } from '@avatijs/throttle';
 
-type EventId = string;
-type ElementWeakRef = WeakRef<Element>;
+export type EventId = string;
 
-interface EventOptions extends AddEventListenerOptions {
+export type ElementWeakRef = WeakRef<Element>;
+
+export interface EventOptions extends AddEventListenerOptions {
     debounce?: number;
     throttle?: number;
     async?: boolean;
@@ -15,13 +16,13 @@ interface EventOptions extends AddEventListenerOptions {
     debug?: boolean;
 }
 
-interface ListenerMetadata {
+export interface ListenerMetadata {
     timestamp: number;
     eventId: EventId;
     originalCallback: string;
 }
 
-interface ListenerDetails {
+export interface ListenerDetails {
     element: ElementWeakRef;
     eventType: string;
     callback: EventListener;
@@ -30,12 +31,12 @@ interface ListenerDetails {
     timestamp: number;
 }
 
-interface EventMetadata extends Event {
+export interface EventMetadata extends Event {
     metadata?: ListenerMetadata;
 }
 
-type LimiterType = 'throttle' | 'debounce';
-type EventType =
+export type LimiterType = 'throttle' | 'debounce';
+export type EventType =
     | 'input'
     | 'change'
     | 'keyup'
@@ -56,7 +57,7 @@ const _validateParams = Symbol('validateParams');
 const _generateEventId = Symbol('generateEventId');
 const _eventIdCounter = Symbol('eventIdCounter');
 
-class EventListenerManager {
+export class EventListenerManager {
     public readonly defaultOptions: Readonly<EventOptions>;
     private readonly [_listeners]: Map<EventId, ListenerDetails>;
     private readonly [_weakRefMap]: WeakMap<Element, Set<EventId>>;
@@ -290,7 +291,7 @@ class EventListenerManager {
             !(
                 element instanceof Element ||
                 element instanceof Window ||
-                element instanceof global.Document
+                element instanceof Document
             )
         ) {
             throw new TypeError('Element must be an instance of Element, Window, or Document');
@@ -335,11 +336,3 @@ class EventListenerManager {
         }
     }
 }
-
-// Create singleton instance
-const eventManager = new EventListenerManager();
-
-export default eventManager;
-
-// Type exports
-export type { EventId, EventOptions, ListenerMetadata, ListenerDetails, EventMetadata };

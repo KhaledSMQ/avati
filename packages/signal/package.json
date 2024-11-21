@@ -55,7 +55,7 @@
   },
   "sideEffects": false,
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "typesVersions": {
     "*": {
@@ -165,7 +165,7 @@
     "watch:silent": "webpack --mode=development --watch --silent",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run build",
-    "test": "jest",
+    "test": "jest --config jest.config.js --project tsconfig.test.json",
     "typecheck": "tsc --noEmit",
     "size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
     "analyze:deps": "madge --circular --extensions ts ./src/index.ts",
@@ -214,7 +214,17 @@
     "task-queue",
     "priority-queue",
     "async",
-    "typescript"
+    "typescript",
+    "signal",
+    "reactive",
+    "events",
+    "event-emitter",
+    "observable",
+    "pubsub",
+    "state-management",
+    "hooks",
+    "data-binding",
+    "stream"
   ],
   "devDependencies": {
     "@types/jest": "^29.5.14",

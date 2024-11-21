@@ -2,6 +2,6 @@
 const sharedConfig = require('../../jest.config.js');
 module.exports = {
     ...sharedConfig,
-    'displayName': 'pointer',
+    'displayName': 'memoize',
     'rootDir': '../../',
 }
