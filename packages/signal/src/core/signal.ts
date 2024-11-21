@@ -15,6 +15,13 @@ import { Base } from './base';
 import { SignalDisposedError } from './errors';
 import { SubscriptionComputation } from './SubscriptionComputation';
 
+export type SubscriptionOption = {
+    /**
+     * If true, the subscription will be called immediately
+     */
+    skipInitial?: boolean;
+}
+
 /**
  * Signal class implements a reactive primitive that holds a value and notifies dependents of changes.
  * It follows the WritableSignal interface contract for value updates and subscriptions.
@@ -114,19 +121,26 @@ export class Signal<T> extends Base<T> {
      * Creates a subscription to the signal's value changes
      *
      * @param callback - Function to call when the value changes
+     * @param {SubscriptionOption} subscriptionOptions - Options for the subscription
      * @returns Function to unsubscribe from changes
      */
-    subscribe(callback: (value: T) => void): UnsubscribeFunction {
+    subscribe(callback: (value: T) => void, subscriptionOptions: SubscriptionOption = { skipInitial: false }): UnsubscribeFunction {
         if (this.disposed) {
             throw new SignalDisposedError('subscribe to');
         }
+        let skippedInitial: boolean = false;
         const computed = new SubscriptionComputation(() => {
-            return callback(this.value);
+            const value = this.value; // subscribe to the value
+            if(subscriptionOptions.skipInitial && !skippedInitial) {
+                skippedInitial = true;
+                return;
+            }
+            return callback(value);
         });
 
         computed.recompute();
 
         return () => computed.dispose();
     }
- }
+}
 
