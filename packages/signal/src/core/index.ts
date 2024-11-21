@@ -6,6 +6,7 @@
  **/
 
 export { Signal } from './signal';
+export type { SubscriptionOption } from './signal';
 export { EffectImpl, effect } from './effect';
 export { Context } from './context';
 export { UpdateQueue } from './updateQueue';
