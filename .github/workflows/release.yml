@@ -39,12 +39,18 @@ jobs:
           NPM_CONFIG_PROVENANCE: true
 
       - name: Setup NPM Authentications
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: |
           if [ -n "$NODE_AUTH_TOKEN" ]; then
             echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
           fi
 
       - name: Validate npm authentication
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: |
           if [ -n "$NODE_AUTH_TOKEN" ]; then
               npm whoami
