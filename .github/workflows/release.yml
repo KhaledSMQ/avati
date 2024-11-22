@@ -28,6 +28,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: master  # Explicitly checkout master branch
+
+      - name: Fetch all tags
+        run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          git fetch --prune --unshallow
+
+      - name: Set up Git branch
+        run: |
+          git checkout master
+          git pull origin master
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -100,7 +111,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          yarn lerna:publish
+          yarn lerna publish from-git --yes --no-verify-access
 
       - name: Cleanup NPM Authentication
         if: always()
