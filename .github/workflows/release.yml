@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: master  # Explicitly checkout master branch
+          ref: master
 
       - name: Fetch all tags
         run: |
@@ -48,6 +48,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
+
+      - name: Configure Git user
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
 
       - name: Setup NPM Authentications
         env:
@@ -73,13 +78,16 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Commit yarn.lock if changed
+        run: |
+          if [[ -n "$(git status --porcelain yarn.lock)" ]]; then
+            git add yarn.lock
+            git commit -m "chore: update yarn.lock [skip ci]"
+            git push origin master
+          fi
+
       - name: Build packages
         run: yarn build
-
-      - name: Configure Git user
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
 
       - name: Generate changelog
         run: yarn generate-changelog
@@ -111,7 +119,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          yarn lerna publish from-git --yes --no-verify-access
+          yarn lerna publish from-git --yes
 
       - name: Cleanup NPM Authentication
         if: always()
