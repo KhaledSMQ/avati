@@ -53,28 +53,27 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-            TAG_NAME=${GITHUB_REF#refs/tags/}
-            
-            # Read the changelog content
-            CHANGELOG_CONTENT=$(cat ./CHANGELOG.md)
-            
-            # Check if release exists
-            if gh release view "$TAG_NAME" &>/dev/null; then
-              echo "Updating existing release for $TAG_NAME"
-              gh release edit "$TAG_NAME" \
-                --title "Release $TAG_NAME" \
-                --notes "$CHANGELOG_CONTENT"
-            else
-              echo "Creating new release for $TAG_NAME"
-              gh release create "$TAG_NAME" \
-                --title "Release $TAG_NAME" \
-                --notes "$CHANGELOG_CONTENT"
-            fi
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          
+          # Read the changelog content
+          CHANGELOG_CONTENT=$(cat ./CHANGELOG.md)
+          
+          # Check if release exists
+          if gh release view "$TAG_NAME" &>/dev/null; then
+            echo "Updating existing release for $TAG_NAME"
+            gh release edit "$TAG_NAME" \
+              --title "Release $TAG_NAME" \
+              --notes "$CHANGELOG_CONTENT"
+          else
+            echo "Creating new release for $TAG_NAME"
+            gh release create "$TAG_NAME" \
+              --title "Release $TAG_NAME" \
+              --notes "$CHANGELOG_CONTENT"
+          fi
 
       - name: Setup NPM Authentication
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
         run: |
           echo "//registry.npmjs.org/:_authToken=${{NODE_AUTH_TOKEN}}" > ~/.npmrc
           npm whoami
