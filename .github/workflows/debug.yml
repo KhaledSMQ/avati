@@ -1,0 +1,84 @@
+name: Debug Workflow
+
+on:
+  workflow_dispatch: # Manual trigger
+
+env:
+  NODE_VERSION: '20.14.0'
+
+jobs:
+  debug:
+    name: Debug NPM and Secrets
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # Checkout Repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Validate Secret Injection
+      - name: Validate Secret
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "NODE_AUTH_TOKEN is not set"
+            exit 1
+          else
+            echo "NODE_AUTH_TOKEN is set"
+          fi
+
+      # Display Environment Variables (for debug only, do NOT expose secrets)
+      - name: Debug Environment Variables
+        run: env | sort | grep -v NODE_AUTH_TOKEN
+
+      # Set up .npmrc Manually
+      - name: Setup NPM Authentications
+        run: |
+          if [ -n "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+            echo "NPM authentication set"
+          else
+            echo "No NPM token provided"
+            exit 1
+          fi
+
+      # Validate NPM Authentication
+      - name: Validate NPM Authentication
+        run: |
+          if [ -n "$NODE_AUTH_TOKEN" ]; then
+            npm whoami
+          else
+            echo "No NPM token provided"
+            exit 1
+          fi
+
+      # Install Dependencies
+      - name: Install Dependencies
+        run: yarn install
+
+      # Build Packages
+      - name: Build Packages
+        run: yarn build
+
+      # Validate Package Publish
+      - name: Test Publish (Dry Run)
+        run: |
+          yarn lerna:publish from-git --yes --no-verify-access --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Cleanup NPM Authentication
+      - name: Cleanup NPM Authentication
+        if: always()
+        run: rm -f ~/.npmrc
