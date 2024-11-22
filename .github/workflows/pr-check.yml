@@ -29,7 +29,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install 
+        run: yarn install
 
       - name: Verify commit messages
         uses: wagoid/commitlint-github-action@v6
@@ -70,7 +70,7 @@ jobs:
               - 'packages/batch-scheduler/**'
 
       - name: Build changed packages
-        if: steps.changes.outputs['batch-scheduler'] == 'true' ||steps.changes.outputs.signal == 'true' || steps.changes.outputs.core == 'true' || steps.changes.outputs.animation == 'true' || steps.changes.outputs.debounce == 'true' || steps.changes.outputs.html == 'true' || steps.changes.outputs.listener == 'true' || steps.changes.outputs.logger == 'true' || steps.changes.outputs.pointer == 'true' || steps.changes.outputs.scrollable == 'true' || steps.changes.outputs.state == 'true' || steps.changes.outputs.throttle == 'true'
+        if: steps.changes.outputs['batch-scheduler'] == 'true' || steps.changes.outputs.signal == 'true' || steps.changes.outputs.core == 'true' || steps.changes.outputs.animation == 'true' || steps.changes.outputs.debounce == 'true' || steps.changes.outputs.html == 'true' || steps.changes.outputs.listener == 'true' || steps.changes.outputs.logger == 'true' || steps.changes.outputs.pointer == 'true' || steps.changes.outputs.scrollable == 'true' || steps.changes.outputs.state == 'true' || steps.changes.outputs.throttle == 'true'
         run: yarn build
 
       - name: Bundle size check

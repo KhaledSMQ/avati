@@ -1,6 +1,6 @@
 {
   "name": "@avatijs/signal",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Signal package part of Avati project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
