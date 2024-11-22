@@ -38,6 +38,21 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
+      - name: Setup NPM Authentications
+        run: |
+          if [ -n "$NODE_AUTH_TOKEN" ]; then
+            echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
+          fi
+
+      - name: Validate npm authentication
+        run: |
+          if [ -n "$NODE_AUTH_TOKEN" ]; then
+              npm whoami
+          else
+              echo "No NPM token provided"
+              exit 1
+          fi
+
       - name: Install dependencies
         run: yarn install
 
@@ -74,9 +89,11 @@ jobs:
               --notes "$CHANGELOG_CONTENT"
           fi 
 
-      - name: Setup NPM Authentications
+      - name: Publish to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: |
-          npm whoami
           yarn lerna:publish from-git --yes --no-verify-access
 
       - name: Cleanup NPM Authentication
