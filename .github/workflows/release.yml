@@ -72,8 +72,11 @@ jobs:
             fi
 
       - name: Setup NPM Authentication
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${{NODE_AUTH_TOKEN}}" > ~/.npmrc
           npm whoami
 
       - name: Publish to NPM
