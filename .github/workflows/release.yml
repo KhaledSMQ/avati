@@ -76,15 +76,7 @@ jobs:
           fi
 
       - name: Install dependencies
-        run: yarn install
-
-      - name: Commit yarn.lock if changed
-        run: |
-          if [[ -n "$(git status --porcelain yarn.lock)" ]]; then
-            git add yarn.lock
-            git commit -m "chore: update yarn.lock [skip ci]"
-            git push origin master
-          fi
+        run: yarn install --frozen-lockfile
 
       - name: Build packages
         run: yarn build
