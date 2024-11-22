@@ -84,15 +84,7 @@ const createBaseConfig = (format, isBrowser = false) => ({
             banner: banner({ pkg: pkg.name, version: pkg.version, homepage: pkg.homepage }),
             raw: true,
             entryOnly: true,
-        }),
-        new webpack.DefinePlugin({
-            __DEV__: !isProduction,
-            __SILENT__: process.argv.includes('--silent'),
-            __VERSION__: JSON.stringify(pkg.version),
-            __PACKAGE_NAME__: JSON.stringify(pkg.name),
-            __TEST__: JSON.stringify(process.env.NODE_ENV === 'test'),
-            __BROWSER__: isBrowser,
-        }),
+        })
     ],
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? 'source-map' : 'eval-source-map',
