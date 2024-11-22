@@ -1,7 +1,7 @@
 module.exports = {
     extends: ['@commitlint/config-conventional'],
     rules: {
-        'scope-enum': [
+        'type-enum': [
             2,
             'always',
             [
@@ -15,7 +15,29 @@ module.exports = {
                 'refactor',
                 'revert',
                 'style',
-                'test'
+                'test',
+                'deps'
+            ],
+        ],
+        'scope-enum': [
+            2,
+            'always',
+            [
+                'core',
+                'avati',
+                'animation',
+                'batch-scheduler',
+                'debounce',
+                'element',
+                'listener',
+                'logger',
+                'memoize',
+                'pointer',
+                'scrollable',
+                'signal',
+                'state',
+                'throttle',
+
             ],
         ],
         'scope-empty': [2, 'never'],

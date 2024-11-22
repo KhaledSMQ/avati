@@ -81,15 +81,15 @@ Here’s what I am currently working on:
 I welcome contributions from developers of all experience levels. If you have an idea, found a bug, or want to improve something, I encourage you to get involved!
 
 ### How to Contribute
-1. Read [Contributing Guide](./Contributing.md) for details on how to get started.
+1. Read [Contributing Guide](https://github.com/KhaledSMQ/avati/blob/master/Contributing.md) for details on how to get started.
 2. Fork the repository and make your changes.
 3. Submit a pull request, and we’ll review it as soon as possible.
  
 ## 📝 License
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KhaledSMQ/avati/blob/master/LICENSE)
 
-Avati is open-source and distributed under the [MIT License](./LICENSE).
+Avati is open-source and distributed under the [MIT License](https://github.com/KhaledSMQ/avati/blob/master/LICENSE).
 
 ---
 <div align="center">

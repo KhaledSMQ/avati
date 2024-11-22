@@ -29,7 +29,7 @@ Thank you for considering contributing to our UI Library! This guide will help y
 ### Prerequisites
 
 -   Node.js (v20 or higher)
--   npm (v10 or higher) or yarn (v2 or higher)
+-   yarn (v3 or higher)
 -   Git
 -   A code editor with TypeScript support (we recommend WebStorm or VSCode)
 
@@ -45,8 +45,7 @@ cd avati
 2. **Install Dependencies**
 
 ```bash
-npm install
-npm run prepare # Sets up git hooks
+yarn install
 ```
 
 3. **VSCode Setup**
@@ -60,15 +59,8 @@ npm run prepare # Sets up git hooks
 ### Project Structure
 
 ```
-ui-library/
-├── packages/                # Package directory
-│   ├── core/               # Core components/utilities
-│   │   ├── src/           # Source code
-│   │   ├── tests/         # Test files
-│   │   ├── package.json   # Package config
-│   │   └── README.md      # Package documentation
-│   ├── components/        # UI components
-│   └── utils/            # Shared utilities
+avati/
+├── packages/              # Package directory
 ├── scripts/              # Build and maintenance scripts
 ├── docs/                # Documentation
 └── package.json         # Root package.json
@@ -81,19 +73,19 @@ ui-library/
 1. **Start Development Server**
 
 ```bash
-npm run dev
+yarn run dev
 ```
 
 2. **Watch Mode with Type Checking**
 
 ```bash
-npm run dev:types
+yarn run dev:types
 ```
 
 3. **Testing During Development**
 
 ```bash
-npm run test:watch
+yarn run test
 ```
 
 ### Package Development
@@ -103,7 +95,7 @@ When creating a new package:
 1. **Create Package Structure**
 
 ```bash
-npm run create-package package-name
+yarn run create-package package-name
 ```
 
 2. **Package Requirements**
@@ -125,7 +117,7 @@ npm run create-package package-name
 npm run build
 
 # Test single package
-npm run test --workspace=@ui-lib/package-name
+npm run test --workspace=@avati/package-name
 
 # Test coverage
 npm run test:coverage
@@ -289,7 +281,7 @@ footer
 3. **Examples**
 
 ```bash
-feat(button): add size variants
+feat(signal): add size variants
 
 - Add small, medium, and large sizes
 - Update documentation
