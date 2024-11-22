@@ -1,0 +1,164 @@
+{
+  "name": "@avatijs/animation",
+  "version": "0.2.0",
+  "description": "Animation package part of Avati project",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "browser": "./dist/umd/index.js",
+  "unpkg": "./dist/umd/index.min.js",
+  "jsdelivr": "./dist/umd/index.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/umd/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18.20.5"
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/esm/index.js",
+      "maxSize": "3 kB",
+      "compression": "brotli"
+    },
+    {
+      "path": "./dist/cjs/index.js",
+      "maxSize": "3 kB",
+      "compression": "brotli"
+    },
+    {
+      "path": "./dist/umd/*.js",
+      "maxSize": "3 kB",
+      "compression": "brotli"
+    }
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run build:types && npm run build:prod",
+    "build:dev": "webpack --mode development --progress",
+    "build:prod": "webpack --mode production",
+    "build:types": "tsc --emitDeclarationOnly",
+    "watch": "webpack --mode=development --watch",
+    "watch:silent": "webpack --mode=development --watch --silent",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run build",
+    "test": "jest --config jest.config.js",
+    "typecheck": "tsc --noEmit",
+    "size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
+    "analyze:deps": "madge --circular --extensions ts ./src/index.ts",
+    "size:check": "bundlesize",
+    "size:watch": "bundlesize --watch",
+    "size:compression": "bundlesize --compression",
+    "check-deps": "depcheck --config .depcheckrc",
+    "analyze": "npm run analyze:size && npm run analyze:deps && npm run analyze:duplicates",
+    "analyze:size": "webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json",
+    "analyze:detailed": "webpack --config webpack.analysis.config.js",
+    "analyze:duplicates": "jscpd src",
+    "analyze:why": "webpack --mode production --display-reasons",
+    "analyze:tree": "webpack --mode production --display-used-exports",
+    "analyze:modules": "webpack --mode production --display-modules",
+    "analyze:full": "webpack --mode production --stats detailed"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "author": {
+    "name": "Khaled Sameer",
+    "email": "khaled.smq@hotmail.com",
+    "url": "https://khaled.ee/"
+  },
+  "homepage": "https://avati.io/",
+  "bugs": {
+    "url": "https://github.com/KhaledSMQ/avati/issues",
+    "email": "khaled.smq@hotmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KhaledSMQ/avati.git",
+    "directory": "packages/animation"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "avati",
+    "animation",
+    "animator",
+    "transitions",
+    "motion",
+    "CSS animations",
+    "JavaScript animations",
+    "SVG animations",
+    "canvas",
+    "interactive",
+    "UI animations",
+    "effects",
+    "tweening",
+    "keyframes",
+    "easing",
+    "performance",
+    "smooth animations",
+    "responsive",
+    "library",
+    "framework",
+    "React animations",
+    "Vue animations",
+    "Angular animations",
+    "React Native",
+    "Three.js",
+    "web animations",
+    "parallax",
+    "scroll animations",
+    "3D animations",
+    "timeline",
+    "sequencing",
+    "choreography",
+    "interactive UI",
+    "user experience",
+    "motion design",
+    "visual effects",
+    "hardware accelerated",
+    "cross-browser",
+    "lightweight",
+    "modular",
+    "extensible",
+    "plugin",
+    "customizable",
+    "ease of use",
+    "developer-friendly",
+    "open source",
+    "documentation",
+    "examples"
+  ],
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.9.1",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "bundlesize": "^0.18.2",
+    "depcheck": "^1.4.7",
+    "dependency-cruiser": "^16.6.0",
+    "eslint": "^8.57.1",
+    "jest": "^29.7.0",
+    "jscpd": "^4.0.5",
+    "madge": "^8.0.0",
+    "rimraf": "^6.0.1",
+    "source-map-explorer": "^2.5.3",
+    "terser-webpack-plugin": "^5.3.10",
+    "ts-jest": "^29.2.5",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
+    "webpack": "^5.96.1",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^5.1.4"
+  }
+}

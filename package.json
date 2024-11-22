@@ -29,6 +29,7 @@
     "build": "lerna run build --stream --sort",
     "dev": "npm run dev --workspaces --recursive",
     "type-check": "tsc --noEmit",
+    "create-package": "node scripts/create-package.mjs create",
     "clean": "npm run clean:dist && npm run clean:types && npm run clean:maps && npm run clean:jsmap",
     "clean:dist": "rimraf packages/*/dist",
     "clean:types": "rimraf packages/**/*.d.ts -g",
