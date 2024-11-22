@@ -36,7 +36,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: yarn install 
+        run: yarn install
 
       - name: Build packages
         run: yarn build
@@ -49,16 +49,27 @@ jobs:
       - name: Generate changelog
         run: yarn generate-changelog
 
-      - name: Create GitHub Release
+      - name: Create or Update Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body_path: ./CHANGELOG.md
-          draft: false
-          prerelease: false
+        run: |
+            TAG_NAME=${GITHUB_REF#refs/tags/}
+            
+            # Read the changelog content
+            CHANGELOG_CONTENT=$(cat ./CHANGELOG.md)
+            
+            # Check if release exists
+            if gh release view "$TAG_NAME" &>/dev/null; then
+              echo "Updating existing release for $TAG_NAME"
+              gh release edit "$TAG_NAME" \
+                --title "Release $TAG_NAME" \
+                --notes "$CHANGELOG_CONTENT"
+            else
+              echo "Creating new release for $TAG_NAME"
+              gh release create "$TAG_NAME" \
+                --title "Release $TAG_NAME" \
+                --notes "$CHANGELOG_CONTENT"
+            fi
 
       - name: Setup NPM Authentication
         run: |
