@@ -100,7 +100,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          yarn lerna:publish from-git --yes --no-verify-access
+          yarn lerna:publish
 
       - name: Cleanup NPM Authentication
         if: always()

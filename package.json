@@ -46,7 +46,7 @@
     "copy-to-modules": "node scripts/copy-to-node-modules.mjs",
     "build-and-copy": "npm run build && npm run copy-to-modules",
     "lerna:version": "lerna version --no-push --conventional-commits",
-    "lerna:publish": "lerna publish from-git --yes",
+    "lerna:publish": "lerna publish",
     "lerna:changed": "lerna changed",
     "lerna:diff": "lerna diff",
     "lerna:list": "lerna list",
