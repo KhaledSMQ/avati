@@ -34,6 +34,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
 
       - name: Install dependencies
         run: yarn install
@@ -69,20 +72,11 @@ jobs:
             gh release create "$TAG_NAME" \
               --title "Release $TAG_NAME" \
               --notes "$CHANGELOG_CONTENT"
-          fi
+          fi 
 
-      - name: Setup NPM Authentication
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Setup NPM Authentications
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{NODE_AUTH_TOKEN}}" > ~/.npmrc
           npm whoami
-
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
-        run: |
           yarn lerna:publish from-git --yes --no-verify-access
 
       - name: Cleanup NPM Authentication
