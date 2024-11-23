@@ -124,7 +124,9 @@ try {
 - **Resource Management**: Automatic cleanup of resources
 - **Memory Efficient**: Proper cleanup and memory management
 
+## Demo
 
+Checkout the [Demo](https://codepen.io/khaledsmq/pen/wvVVYYe) to see TypeScript Debounce in action.
 
 ## Changelog
 
