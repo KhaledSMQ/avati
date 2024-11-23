@@ -1,6 +1,6 @@
 {
   "name": "@avatijs/batch-scheduler",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Batch scheduler package part of Avati project",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.esm.js",
