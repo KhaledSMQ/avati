@@ -1,6 +1,6 @@
 {
   "name": "@avatijs/state",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "State management part of Avati project",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -75,7 +75,7 @@
     "vuex"
   ],
   "dependencies": {
-    "@avatijs/logger": "^0.1.0"
+    "@avatijs/logger": "0.2.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

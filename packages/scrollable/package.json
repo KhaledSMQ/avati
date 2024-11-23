@@ -1,6 +1,6 @@
 {
   "name": "@avatijs/scrollable",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Scrollable package part of Avati project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

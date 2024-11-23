@@ -1,6 +1,6 @@
 {
   "name": "@avatijs/listener",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Listener package part of Avati project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -141,8 +141,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@avatijs/debounce": "^0.1.2",
-    "@avatijs/memoize": "^0.1.2",
-    "@avatijs/throttle": "^0.1.2"
+    "@avatijs/debounce": "0.2.0",
+    "@avatijs/memoize": "0.2.0",
+    "@avatijs/throttle": "0.2.0"
   }
 }

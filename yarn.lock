@@ -124,7 +124,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/debounce@^0.1.2, @avatijs/debounce@workspace:packages/debounce":
+"@avatijs/debounce@0.2.0, @avatijs/debounce@workspace:packages/debounce":
   version: 0.0.0-use.local
   resolution: "@avatijs/debounce@workspace:packages/debounce"
   dependencies:
@@ -178,13 +178,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/listener@^0.1.0, @avatijs/listener@workspace:packages/listener":
+"@avatijs/listener@0.2.0, @avatijs/listener@workspace:packages/listener":
   version: 0.0.0-use.local
   resolution: "@avatijs/listener@workspace:packages/listener"
   dependencies:
-    "@avatijs/debounce": ^0.1.2
-    "@avatijs/memoize": ^0.1.2
-    "@avatijs/throttle": ^0.1.2
+    "@avatijs/debounce": 0.2.0
+    "@avatijs/memoize": 0.2.0
+    "@avatijs/throttle": 0.2.0
     "@types/jest": ^29.5.14
     "@types/node": ^22.9.1
     "@typescript-eslint/eslint-plugin": ^8.15.0
@@ -208,7 +208,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/logger@^0.1.0, @avatijs/logger@workspace:packages/logger":
+"@avatijs/logger@0.2.0, @avatijs/logger@workspace:packages/logger":
   version: 0.0.0-use.local
   resolution: "@avatijs/logger@workspace:packages/logger"
   dependencies:
@@ -235,7 +235,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/memoize@^0.1.2, @avatijs/memoize@workspace:packages/memoize":
+"@avatijs/memoize@0.2.0, @avatijs/memoize@workspace:packages/memoize":
   version: 0.0.0-use.local
   resolution: "@avatijs/memoize@workspace:packages/memoize"
   dependencies:
@@ -266,10 +266,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@avatijs/pointer@workspace:packages/pointer"
   dependencies:
-    "@avatijs/debounce": ^0.1.2
-    "@avatijs/listener": ^0.1.0
-    "@avatijs/memoize": ^0.1.2
-    "@avatijs/throttle": ^0.1.2
+    "@avatijs/debounce": 0.2.0
+    "@avatijs/listener": 0.2.0
+    "@avatijs/memoize": 0.2.0
+    "@avatijs/throttle": 0.2.0
     "@types/jest": ^29.5.14
     "@types/node": ^22.9.1
     "@typescript-eslint/eslint-plugin": ^8.15.0
@@ -352,7 +352,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@avatijs/state@workspace:packages/state"
   dependencies:
-    "@avatijs/logger": ^0.1.0
+    "@avatijs/logger": 0.2.0
     "@types/jest": ^29.5.14
     "@types/node": ^22.9.1
     "@typescript-eslint/eslint-plugin": ^8.15.0
@@ -376,7 +376,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@avatijs/throttle@^0.1.2, @avatijs/throttle@workspace:packages/throttle":
+"@avatijs/throttle@0.2.0, @avatijs/throttle@workspace:packages/throttle":
   version: 0.0.0-use.local
   resolution: "@avatijs/throttle@workspace:packages/throttle"
   dependencies:
