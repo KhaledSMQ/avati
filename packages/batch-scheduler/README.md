@@ -25,6 +25,12 @@ Or using yarn:
 yarn add @avatijs/batch-scheduler
 ```
 
+Or
+
+```
+<script src="https://cdn.jsdelivr.net/npm/@avatijs/batch-scheduler@0.1.2/dist/index.umd.min.js"></script>
+```
+
 ## Basic Usage
 
 ```typescript
