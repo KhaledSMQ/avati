@@ -75,7 +75,7 @@ __metadata:
   resolution: "@avatijs/animation@workspace:packages/animation"
   dependencies:
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -102,7 +102,7 @@ __metadata:
   resolution: "@avatijs/batch-scheduler@workspace:packages/batch-scheduler"
   dependencies:
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -129,7 +129,7 @@ __metadata:
   resolution: "@avatijs/debounce@workspace:packages/debounce"
   dependencies:
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -156,7 +156,7 @@ __metadata:
   resolution: "@avatijs/element@workspace:packages/element"
   dependencies:
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -186,7 +186,7 @@ __metadata:
     "@avatijs/memoize": 0.2.0
     "@avatijs/throttle": 0.2.0
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -213,7 +213,7 @@ __metadata:
   resolution: "@avatijs/logger@workspace:packages/logger"
   dependencies:
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -240,7 +240,7 @@ __metadata:
   resolution: "@avatijs/memoize@workspace:packages/memoize"
   dependencies:
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -271,7 +271,7 @@ __metadata:
     "@avatijs/memoize": 0.2.0
     "@avatijs/throttle": 0.2.0
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -298,7 +298,7 @@ __metadata:
   resolution: "@avatijs/scrollable@workspace:packages/scrollable"
   dependencies:
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -326,7 +326,7 @@ __metadata:
   resolution: "@avatijs/signal@workspace:packages/signal"
   dependencies:
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -354,7 +354,7 @@ __metadata:
   dependencies:
     "@avatijs/logger": 0.2.0
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -381,7 +381,7 @@ __metadata:
   resolution: "@avatijs/throttle@workspace:packages/throttle"
   dependencies:
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     bundlesize: ^0.18.2
@@ -3693,12 +3693,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^22.9.1":
+"@types/node@npm:*":
   version: 22.9.1
   resolution: "@types/node@npm:22.9.1"
   dependencies:
     undici-types: ~6.19.8
   checksum: dee25051e8d89f38b2b26c0714ce60acd1e3f9b1b946131ce3c6e64d626a134f1bec2d948f7ead3da0136aeb7672234f066f97f8290e6aead236e43f4ecb5a68
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^22.9.3":
+  version: 22.9.3
+  resolution: "@types/node@npm:22.9.3"
+  dependencies:
+    undici-types: ~6.19.8
+  checksum: 274cced37a8a11cd89827c551de73980a174e00bef0768c10c1fb7d3887a26b4fade25f870e3fd870432b93546e092cdbe0979e65110c0839982dc2b5938aabc
   languageName: node
   linkType: hard
 
@@ -4655,7 +4664,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.6.3
     "@types/fs-extra": ^11.0.4
     "@types/jest": ^29.5.14
-    "@types/node": ^22.9.1
+    "@types/node": ^22.9.3
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
     autoprefixer: ^10.4.20
